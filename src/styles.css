@@ -198,37 +198,39 @@ body:has(.employment-screen) { background: var(--muted); }
 .employment-nav-item.active:hover { background: transparent; }
 .employment-empty { min-height: 300px; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 16px; color: var(--muted-foreground); }
 @media all {
-  .employment-screen { padding: 14px 12px 105px; }
-  .employment-search-row { gap: 10px; }
-  .employment-search { height: 54px; gap: 10px; padding: 0 14px; border-radius: 16px; }
-  .employment-search > svg { width: 22px; height: 22px; }
-  .employment-search input { font-size: 15px; }
-  .employment-filter { width: 54px; height: 54px; border-radius: 16px; }
-  .employment-filter svg { width: 25px; height: 25px; }
-  .employment-tabs { gap: 8px; margin-top: 16px; }
-  .employment-tab { height: 45px; padding: 0 8px; font-size: 14px; gap: 6px; border-radius: 18px; }
-  .employment-tab svg { width: 17px; height: 17px; }
-  .tab-count { padding: 1px 7px; font-size: 11px; }
-  .employment-header { margin-bottom: 16px; }
-  .employment-list { gap: 15px; }
-  .employment-card { padding: 19px 17px; border-radius: 22px; }
-  .employment-card.featured::before { width: 6px; }
-  .employment-card-main { gap: 12px; }
-  .job-logo { width: 48px; height: 48px; border-radius: 14px; }
-  .employment-company { font-size: 13px; margin-bottom: 5px; }
-  .employment-copy h2 { font-size: 16px; }
-  .employment-description { font-size: 15px; margin-top: 6px; }
-  .employment-arrow { width: 34px; height: 38px; border-radius: 13px; }
-  .employment-arrow svg { width: 18px; height: 18px; }
-  .employment-meta { margin-top: 16px; gap: 6px; font-size: 12px; }
-  .location-chip, .date-chip { gap: 5px; padding: 6px 9px; border-radius: 11px; }
+  .employment-screen { padding: 12px 12px 90px; }
+  .employment-search-row { gap: 8px; }
+  .employment-search { height: 44px; gap: 8px; padding: 0 12px; border-radius: 8px; border-width: 1px; }
+  .employment-search > svg { width: 18px; height: 18px; }
+  .employment-search input { font-size: 13px; font-weight: 400; }
+  .employment-filter { width: 44px; height: 44px; border-radius: 8px; border-width: 1px; }
+  .employment-filter svg { width: 20px; height: 20px; }
+  .employment-tabs { gap: 6px; margin-top: 12px; }
+  .employment-tab { height: 36px; padding: 0 6px; font-size: 12px; font-weight: 600; gap: 4px; border-radius: 8px; border-width: 1px; }
+  .employment-tab svg { width: 14px; height: 14px; }
+  .tab-count { padding: 1px 5px; font-size: 10px; }
+  .employment-header { margin-bottom: 12px; }
+  .employment-list { gap: 10px; }
+  .employment-card { padding: 14px 12px; border-radius: 8px; border-width: 1px; }
+  .employment-card.featured::before { width: 3px; }
+  .employment-card-main { gap: 10px; align-items: flex-start; }
+  .job-logo { width: 40px; height: 40px; border-radius: 8px; }
+  .job-logo svg { width: 23px; height: 23px; }
+  .employment-company { font-size: 11px; font-weight: 600; margin-bottom: 4px; }
+  .employment-copy h2 { font-size: 14px; line-height: 1.4; font-weight: 600; }
+  .employment-description { font-size: 12px; line-height: 1.45; margin-top: 4px; }
+  .employment-arrow { width: 24px; height: 30px; border: 0; border-radius: 6px; background: transparent; align-self: center; }
+  .employment-arrow svg { width: 16px; height: 16px; }
+  .employment-meta { margin-top: 10px; gap: 6px; font-size: 11px; font-weight: 500; }
+  .location-chip, .date-chip { gap: 4px; padding: 4px 6px; border-radius: 4px; }
   .location-chip { max-width: 60%; }
-  .employment-meta svg { width: 14px; height: 14px; }
-  .employment-badges span { font-size: 12px; padding: 5px 10px; border-radius: 10px; }
-  .employment-nav { height: 82px; bottom: 8px; border-radius: 33px; padding: 5px 7px; width: calc(100% - 18px); }
-  .employment-nav-item { height: 65px; font-size: 10px; gap: 3px; }
-  .employment-nav-item .nav-icon { width: 42px; height: 38px; }
-  .employment-nav-item svg { width: 24px; height: 24px; }
+  .employment-meta svg { width: 12px; height: 12px; }
+  .employment-badges { margin-top: 8px; }
+  .employment-badges span { font-size: 10px; font-weight: 600; padding: 3px 7px; border-radius: 4px; }
+  .employment-nav { height: 66px; bottom: 8px; border-radius: 20px; padding: 4px 7px; width: calc(100% - 18px); }
+  .employment-nav-item { height: 56px; font-size: 10px; font-weight: 500; gap: 2px; }
+  .employment-nav-item .nav-icon { width: 34px; height: 30px; border-radius: 12px; }
+  .employment-nav-item svg { width: 20px; height: 20px; }
 }
 @media (prefers-reduced-motion: reduce) { .employment-card { transition: none; } }
 

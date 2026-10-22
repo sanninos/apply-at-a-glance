@@ -101,7 +101,7 @@ function JobDetail() {
     <div className="min-h-screen bg-muted flex justify-center">
       <div className="relative w-full max-w-md bg-background min-h-screen pb-28">
         <header className="bg-primary text-primary-foreground px-5 pt-6 pb-16 rounded-b-[2rem]">
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between invisible" aria-hidden="true">
             <Link to="/" aria-label="Volver" className="size-10 grid place-items-center rounded-full bg-primary-foreground/15">
               <ArrowLeft className="size-5" />
             </Link>

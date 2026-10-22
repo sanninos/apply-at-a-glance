@@ -62,7 +62,7 @@ export const Route = createFileRoute("/llamado/$jobId")({
     <div className="min-h-screen bg-muted flex items-center justify-center p-6">
       <div className="text-center">
         <p className="text-lg font-semibold text-foreground">No pudimos cargar el llamado</p>
-        <p className="text-sm text-muted-foreground mt-1">{error.message}</p>
+        <p className="text-sm text-muted-foreground mt-1">{error instanceof Error ? error.message : String(error)}</p>
       </div>
     </div>
   ),

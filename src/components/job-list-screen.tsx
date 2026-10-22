@@ -45,7 +45,7 @@ export function JobListScreen({ jobs }: { jobs: JobListItem[] }) {
       </div>
     </header>
     <section className="employment-list" aria-label="Empleos disponibles">
-      {visible.map(job => <Link className={cn("employment-card", job.isFeatured && "featured")} key={job.id} to="/llamado/$jobId" params={{ jobId: String(job.id) }}>
+      {visible.map(job => <Link className={cn("employment-card", job.isFeatured && "featured")} key={job.id} to="/llamado/$jobId" params={{ jobId: String(job.id) }} preload="intent" preloadDelay={0}>
         <div className="employment-card-main"><EmployerLogo job={job} /><div className="employment-copy"><p className="employment-company">{job.Empresa || "Empresa"}</p><h2>{job.titulo || "Oferta de empleo"}</h2><p className="employment-description">{job.descripcion}</p></div><span className="employment-arrow"><ChevronRight aria-hidden="true" /></span></div>
         <div className="employment-meta"><span className="location-chip"><MapPin aria-hidden="true" /><span>{job.ubicacion || job.ciudad || "Uruguay"}</span></span><span className="date-chip"><Clock aria-hidden="true" />{publishedAgo(job.created_at)}</span></div>
         {(job.isFeatured || isUrgent(job)) && <div className="employment-badges">{job.isFeatured && <span>Destacada</span>}{isUrgent(job) && <span>Urgente</span>}</div>}

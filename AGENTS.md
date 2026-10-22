@@ -11,3 +11,4 @@
 
 - The index route redirects to the latest job detail; the employment list lives separately at /empleos, and /llamado/$jobId URLs retain the original detail screen so shared links keep working.
 - Job list presentation and filtering live in a focused component and browser-safe helper; public list reads project only display fields and paginate Supabase results to avoid silently missing rows.
+- Job detail uses shared query options with a short freshness window and intent-based link preloading so navigation reuses complete detail responses without duplicate reads or prefetching the entire list.

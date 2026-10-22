@@ -10,11 +10,17 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as EmpleosRouteImport } from './routes/empleos'
 import { Route as LlamadoJobIdRouteImport } from './routes/llamado/$jobId'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EmpleosRoute = EmpleosRouteImport.update({
+  id: '/empleos',
+  path: '/empleos',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LlamadoJobIdRoute = LlamadoJobIdRouteImport.update({
@@ -25,27 +31,31 @@ const LlamadoJobIdRoute = LlamadoJobIdRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/empleos': typeof EmpleosRoute
   '/llamado/$jobId': typeof LlamadoJobIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/empleos': typeof EmpleosRoute
   '/llamado/$jobId': typeof LlamadoJobIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/empleos': typeof EmpleosRoute
   '/llamado/$jobId': typeof LlamadoJobIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/llamado/$jobId'
+  fullPaths: '/' | '/empleos' | '/llamado/$jobId'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/llamado/$jobId'
-  id: '__root__' | '/' | '/llamado/$jobId'
+  to: '/' | '/empleos' | '/llamado/$jobId'
+  id: '__root__' | '/' | '/empleos' | '/llamado/$jobId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  EmpleosRoute: typeof EmpleosRoute
   LlamadoJobIdRoute: typeof LlamadoJobIdRoute
 }
 
@@ -56,6 +66,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/empleos': {
+      id: '/empleos'
+      path: '/empleos'
+      fullPath: '/empleos'
+      preLoaderRoute: typeof EmpleosRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/llamado/$jobId': {
@@ -70,6 +87,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  EmpleosRoute: EmpleosRoute,
   LlamadoJobIdRoute: LlamadoJobIdRoute,
 }
 export const routeTree = rootRouteImport

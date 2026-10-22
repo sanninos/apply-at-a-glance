@@ -1,5 +1,5 @@
-import { createFileRoute, notFound, Link } from "@tanstack/react-router";
-import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { useSuspenseQuery } from "@tanstack/react-query";
 import {
   ArrowLeft,
   Bookmark,
@@ -13,17 +13,8 @@ import {
   Building2,
   Users,
 } from "lucide-react";
-import { getJobById, type JobDetailData } from "@/lib/jobs.functions";
-
-const jobQueryOptions = (id: number) =>
-  queryOptions({
-    queryKey: ["job", id],
-    queryFn: async () => {
-      const job = await getJobById({ data: id });
-      if (!job) throw notFound();
-      return job;
-    },
-  });
+import { type JobDetailData } from "@/lib/jobs.functions";
+import { jobQueryOptions } from "@/lib/job-query";
 
 export const Route = createFileRoute("/llamado/$jobId")({
   loader: ({ params, context }) =>

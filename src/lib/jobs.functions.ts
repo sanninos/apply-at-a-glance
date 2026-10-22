@@ -71,7 +71,7 @@ export const getLatestLlamadoId = createServerFn({ method: "GET" }).handler(
     const { data, error } = await supabase
       .from("JobsDetails")
       .select("id")
-      .eq("isLlamado", true)
+      .eq("isLlamado", false)
       .order("created_at", { ascending: false })
       .limit(1)
       .maybeSingle();

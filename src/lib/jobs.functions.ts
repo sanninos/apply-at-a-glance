@@ -1,5 +1,6 @@
 import { createServerFn } from "@tanstack/react-start";
 import { supabase } from "@/integrations/supabase/client";
+import type { JobListItem } from "@/lib/job-list";
 
 export type JobDetailData = {
   id: number;
@@ -80,3 +81,20 @@ export const getLatestLlamadoId = createServerFn({ method: "GET" }).handler(
     return data?.id ?? null;
   },
 );
+
+export const getJobsList = createServerFn({ method: "GET" }).handler(async (): Promise<JobListItem[]> => {
+  // Only public employment fields; never return applicant data.
+  const jobs: JobListItem[] = [];
+  for (let offset = 0; ; offset += 1000) {
+    const { data, error } = await supabase
+      .from("JobsDetails")
+      .select("id, titulo, descripcion, Empresa, ubicacion, ciudad, fotoEmpresa, image, created_at, isFeatured, estado_postulacion, tipoContrato")
+      .eq("isLlamado", false)
+      .order("created_at", { ascending: false })
+      .order("id", { ascending: false })
+      .range(offset, offset + 999);
+    if (error) throw new Error("No pudimos cargar los empleos. Intentá nuevamente.");
+    jobs.push(...(data ?? []));
+    if (!data || data.length < 1000) return jobs;
+  }
+});

@@ -1,0 +1,2 @@
+- [ ] Recreate the reference employment list with search, filters, real jobs and bottom navigation.
+- [ ] Preserve job-detail URLs and verify list-to-detail navigation.

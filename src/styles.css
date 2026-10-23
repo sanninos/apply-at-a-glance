@@ -68,6 +68,11 @@
 }
 
 :root {
+  --access-blue: oklch(0.38 0.14 264);
+  --google-blue: oklch(0.63 0.18 260);
+  --google-green: oklch(0.6 0.16 150);
+  --google-yellow: oklch(0.83 0.17 85);
+  --google-red: oklch(0.6 0.21 28);
   --employment-surface: oklch(0.975 0.015 245);
   --employment-blue: oklch(0.45 0.105 260);
   --employment-nav: oklch(0.40 0.125 263);
@@ -154,6 +159,38 @@
 
 .employment-screen { max-width: 28rem; min-height: 100dvh; margin: 0 auto; background: var(--employment-surface); padding: 20px 20px 125px; font-family: "Segoe UI", system-ui, sans-serif; }
 body:has(.employment-screen) { background: var(--muted); }
+.access-screen { max-width: 28rem; margin: 0 auto; min-height: 100dvh; background: var(--background); color: var(--employment-blue); padding: 18px 20px 36px; font-family: "Segoe UI", system-ui, sans-serif; }
+body:has(.access-screen) { background: var(--muted); }
+.access-close { width: 42px; height: 42px; border-radius: 50%; background: var(--muted); color: var(--muted-foreground); }
+.access-close svg { width: 24px; height: 24px; }
+.access-content { padding: 0 14px; }
+.access-brand { display: flex; align-items: center; justify-content: center; gap: 12px; margin: 26px 0 36px; }
+.access-brand img { width: 46px; height: 46px; border-radius: 50%; object-fit: cover; box-shadow: var(--employment-shadow); }
+.access-brand h1 { font-size: 32px; font-weight: 850; letter-spacing: 0; color: var(--access-blue); }
+.access-google, .access-submit { width: 100%; height: 56px; border-radius: 999px; background: var(--background); color: var(--employment-blue); font-size: 16px; font-weight: 650; box-shadow: none; border: 1.5px solid var(--border); }
+.access-google svg { width: 24px; height: 24px; margin-right: 4px; }
+.google-blue { fill: var(--google-blue); }.google-green { fill: var(--google-green); }.google-yellow { fill: var(--google-yellow); }.google-red { fill: var(--google-red); }
+.access-divider { display: flex; align-items: center; gap: 14px; margin: 23px 0; font-size: 14px; color: var(--muted-foreground); }
+.access-divider span { height: 1px; flex: 1; background: var(--border); }
+.access-tabs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); background: var(--secondary); border-radius: 17px; padding: 4px; margin-bottom: 22px; }
+.access-tabs button { height: 52px; border-radius: 14px; color: var(--employment-blue); font-size: 16px; font-weight: 600; }
+.access-tabs button.selected { background: var(--access-blue); color: var(--primary-foreground); box-shadow: var(--employment-shadow); }
+.access-form { display: flex; flex-direction: column; gap: 17px; }
+.access-field { display: flex; align-items: center; gap: 17px; height: 56px; padding: 0 17px; border-radius: 14px; background: var(--secondary); }
+.access-field > svg { width: 21px; height: 21px; flex-shrink: 0; }
+.access-field input { width: 100%; min-width: 0; border: 0; outline: none; background: transparent; color: var(--foreground); font-size: 16px; }
+.access-field input::placeholder { color: var(--muted-foreground); }
+.access-field:focus-within { outline: 2px solid var(--ring); outline-offset: 2px; }
+.access-field button { flex-shrink: 0; width: 28px; height: 32px; color: var(--muted-foreground); }
+.access-submit { border-color: var(--employment-blue); margin-top: 6px; }
+.access-forgot { align-self: flex-end; height: auto; padding: 0; color: var(--employment-blue); font-size: 12px; }
+.access-error, .access-notice { font-size: 13px; line-height: 1.5; margin: 0; }
+.access-error { color: var(--destructive); }.access-notice { color: var(--employment-blue); }
+.access-account { display: flex; flex-direction: column; align-items: center; gap: 20px; padding-top: 24px; text-align: center; }
+.access-account h2 { font-size: 22px; font-weight: 650; overflow-wrap: anywhere; }
+.access-account p { max-width: 100%; overflow-wrap: anywhere; font-size: 14px; color: var(--muted-foreground); }
+.access-account-icon { width: 44px; height: 44px; }
+@media (max-width: 360px) { .access-screen { padding-inline: 12px; }.access-content { padding-inline: 8px; }.access-brand h1 { font-size: 28px; } }
 .employment-header { margin-bottom: 24px; }
 .employment-search-row { display: flex; gap: 16px; }
 .employment-search { min-width: 0; flex: 1; display: flex; align-items: center; gap: 16px; border: 2px solid var(--border); border-radius: 22px; background: var(--card); padding: 0 22px; height: 80px; box-shadow: var(--employment-shadow); color: var(--muted-foreground); }

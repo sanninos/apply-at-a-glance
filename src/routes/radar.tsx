@@ -6,7 +6,7 @@ import { RadarScreen } from '@/components/radar-screen';
 
 const radarQuery = queryOptions({ queryKey: ['radar-jobs'], queryFn: async () => toRadarJobs(await getRadarJobs()), staleTime: 60000 });
 export const Route = createFileRoute('/radar')({
-  validateSearch: (search: Record<string, unknown>) => ({ q: typeof search.q === 'string' ? search.q : '' }),
+  validateSearch: (search: Record<string, unknown>) => ({ q: typeof search['q'] === 'string' ? search['q'] : '' }),
   head: () => ({ meta: [
     { title: 'EmpleosUy · Radar de empleos' },
     { name: 'description', content: 'Explorá en el mapa las ofertas de trabajo con ubicación en Uruguay.' },

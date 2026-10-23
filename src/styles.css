@@ -218,7 +218,7 @@ body:has(.social-screen) { background: var(--muted); }
 .social-poster { display: block; width: 100%; height: auto; background: var(--muted); }
 .social-summary { display: flex; align-items: center; gap: 10px; padding: 10px 12px; }
 .social-summary-copy { flex: 1; min-width: 0; }
-.social-summary-title { font-size: 14px; line-height: 1.4; font-weight: 600; color: var(--foreground); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.social-summary-title { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; font-size: 14px; line-height: 1.4; font-weight: 600; color: var(--foreground); overflow-wrap: anywhere; }
 .social-summary-loc { display: flex; align-items: center; gap: 4px; margin-top: 2px; font-size: 11px; color: var(--employment-blue); }
 .social-summary-loc svg { width: 12px; height: 12px; flex-shrink: 0; color: var(--destructive); }
 .social-summary-loc span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }

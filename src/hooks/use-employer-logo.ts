@@ -17,10 +17,12 @@ export function useEmployerLogo(photo: string | null) {
 
   useEffect(() => {
     const element = ref.current;
-    if (element && element.complete && element.naturalWidth === 0) {
-      setSource(current => (current === "photo" ? "default" : current));
-    }
-  }, [photo]);
+    if (!element) return;
+    const fail = () => setSource(current => (current === "photo" ? "default" : current === "default" ? "none" : current));
+    if (element.complete && element.naturalWidth === 0) fail();
+    element.addEventListener("error", fail, { once: true });
+    return () => element.removeEventListener("error", fail);
+  }, [src]);
 
   return { src, ref, onError };
 }

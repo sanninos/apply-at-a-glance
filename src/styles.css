@@ -191,6 +191,35 @@ body:has(.access-screen) { background: var(--muted); }
 .access-account p { max-width: 100%; overflow-wrap: anywhere; font-size: 14px; color: var(--muted-foreground); }
 .access-account-icon { width: 44px; height: 44px; }
 @media (max-width: 360px) { .access-screen { padding-inline: 12px; }.access-content { padding-inline: 8px; }.access-brand h1 { font-size: 28px; } }
+.profile-screen { max-width: 28rem; min-height: 100dvh; margin: 0 auto; padding: 16px 12px 94px; background: var(--employment-surface); color: var(--primary); font-family: "Segoe UI", system-ui, sans-serif; }
+body:has(.profile-screen) { background: var(--muted); }
+.profile-block { background: var(--card); border: 1px solid var(--border); border-radius: 23px; padding: 14px 12px; box-shadow: var(--employment-shadow); margin-bottom: 16px; }
+.profile-heading { position: relative; padding-left: 16px; margin-bottom: 12px; }
+.profile-heading::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 5px; border-radius: 5px; background: var(--employment-yellow); }
+.profile-heading h2 { font-size: 14px; line-height: 1.5; font-weight: 650; letter-spacing: 0; }
+.profile-heading p { font-size: 12px; margin-top: 2px; color: var(--muted-foreground); font-weight: 550; }
+.profile-account-row, .profile-consent-row { display: flex; align-items: center; gap: 12px; }
+.profile-icon-tile { width: 54px; height: 54px; display: grid; place-items: center; border: 1px solid var(--border); border-radius: 15px; background: var(--employment-surface); flex-shrink: 0; }
+.profile-icon-tile svg { width: 24px; height: 24px; }
+.profile-account-copy { min-width: 0; display: flex; flex-direction: column; gap: 3px; }
+.profile-account-copy strong, .profile-email { font-size: 14px; font-weight: 600; overflow-wrap: anywhere; }
+.profile-account-copy p { font-size: 12px; color: var(--muted-foreground); font-weight: 550; }
+.profile-login { width: 100%; justify-content: space-between; margin-top: 12px; border-radius: 14px; font-size: 13px; color: var(--primary); }
+.profile-consent-copy { min-width: 0; flex: 1; }
+.profile-consent-copy h3 { font-size: 13px; font-weight: 600; line-height: 1.4; }
+.profile-consent-copy p { font-size: 12px; line-height: 1.4; margin-top: 4px; color: var(--muted-foreground); font-weight: 500; }
+.profile-pending { display: block; font-size: 10px; margin-top: 6px; color: var(--muted-foreground); }
+.profile-switch { width: 44px; height: 26px; }
+.profile-switch > span { width: 20px; height: 20px; background: var(--employment-yellow); }
+.profile-access-block { margin-top: 32px; }
+.profile-access-list { display: grid; gap: 10px; }
+.profile-access-row { width: 100%; min-height: 50px; height: auto; justify-content: flex-start; gap: 12px; padding: 12px 14px; border-radius: 14px; box-shadow: none; color: var(--primary); font-weight: 400; font-size: 13px; }
+.profile-access-row:disabled { opacity: 1; }
+.profile-access-row svg { width: 18px; height: 18px; }
+.profile-access-row > span { flex: 1; text-align: left; white-space: normal; }
+.profile-access-row small { font-size: 9px; color: var(--muted-foreground); }
+.profile-signout { width: 100%; color: var(--muted-foreground); font-size: 13px; }
+.profile-error { font-size: 12px; line-height: 1.5; color: var(--destructive); margin-top: 8px; }
 .employment-header { margin-bottom: 24px; }
 .employment-search-row { display: flex; gap: 16px; }
 .employment-search { min-width: 0; flex: 1; display: flex; align-items: center; gap: 16px; border: 2px solid var(--border); border-radius: 22px; background: var(--card); padding: 0 22px; height: 80px; box-shadow: var(--employment-shadow); color: var(--muted-foreground); }

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "@tanstack/react-router";
-import { Bell, Radar, BriefcaseBusiness, Megaphone, Briefcase, Layers, UserRound, Search, SlidersHorizontal, Flame, Clock, ChevronRight, MapPin, Building2 } from "lucide-react";
+import { Bell, Radar, BriefcaseBusiness, Layers, UserRound, Search, SlidersHorizontal, Flame, Clock, ChevronRight, MapPin, Building2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
@@ -10,8 +10,8 @@ import { cn } from "@/lib/utils";
 
 const navigation = [
   { label: "Alertas", icon: Bell }, { label: "Radar", icon: Radar },
-  { label: "Empleos", icon: BriefcaseBusiness }, { label: "Llamados", icon: Megaphone },
-  { label: "Ofertas", icon: Briefcase }, { label: "Social", icon: Layers }, { label: "Perfil", icon: UserRound },
+  { label: "Empleos", icon: BriefcaseBusiness },
+  { label: "Social", icon: Layers }, { label: "Perfil", icon: UserRound },
 ];
 
 function EmployerLogo({ job }: { job: JobListItem }) {

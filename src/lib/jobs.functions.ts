@@ -1,6 +1,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { supabase } from "@/integrations/supabase/client";
 import type { JobListItem } from "@/lib/job-list";
+import type { SocialPostRow } from "@/lib/social-posts";
 
 export type JobDetailData = {
   id: number;
@@ -96,5 +97,24 @@ export const getJobsList = createServerFn({ method: "GET" }).handler(async (): P
     if (error) throw new Error("No pudimos cargar los empleos. Intentá nuevamente.");
     jobs.push(...(data ?? []));
     if (!data || data.length < 1000) return jobs;
+  }
+});
+
+export const getSocialPosts = createServerFn({ method: "GET" }).handler(async (): Promise<SocialPostRow[]> => {
+  // Poster and display fields only; never return applicant data.
+  const rows: SocialPostRow[] = [];
+  for (let offset = 0; ; offset += 1000) {
+    const { data, error } = await supabase
+      .from("JobsDetails")
+      .select("id, poster, titulo, Empresa, ubicacion, ciudad, fotoEmpresa, image, created_at")
+      .eq("isLlamado", false)
+      .not("poster", "is", null)
+      .neq("poster", "")
+      .order("created_at", { ascending: false })
+      .order("id", { ascending: false })
+      .range(offset, offset + 999);
+    if (error) throw new Error("No pudimos cargar los pósteres. Intentá nuevamente.");
+    rows.push(...(data ?? []));
+    if (!data || data.length < 1000) return rows;
   }
 });

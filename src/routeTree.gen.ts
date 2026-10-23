@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as EmpleosRouteImport } from './routes/empleos'
+import { Route as SocialRouteImport } from './routes/social'
 import { Route as LlamadoJobIdRouteImport } from './routes/llamado/$jobId'
 
 const IndexRoute = IndexRouteImport.update({
@@ -23,6 +24,11 @@ const EmpleosRoute = EmpleosRouteImport.update({
   path: '/empleos',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SocialRoute = SocialRouteImport.update({
+  id: '/social',
+  path: '/social',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const LlamadoJobIdRoute = LlamadoJobIdRouteImport.update({
   id: '/llamado/$jobId',
   path: '/llamado/$jobId',
@@ -32,30 +38,34 @@ const LlamadoJobIdRoute = LlamadoJobIdRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/empleos': typeof EmpleosRoute
+  '/social': typeof SocialRoute
   '/llamado/$jobId': typeof LlamadoJobIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/empleos': typeof EmpleosRoute
+  '/social': typeof SocialRoute
   '/llamado/$jobId': typeof LlamadoJobIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/empleos': typeof EmpleosRoute
+  '/social': typeof SocialRoute
   '/llamado/$jobId': typeof LlamadoJobIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/empleos' | '/llamado/$jobId'
+  fullPaths: '/' | '/empleos' | '/social' | '/llamado/$jobId'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/empleos' | '/llamado/$jobId'
-  id: '__root__' | '/' | '/empleos' | '/llamado/$jobId'
+  to: '/' | '/empleos' | '/social' | '/llamado/$jobId'
+  id: '__root__' | '/' | '/empleos' | '/social' | '/llamado/$jobId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   EmpleosRoute: typeof EmpleosRoute
+  SocialRoute: typeof SocialRoute
   LlamadoJobIdRoute: typeof LlamadoJobIdRoute
 }
 
@@ -75,6 +85,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EmpleosRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/social': {
+      id: '/social'
+      path: '/social'
+      fullPath: '/social'
+      preLoaderRoute: typeof SocialRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/llamado/$jobId': {
       id: '/llamado/$jobId'
       path: '/llamado/$jobId'
@@ -88,6 +105,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   EmpleosRoute: EmpleosRoute,
+  SocialRoute: SocialRoute,
   LlamadoJobIdRoute: LlamadoJobIdRoute,
 }
 export const routeTree = rootRouteImport

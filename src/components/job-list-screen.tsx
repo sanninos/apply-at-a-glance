@@ -1,18 +1,13 @@
 import { useState } from "react";
 import { Link } from "@tanstack/react-router";
-import { Bell, Radar, BriefcaseBusiness, Layers, UserRound, Search, SlidersHorizontal, Flame, Clock, ChevronRight, MapPin, Building2 } from "lucide-react";
+import { BriefcaseBusiness, Search, SlidersHorizontal, Flame, Clock, ChevronRight, MapPin, Building2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+import { AppBottomNav } from "@/components/app-bottom-nav";
 import { filterJobs, isUrgent, publishedAgo, type JobListItem, type JobListMode } from "@/lib/job-list";
 import { useEmployerLogo } from "@/hooks/use-employer-logo";
 import { cn } from "@/lib/utils";
-
-const navigation = [
-  { label: "Alertas", icon: Bell }, { label: "Radar", icon: Radar },
-  { label: "Empleos", icon: BriefcaseBusiness },
-  { label: "Social", icon: Layers }, { label: "Perfil", icon: UserRound },
-];
 
 function EmployerLogo({ job }: { job: JobListItem }) {
   const { src, ref, onError } = useEmployerLogo(job.fotoEmpresa || job.image);
@@ -52,9 +47,7 @@ export function JobListScreen({ jobs }: { jobs: JobListItem[] }) {
       </Link>)}
       {!visible.length && <div className="employment-empty"><Search /><h2>No se encontraron empleos</h2><Button variant="outline" onClick={() => { setSearch(""); setLocation(""); setContract(""); setMode("all"); }}>Ver todos</Button></div>}
     </section>
-    <nav className="employment-nav" aria-label="Navegación principal">
-      {navigation.map(({ label, icon: Icon }) => <Button key={label} variant="ghost" disabled={label !== "Empleos"} aria-current={label === "Empleos" ? "page" : undefined} title={label === "Empleos" ? label : `${label}: próximamente`} className={cn("employment-nav-item", label === "Empleos" && "active")} onClick={() => { setSearch(""); setMode("all"); setLocation(""); setContract(""); window.scrollTo({ top: 0, behavior: "smooth" }); }}><span className="nav-icon"><Icon /></span><span>{label}</span></Button>)}
-    </nav>
+    <AppBottomNav active="empleos" />
     <Dialog open={filtersOpen} onOpenChange={setFiltersOpen}><DialogContent className="max-w-sm rounded-lg"><DialogHeader><DialogTitle>Filtrar empleos</DialogTitle><DialogDescription>Ubicación y tipo de contrato</DialogDescription></DialogHeader>
       <label className="grid gap-2 text-sm font-medium">Ubicación<select className="h-11 rounded-md border bg-background px-3 text-foreground" value={location} onChange={event => setLocation(event.target.value)}><option value="">Todas las ubicaciones</option>{locations.map(value => <option key={value}>{value}</option>)}</select></label>
       <label className="grid gap-2 text-sm font-medium">Contrato<select className="h-11 rounded-md border bg-background px-3 text-foreground" value={contract} onChange={event => setContract(event.target.value)}><option value="">Todos los contratos</option>{contracts.map(value => <option key={value}>{value}</option>)}</select></label>

@@ -9,6 +9,7 @@
 > the editor, so keep the branch in a working state.
 <!-- LOVABLE:END -->
 
-- The index route redirects to the latest job detail; the employment list lives separately at /empleos, and /llamado/$jobId URLs retain the original detail screen so shared links keep working.
+- The employment list is the home screen ("/"); /empleos redirects there so older links keep working, and /llamado/$jobId retains the original detail screen.
 - Job list presentation and filtering live in a focused component and browser-safe helper; public list reads project only display fields and paginate Supabase results to avoid silently missing rows.
 - Job detail uses shared query options with a short freshness window and intent-based link preloading so navigation reuses complete detail responses without duplicate reads or prefetching the entire list.
+- Company and poster images resolve through a shared browser-safe fallback attached to the current element, so a photo that fails after mount still falls back instead of rendering a broken image.

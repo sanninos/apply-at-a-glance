@@ -1,4 +1,4 @@
-- [ ] Add the account-data block, tutorial and reference-style sign-out controls to Profile; keep unavailable actions disabled.
+- [x] Add the account-data block, tutorial and reference-style sign-out controls to Profile; verified desktop/mobile, with unavailable actions disabled.
 - [x] Create the reference Profile screen and connect the bottom navigation (verified signed-out; actual account verification remains unavailable on external unmanaged Supabase).
 - [x] Add reference-style registration and sign-in with private profiles, Google access and session-aware account navigation.
 - [ ] Verify real signup, profile creation and Google login; blocked by unavailable authenticated testing on external unmanaged Supabase.

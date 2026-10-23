@@ -2,6 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { Bell, Radar, BriefcaseBusiness, Layers, UserRound } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { useAccess } from '@/components/access-provider';
 
 type AppSection = "empleos" | "social" | "radar";
 
@@ -14,6 +15,7 @@ const sections = [
 ] as const;
 
 export function AppBottomNav({ active }: { active: AppSection }) {
+  const { user } = useAccess();
   return (
     <nav className="employment-nav" aria-label="Navegación principal">
       {sections.map(({ id, label, icon: Icon }) => {
@@ -49,6 +51,7 @@ export function AppBottomNav({ active }: { active: AppSection }) {
               {inner}
             </Link>
           );
+        if (id === 'perfil') return <Link key={label} to="/auth" className="employment-nav-item" aria-label={user ? 'Mi cuenta' : 'Ingresar o registrarse'}><span className="nav-icon"><Icon /></span><span>{user ? 'Mi cuenta' : label}</span></Link>;
         return (
           <Button key={label} variant="ghost" disabled title={`${label}: próximamente`} className="employment-nav-item">
             {inner}

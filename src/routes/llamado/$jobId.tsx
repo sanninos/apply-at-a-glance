@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 import { type JobDetailData } from "@/lib/jobs.functions";
 import { jobQueryOptions } from "@/lib/job-query";
+import { useEmployerLogo } from "@/hooks/use-employer-logo";
 
 export const Route = createFileRoute("/llamado/$jobId")({
   loader: ({ params, context }) =>
@@ -86,7 +87,7 @@ function JobDetail() {
   const fechaCierre = formatFecha(job.fechaCierre);
   const fechaInicio = formatFecha(job.fechaInicio);
   const cerrado = job.fechaCierre ? new Date(job.fechaCierre) < new Date() : false;
-  const logo = job.fotoEmpresa || job.image;
+  const { src: logo, ref: logoRef, onError: failLogo } = useEmployerLogo(job.fotoEmpresa || job.image);
 
   return (
     <div className="min-h-screen bg-muted flex justify-center [--primary:var(--employment-blue)]">
@@ -110,7 +111,7 @@ function JobDetail() {
         <section className="-mt-12 mx-5 rounded-3xl bg-card shadow-lg p-5 text-center">
           <div className="mx-auto -mt-12 size-16 rounded-2xl bg-accent text-accent-foreground grid place-items-center shadow-md overflow-hidden">
             {logo ? (
-              <img src={logo} alt={job.empresa ?? "Empresa"} className="size-full object-cover" />
+              <img ref={logoRef} src={logo} alt={job.empresa ?? "Empresa"} className="size-full object-cover" onError={failLogo} />
             ) : (
               <Building2 className="size-8" />
             )}

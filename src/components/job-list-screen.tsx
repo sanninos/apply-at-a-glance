@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { filterJobs, isUrgent, publishedAgo, type JobListItem, type JobListMode } from "@/lib/job-list";
+import { useEmployerLogo } from "@/hooks/use-employer-logo";
 import { cn } from "@/lib/utils";
 
 const navigation = [
@@ -14,9 +15,8 @@ const navigation = [
 ];
 
 function EmployerLogo({ job }: { job: JobListItem }) {
-  const [failed, setFailed] = useState(false);
-  const image = job.fotoEmpresa || job.image;
-  return <div className="job-logo">{image && !failed ? <img src={image} alt={job.Empresa || "Empresa"} onError={() => setFailed(true)} /> : <Building2 aria-hidden="true" />}</div>;
+  const { src, ref, onError } = useEmployerLogo(job.fotoEmpresa || job.image);
+  return <div className="job-logo">{src ? <img ref={ref} src={src} alt={job.Empresa || "Empresa"} onError={onError} /> : <Building2 aria-hidden="true" />}</div>;
 }
 
 export function JobListScreen({ jobs }: { jobs: JobListItem[] }) {

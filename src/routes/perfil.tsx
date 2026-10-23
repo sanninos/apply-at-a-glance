@@ -1,7 +1,7 @@
 import { createFileRoute, Link, useNavigate } from '@tanstack/react-router';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useState, type ReactNode } from 'react';
-import { UserCircle, Megaphone, Bell, UsersRound, ListPen, ChartNoAxesColumnIncreasing, LogOut, ChevronRight } from 'lucide-react';
+import { UserCircle, Megaphone, Bell, UsersRound, ListTodo, ChartNoAxesColumnIncreasing, LogOut, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
 import { AppBottomNav } from '@/components/app-bottom-nav';
@@ -74,7 +74,7 @@ function ProfileScreen() {
     </ProfileBlock>
     <ProfileBlock title="ACCESOS" subtitle="Acciones de tu cuenta" className="profile-access-block">
       <div className="profile-access-list">
-        {[{ label: 'Mis notificaciones', icon: Bell }, { label: 'Tus postulaciones', icon: UsersRound }, { label: 'Edita tu curriculum', icon: ListPen }, { label: 'Visitas a tu perfil', icon: ChartNoAxesColumnIncreasing }].map(({ label, icon: Icon }) => <Button key={label} variant="outline" disabled className="profile-access-row" title={`${label}: próximamente`}><Icon /><span>{label}</span><small>Próximamente</small></Button>)}
+        {[{ label: 'Mis notificaciones', icon: Bell }, { label: 'Tus postulaciones', icon: UsersRound }, { label: 'Edita tu curriculum', icon: ListTodo }, { label: 'Visitas a tu perfil', icon: ChartNoAxesColumnIncreasing }].map(({ label, icon: Icon }) => <Button key={label} variant="outline" disabled className="profile-access-row" title={`${label}: próximamente`}><Icon /><span>{label}</span><small>Próximamente</small></Button>)}
       </div>
     </ProfileBlock>
     {user && <Button variant="ghost" className="profile-signout" disabled={busy} onClick={signOut}><LogOut />{busy ? 'Cerrando sesión…' : 'Cerrar sesión'}</Button>}

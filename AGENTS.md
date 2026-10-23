@@ -13,3 +13,4 @@
 - Job list presentation and filtering live in a focused component and browser-safe helper; public list reads project only display fields and paginate Supabase results to avoid silently missing rows.
 - Job detail uses shared query options with a short freshness window and intent-based link preloading so navigation reuses complete detail responses without duplicate reads or prefetching the entire list.
 - Company and poster images resolve through a shared browser-safe fallback attached to the current element, so a photo that fails after mount still falls back instead of rendering a broken image.
+- Radar uses Google Maps JavaScript with a callback-based asynchronous loader and public display-only paginated job reads; parse stored coordinates in a browser-safe helper to keep invalid locations off the map.

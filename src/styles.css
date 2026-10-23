@@ -214,7 +214,8 @@ body:has(.social-screen) { background: var(--muted); }
 .social-post + .social-post { margin-top: 12px; }
 .social-post:hover { border-color: var(--employment-blue); }
 .social-post:focus-visible { outline: 2px solid var(--employment-blue); outline-offset: 3px; }
-.social-poster { flex: 1; min-height: 0; width: 100%; object-fit: contain; background: var(--primary); }
+.social-poster-blur { position: absolute; inset: 0; z-index: 0; width: 100%; height: 100%; object-fit: cover; filter: blur(28px) saturate(135%) brightness(0.92); transform: scale(1.16); }
+.social-poster { position: relative; z-index: 1; flex: 1; min-height: 0; width: 100%; object-fit: contain; background: transparent; }
 .social-summary { position: absolute; left: 12px; right: 12px; bottom: 12px; display: flex; align-items: center; gap: 10px; padding: 10px 12px; background: var(--card); border-radius: 22px; box-shadow: 0 10px 28px color-mix(in oklab, var(--primary) 38%, transparent), 0 2px 6px color-mix(in oklab, var(--primary) 22%, transparent); }
 .social-summary .job-logo { border: none; background: color-mix(in oklab, var(--employment-yellow) 26%, var(--card)); color: var(--primary); }
 .social-summary .employment-arrow { width: 32px; height: 32px; border: none; border-radius: 12px; background: color-mix(in oklab, var(--employment-blue) 12%, var(--card)); color: var(--primary); align-self: center; }

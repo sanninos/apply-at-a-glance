@@ -35,8 +35,9 @@ describe("useEmployerLogo", () => {
     expect(result.current.src).toBeNull();
   });
 
-  it("replaces a company photo that never loads with the placeholder", () => {
+  it("replaces a company photo whose load fails with the placeholder", () => {
     render(createElement(LogoTest, { photo: "https://cdn.example/logo.png" }));
+    act(() => screen.getByTestId("logo").dispatchEvent(new Event("error")));
     expect(screen.getByTestId("logo").getAttribute("src")).toBe(DEFAULT_EMPLOYER_LOGO);
   });
 

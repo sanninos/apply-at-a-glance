@@ -10,13 +10,6 @@ export function SocialScreen({ posts }: { posts: SocialPost[] }) {
   return (
     <main className="social-screen">
       <h1 className="sr-only">Social</h1>
-      <header className="social-header">
-        <p className="social-kicker">Social</p>
-        <h2>Pósteres de ofertas</h2>
-        <p className="social-count">
-          {posts.length === 1 ? "1 póster publicado" : `${posts.length} pósteres publicados`}
-        </p>
-      </header>
       {posts.length ? (
         <section className="social-feed" aria-label="Pósteres de ofertas de trabajo">
           {posts.map((post) => (

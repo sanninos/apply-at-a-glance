@@ -1,3 +1,4 @@
+/// <reference types="google.maps" />
 declare global {
   interface Window { initRadarMap?: () => void }
 }

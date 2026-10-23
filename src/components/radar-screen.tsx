@@ -1,3 +1,4 @@
+/// <reference types="google.maps" />
 import { useEffect, useRef, useState } from 'react';
 import { Link } from '@tanstack/react-router';
 import { BriefcaseBusiness, ChevronRight, LocateFixed, MapPin, SlidersHorizontal, X } from 'lucide-react';

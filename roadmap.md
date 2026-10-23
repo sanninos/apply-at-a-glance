@@ -1,4 +1,4 @@
-- [ ] Create the reference Profile screen and connect the bottom navigation.
+- [x] Create the reference Profile screen and connect the bottom navigation (verified signed-out; actual account verification remains unavailable on external unmanaged Supabase).
 - [x] Add reference-style registration and sign-in with private profiles, Google access and session-aware account navigation.
 - [ ] Verify real signup, profile creation and Google login; blocked by unavailable authenticated testing on external unmanaged Supabase.
 - [x] Recreate the reference employment list with search, filters, real jobs and bottom navigation (other sections remain inactive).

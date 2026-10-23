@@ -4,3 +4,4 @@
 - [x] Make the employment list the home screen, keeping /empleos as a redirect.
 - [x] Add the Social screen (/social) as a scroll feed of offer posters, with the bottom navigation shared between screens.
 - [x] Remove the Social screen header (title, kicker and poster counter) so posters fill the screen.
+- [x] Show the Social offer details in a white highlighted rounded card floating at the bottom of each slide.

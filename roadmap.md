@@ -1,3 +1,4 @@
+- [ ] Add reference-style registration and sign-in with private profiles, Google access and session-aware account navigation.
 - [x] Recreate the reference employment list with search, filters, real jobs and bottom navigation (other sections remain inactive).
 - [x] Preserve job-detail URLs and verify list-to-detail navigation.
 - [x] Restore the original initial detail screen and move the employment list to its own screen.

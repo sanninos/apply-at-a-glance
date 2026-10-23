@@ -1,0 +1,26 @@
+import { useEffect, useRef, useState } from "react";
+import { DEFAULT_EMPLOYER_LOGO } from "@/lib/job-branding";
+
+/**
+ * Resolves the logo for a job: the company photo when there is one, the shared
+ * placeholder when there is none or the photo cannot be loaded, and finally the
+ * building icon when even the placeholder fails.
+ *
+ * A photo that fails during the first paint never reaches React's onError, so
+ * the loaded state is also checked once after mount.
+ */
+export function useEmployerLogo(photo: string | null) {
+  const [source, setSource] = useState<"photo" | "default" | "none">(photo ? "photo" : "default");
+  const ref = useRef<HTMLImageElement>(null);
+  const src = source === "photo" ? photo : source === "default" ? DEFAULT_EMPLOYER_LOGO : null;
+  const onError = () => setSource(current => (current === "photo" ? "default" : "none"));
+
+  useEffect(() => {
+    const element = ref.current;
+    if (element && element.complete && element.naturalWidth === 0) {
+      setSource(current => (current === "photo" ? "default" : current));
+    }
+  }, [photo]);
+
+  return { src, ref, onError };
+}

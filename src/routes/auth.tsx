@@ -77,7 +77,7 @@ function AccessScreen() {
     <div className="access-content">
       <div className="access-brand"><img src={DEFAULT_EMPLOYER_LOGO} alt="Bandera de Uruguay" /><h1>URUJOBS</h1></div>
       {ready && user ? <section className="access-account">
-        <CheckCircle2 className="access-account-icon" /><h2>{profile.data?.full_name || user.user_metadata?.full_name || 'Mi cuenta'}</h2><p>{user.email}</p>
+        <CheckCircle2 className="access-account-icon" /><h2>{profile.data?.full_name || user.user_metadata?.['full_name'] || 'Mi cuenta'}</h2><p>{user.email}</p>
         {profile.isError && <p role="alert">No pudimos cargar tu nombre de perfil.</p>}{notice && <p role="status">{notice}</p>}
         <Button className="access-submit" variant="outline" onClick={() => navigate({ to: '/' })}>Ver empleos</Button>
         <Button variant="ghost" disabled={busy} onClick={signOut}><LogOut /> Cerrar sesión</Button>

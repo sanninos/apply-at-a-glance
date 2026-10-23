@@ -2,6 +2,9 @@ import { createServerFn } from "@tanstack/react-start";
 import { supabase } from "@/integrations/supabase/client";
 import type { JobListItem } from "@/lib/job-list";
 import type { SocialPostRow } from "@/lib/social-posts";
+import { createClient } from "@supabase/supabase-js";
+import type { Database } from "@/integrations/supabase/types";
+import type { RadarJobRow } from "@/lib/radar-jobs";
 
 export type JobDetailData = {
   id: number;
@@ -116,5 +119,30 @@ export const getSocialPosts = createServerFn({ method: "GET" }).handler(async ()
     if (error) throw new Error("No pudimos cargar los pósteres. Intentá nuevamente.");
     rows.push(...(data ?? []));
     if (!data || data.length < 1000) return rows;
+  }
+});
+
+export const getRadarJobs = createServerFn({ method: "GET" }).handler(async (): Promise<RadarJobRow[]> => {
+  const url = process.env['SUPABASE_URL'];
+  const key = process.env['SUPABASE_PUBLISHABLE_KEY'];
+  if (!url || !key) throw new Error('No pudimos conectar con las ofertas.');
+  const client = createClient<Database>(url, key, {
+    auth: { persistSession: false, autoRefreshToken: false },
+    global: { fetch: (input, init) => {
+      const headers = new Headers(init?.headers);
+      if (key.startsWith('sb_') && headers.get('Authorization') === `Bearer ${key}`) headers.delete('Authorization');
+      headers.set('apikey', key);
+      return fetch(input, { ...init, headers });
+    } },
+  });
+  const jobs: RadarJobRow[] = [];
+  for (let offset = 0; ; offset += 1000) {
+    const { data, error } = await client.from('JobsDetails')
+      .select('id, titulo, Empresa, ubicacion, ciudad, fotoEmpresa, image, latLong')
+      .eq('isLlamado', false).not('latLong', 'is', null).neq('latLong', '')
+      .order('id', { ascending: false }).range(offset, offset + 999);
+    if (error) throw new Error('No pudimos cargar las ofertas del Radar.');
+    jobs.push(...(data ?? []));
+    if (!data || data.length < 1000) return jobs;
   }
 });

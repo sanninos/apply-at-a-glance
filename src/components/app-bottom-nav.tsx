@@ -3,7 +3,7 @@ import { Bell, Radar, BriefcaseBusiness, Layers, UserRound } from "lucide-react"
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
-type AppSection = "empleos" | "social";
+type AppSection = "empleos" | "social" | "radar";
 
 const sections = [
   { id: "alertas", label: "Alertas", icon: Bell },
@@ -38,11 +38,11 @@ export function AppBottomNav({ active }: { active: AppSection }) {
               {inner}
             </Link>
           );
-        if (id === "social")
+        if (id === "social" || id === "radar")
           return (
             <Link
               key={label}
-              to="/social"
+              to={id === "social" ? "/social" : "/radar"}
               aria-current={isActive ? "page" : undefined}
               className={cn("employment-nav-item", isActive && "active")}
             >

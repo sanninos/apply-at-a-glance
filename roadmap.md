@@ -1,3 +1,5 @@
 - [x] Recreate the reference employment list with search, filters, real jobs and bottom navigation (other sections remain inactive).
 - [x] Preserve job-detail URLs and verify list-to-detail navigation.
 - [x] Restore the original initial detail screen and move the employment list to its own screen.
+- [x] Make the employment list the home screen, keeping /empleos as a redirect.
+- [x] Add the Social screen (/social) as a scroll feed of offer posters, with the bottom navigation shared between screens.

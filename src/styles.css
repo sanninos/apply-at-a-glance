@@ -63,6 +63,8 @@
   --color-employment-blue: var(--employment-blue);
   --color-employment-nav: var(--employment-nav);
   --color-employment-yellow: var(--employment-yellow);
+  --color-employment-orange: var(--employment-orange);
+  --color-employment-red: var(--employment-red);
 }
 
 :root {
@@ -70,6 +72,8 @@
   --employment-blue: oklch(0.45 0.105 260);
   --employment-nav: oklch(0.40 0.125 263);
   --employment-yellow: oklch(0.84 0.16 85);
+  --employment-orange: oklch(0.72 0.17 55);
+  --employment-red: oklch(0.58 0.21 25);
   --employment-shadow: 0 6px 20px color-mix(in oklab, var(--primary) 5%, transparent);
   --radius: 0.625rem;
   --background: oklch(1 0 0);
@@ -111,6 +115,8 @@
   --employment-blue: oklch(0.7 0.1 260);
   --employment-nav: oklch(0.32 0.09 263);
   --employment-yellow: oklch(0.84 0.16 85);
+  --employment-orange: oklch(0.72 0.17 55);
+  --employment-red: oklch(0.58 0.21 25);
   --employment-shadow: 0 6px 20px color-mix(in oklab, var(--foreground) 5%, transparent);
   --background: oklch(0.129 0.042 264.695);
   --foreground: oklch(0.984 0.003 247.858);
@@ -165,10 +171,12 @@ body:has(.employment-screen) { background: var(--muted); }
 .tab-count { font-size: 14px; padding: 2px 11px; border-radius: 20px; background: var(--employment-surface); color: var(--employment-blue); }
 .selected .tab-count { background: color-mix(in oklab, var(--primary-foreground) 24%, transparent); color: inherit; }
 .employment-list { display: grid; gap: 22px; }
-.employment-card { position: relative; overflow: hidden; display: block; background: var(--card); border: 2px solid var(--border); border-radius: 30px; padding: 30px; box-shadow: var(--employment-shadow); transition: border-color 150ms; }
+.employment-card { --employment-card-radius: 30px; position: relative; overflow: hidden; display: block; background: var(--card); border: 2px solid var(--border); border-radius: var(--employment-card-radius); padding: 30px; box-shadow: var(--employment-shadow); transition: border-color 150ms; }
 .employment-card:hover { border-color: var(--employment-blue); }
 .employment-card:focus-visible { outline: 2px solid var(--employment-blue); outline-offset: 3px; }
-.employment-card.featured::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 9px; background: var(--employment-yellow); }
+.employment-card.featured::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 9px; background: var(--employment-orange); border-radius: var(--employment-card-radius) 0 0 var(--employment-card-radius); }
+.employment-card.urgent::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 9px; background: var(--employment-red); border-radius: var(--employment-card-radius) 0 0 var(--employment-card-radius); }
+.employment-card.featured.urgent::before { background: linear-gradient(to bottom, var(--employment-orange) 0 50%, var(--employment-red) 50% 100%); }
 .employment-card-main { display: flex; align-items: center; gap: 20px; }
 .job-logo { width: 76px; height: 76px; flex-shrink: 0; overflow: hidden; border: 1px solid var(--border); border-radius: 22px; display: grid; place-items: center; background: var(--employment-surface); color: var(--employment-blue); }
 .job-logo img { width: 100%; height: 100%; object-fit: contain; background: var(--card); }
@@ -211,8 +219,8 @@ body:has(.employment-screen) { background: var(--muted); }
   .tab-count { padding: 1px 5px; font-size: 10px; }
   .employment-header { margin-bottom: 12px; }
   .employment-list { gap: 10px; }
-  .employment-card { padding: 14px 12px; border-radius: 22px; border-width: 1px; }
-  .employment-card.featured::before { width: 3px; }
+  .employment-card { --employment-card-radius: 22px; padding: 14px 12px; border-radius: var(--employment-card-radius); border-width: 1px; }
+  .employment-card.featured::before, .employment-card.urgent::before { width: 3px; }
   .employment-card-main { gap: 10px; align-items: flex-start; }
   .job-logo { width: 40px; height: 40px; border-radius: 14px; }
   .job-logo svg { width: 23px; height: 23px; }

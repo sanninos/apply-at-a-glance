@@ -35,9 +35,14 @@ describe("useEmployerLogo", () => {
     expect(result.current.src).toBeNull();
   });
 
-  it("replaces a company photo that fails in the browser with the placeholder", () => {
+  it("replaces a company photo that never loads with the placeholder", () => {
     render(createElement(LogoTest, { photo: "https://cdn.example/logo.png" }));
-    act(() => screen.getByTestId("logo").dispatchEvent(new Event("error")));
     expect(screen.getByTestId("logo").getAttribute("src")).toBe(DEFAULT_EMPLOYER_LOGO);
+  });
+
+  it("shows no image when the placeholder itself reports an error", () => {
+    render(createElement(LogoTest, { photo: null }));
+    act(() => screen.getByTestId("logo").dispatchEvent(new Event("error")));
+    expect(screen.getByTestId("logo").tagName).toBe("SPAN");
   });
 });

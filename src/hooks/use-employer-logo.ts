@@ -19,10 +19,13 @@ export function useEmployerLogo(photo: string | null) {
     const element = ref.current;
     if (!element) return;
     const fail = () => setSource(current => (current === "photo" ? "default" : current === "default" ? "none" : current));
-    if (element.complete && element.naturalWidth === 0) fail();
+    // A photo that failed before React could attach its own handler is only
+    // visible through the element's load state; the placeholder is not re-checked
+    // that way so a never-loaded placeholder never cascades into the icon.
+    if (source === "photo" && element.complete && element.naturalWidth === 0) fail();
     element.addEventListener("error", fail, { once: true });
     return () => element.removeEventListener("error", fail);
-  }, [src]);
+  }, [src, source]);
 
   return { src, ref, onError };
 }

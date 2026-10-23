@@ -1,7 +1,7 @@
 import { createFileRoute, Link, useNavigate } from '@tanstack/react-router';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useState, type ReactNode } from 'react';
-import { UserCircle, Megaphone, Bell, UsersRound, ListTodo, ChartNoAxesColumnIncreasing, LogOut, ChevronRight } from 'lucide-react';
+import { UserCircle, Megaphone, Bell, UsersRound, ListTodo, ChartNoAxesColumnIncreasing, LogOut, ChevronRight, Download, Trash2, GraduationCap } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
 import { AppBottomNav } from '@/components/app-bottom-nav';
@@ -77,7 +77,24 @@ function ProfileScreen() {
         {[{ label: 'Mis notificaciones', icon: Bell }, { label: 'Tus postulaciones', icon: UsersRound }, { label: 'Edita tu curriculum', icon: ListTodo }, { label: 'Visitas a tu perfil', icon: ChartNoAxesColumnIncreasing }].map(({ label, icon: Icon }) => <Button key={label} variant="outline" disabled className="profile-access-row" title={`${label}: próximamente`}><Icon /><span>{label}</span><small>Próximamente</small></Button>)}
       </div>
     </ProfileBlock>
-    {user && <Button variant="ghost" className="profile-signout" disabled={busy} onClick={signOut}><LogOut />{busy ? 'Cerrando sesión…' : 'Cerrar sesión'}</Button>}
+    <ProfileBlock title="DATOS DE TU CUENTA" subtitle="GDPR · privacidad y portabilidad">
+      <div className="profile-data-list">
+        <Button variant="ghost" className="profile-data-row" disabled title="Exportar mis datos: próximamente">
+          <span className="profile-icon-tile"><Download /></span>
+          <span className="profile-data-copy"><strong>Exportar mis datos</strong><span>Descarga un JSON con tu perfil, convocatorias guardadas y consentimientos.</span><small>Próximamente</small></span>
+          <ChevronRight className="profile-data-arrow" />
+        </Button>
+        <Button variant="ghost" className="profile-data-row profile-data-delete" disabled title="Eliminar mi cuenta: próximamente">
+          <span className="profile-icon-tile"><Trash2 /></span>
+          <span className="profile-data-copy"><strong>Eliminar mi cuenta</strong><span>Borra tu cuenta y todos tus datos definitivamente.</span><small>Próximamente</small></span>
+          <ChevronRight className="profile-data-arrow" />
+        </Button>
+      </div>
+    </ProfileBlock>
+    <div className="profile-footer-actions">
+      <Button variant="outline" className="profile-tutorial" disabled title="Repetir tutorial: próximamente"><GraduationCap /><span>Repetir tutorial<small>Próximamente</small></span></Button>
+      <Button variant="outline" className="profile-signout" disabled={!user || busy} onClick={signOut}><LogOut />{busy ? 'Cerrando sesión…' : 'Cerrar sesión'}</Button>
+    </div>
     {error && <p className="profile-error" role="alert">{error}</p>}
     <AppBottomNav active="perfil" />
   </main>;

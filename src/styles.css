@@ -205,6 +205,24 @@ body:has(.employment-screen) { background: var(--muted); }
 .employment-nav-item.active .nav-icon { background: var(--employment-yellow); color: var(--primary); }
 .employment-nav-item.active:hover { background: transparent; }
 .employment-empty { min-height: 300px; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 16px; color: var(--muted-foreground); }
+.social-screen { max-width: 28rem; min-height: 100dvh; margin: 0 auto; background: var(--employment-surface); padding: 12px 12px 90px; font-family: "Segoe UI", system-ui, sans-serif; }
+body:has(.social-screen) { background: var(--muted); }
+.social-header { margin-bottom: 12px; padding: 2px 4px 0; }
+.social-kicker { font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--employment-blue); }
+.social-header h2 { font-size: 16px; font-weight: 700; color: var(--foreground); }
+.social-count { margin-top: 2px; font-size: 11px; color: var(--muted-foreground); }
+.social-feed { display: grid; gap: 14px; }
+.social-post { display: block; overflow: hidden; background: var(--card); border: 1px solid var(--border); border-radius: 22px; box-shadow: var(--employment-shadow); transition: border-color 150ms; }
+.social-post:hover { border-color: var(--employment-blue); }
+.social-post:focus-visible { outline: 2px solid var(--employment-blue); outline-offset: 3px; }
+.social-poster { display: block; width: 100%; height: auto; background: var(--muted); }
+.social-summary { display: flex; align-items: center; gap: 10px; padding: 10px 12px; }
+.social-summary-copy { flex: 1; min-width: 0; }
+.social-summary-title { font-size: 14px; line-height: 1.4; font-weight: 600; color: var(--foreground); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.social-summary-loc { display: flex; align-items: center; gap: 4px; margin-top: 2px; font-size: 11px; color: var(--employment-blue); }
+.social-summary-loc svg { width: 12px; height: 12px; flex-shrink: 0; color: var(--destructive); }
+.social-summary-loc span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.social-summary-company { margin-top: 2px; font-size: 10px; font-weight: 600; text-transform: uppercase; color: var(--muted-foreground); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 @media all {
   .employment-screen { padding: 12px 12px 90px; }
   .employment-search-row { gap: 8px; }

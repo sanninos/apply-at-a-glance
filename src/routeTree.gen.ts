@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as EmpleosRouteImport } from './routes/empleos'
+import { Route as PerfilRouteImport } from './routes/perfil'
 import { Route as RadarRouteImport } from './routes/radar'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as SocialRouteImport } from './routes/social'
@@ -30,6 +31,11 @@ const AuthRoute = AuthRouteImport.update({
 const EmpleosRoute = EmpleosRouteImport.update({
   id: '/empleos',
   path: '/empleos',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PerfilRoute = PerfilRouteImport.update({
+  id: '/perfil',
+  path: '/perfil',
   getParentRoute: () => rootRouteImport,
 } as any)
 const RadarRoute = RadarRouteImport.update({
@@ -57,6 +63,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/empleos': typeof EmpleosRoute
+  '/perfil': typeof PerfilRoute
   '/radar': typeof RadarRoute
   '/reset-password': typeof ResetPasswordRoute
   '/social': typeof SocialRoute
@@ -66,6 +73,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/empleos': typeof EmpleosRoute
+  '/perfil': typeof PerfilRoute
   '/radar': typeof RadarRoute
   '/reset-password': typeof ResetPasswordRoute
   '/social': typeof SocialRoute
@@ -76,6 +84,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/empleos': typeof EmpleosRoute
+  '/perfil': typeof PerfilRoute
   '/radar': typeof RadarRoute
   '/reset-password': typeof ResetPasswordRoute
   '/social': typeof SocialRoute
@@ -87,6 +96,7 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/empleos'
+    | '/perfil'
     | '/radar'
     | '/reset-password'
     | '/social'
@@ -96,6 +106,7 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/empleos'
+    | '/perfil'
     | '/radar'
     | '/reset-password'
     | '/social'
@@ -105,6 +116,7 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/empleos'
+    | '/perfil'
     | '/radar'
     | '/reset-password'
     | '/social'
@@ -115,6 +127,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthRoute: typeof AuthRoute
   EmpleosRoute: typeof EmpleosRoute
+  PerfilRoute: typeof PerfilRoute
   RadarRoute: typeof RadarRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
   SocialRoute: typeof SocialRoute
@@ -142,6 +155,13 @@ declare module '@tanstack/react-router' {
       path: '/empleos'
       fullPath: '/empleos'
       preLoaderRoute: typeof EmpleosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/perfil': {
+      id: '/perfil'
+      path: '/perfil'
+      fullPath: '/perfil'
+      preLoaderRoute: typeof PerfilRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/radar': {
@@ -179,6 +199,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthRoute: AuthRoute,
   EmpleosRoute: EmpleosRoute,
+  PerfilRoute: PerfilRoute,
   RadarRoute: RadarRoute,
   ResetPasswordRoute: ResetPasswordRoute,
   SocialRoute: SocialRoute,

@@ -211,7 +211,7 @@ body:has(.social-screen) { background: var(--muted); }
 .social-kicker { font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--employment-blue); }
 .social-header h2 { font-size: 16px; font-weight: 700; color: var(--foreground); }
 .social-count { margin-top: 2px; font-size: 11px; color: var(--muted-foreground); }
-.social-feed { display: grid; height: calc(100dvh - 224px); min-height: 460px; overflow-y: auto; overscroll-behavior: contain; scroll-snap-type: y mandatory; scroll-behavior: smooth; border-radius: 22px; }
+.social-feed { display: grid; grid-auto-rows: 100%; height: calc(100dvh - 224px); min-height: 460px; overflow-y: auto; overscroll-behavior: contain; scroll-snap-type: y mandatory; scroll-behavior: smooth; border-radius: 22px; }
 .social-feed::-webkit-scrollbar { display: none; }
 .social-feed { scrollbar-width: none; }
 .social-post { position: relative; scroll-snap-align: start; scroll-snap-stop: always; display: flex; flex-direction: column; height: 100%; overflow: hidden; background: var(--primary); border: 1px solid var(--border); border-radius: 22px; box-shadow: var(--employment-shadow); }

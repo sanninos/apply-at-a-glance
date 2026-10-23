@@ -41,6 +41,14 @@ function SocialPostCard({ post }: { post: SocialPost }) {
       preloadDelay={0}
     >
       <img
+        className="social-poster-blur"
+        src={post.poster}
+        alt=""
+        aria-hidden="true"
+        loading="lazy"
+        tabIndex={-1}
+      />
+      <img
         className="social-poster"
         src={post.poster}
         alt={`Póster de la oferta: ${post.titulo || "Empleo"}`}

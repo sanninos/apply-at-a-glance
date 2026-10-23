@@ -1,6 +1,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { supabase } from "@/integrations/supabase/client";
 import type { JobListItem } from "@/lib/job-list";
+import type { SocialPostRow } from "@/lib/social-posts";
 
 export type JobDetailData = {
   id: number;

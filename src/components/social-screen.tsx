@@ -1,19 +1,32 @@
+// ============= Full file contents =============
 import { useState } from "react";
 import { Link } from "@tanstack/react-router";
-import { BriefcaseBusiness, ChevronRight, MapPin } from "lucide-react";
+import { BriefcaseBusiness, ChevronDown, ChevronRight, MapPin } from "lucide-react";
 import { AppBottomNav } from "@/components/app-bottom-nav";
 import { useEmployerLogo } from "@/hooks/use-employer-logo";
 import { publishedAgo } from "@/lib/job-list";
 import type { SocialPost } from "@/lib/social-posts";
 
 export function SocialScreen({ posts }: { posts: SocialPost[] }) {
+  const [seenScroll, setSeenScroll] = useState(false);
+
   return (
     <main className="social-screen">
       <h1 className="sr-only">Social</h1>
       {posts.length ? (
-        <section className="social-feed" aria-label="Pósteres de ofertas de trabajo">
-          {posts.map((post) => (
-            <SocialPostCard key={post.id} post={post} />
+        <section
+          className="social-feed"
+          aria-label="Pósteres de ofertas de trabajo"
+          onScroll={(event) => {
+            if (!seenScroll && event.currentTarget.scrollTop > 24) setSeenScroll(true);
+          }}
+        >
+          {posts.map((post, index) => (
+            <SocialPostCard
+              key={post.id}
+              post={post}
+              showScrollHint={index === 0 && posts.length > 1 && !seenScroll}
+            />
           ))}
         </section>
       ) : (
@@ -27,7 +40,13 @@ export function SocialScreen({ posts }: { posts: SocialPost[] }) {
   );
 }
 
-function SocialPostCard({ post }: { post: SocialPost }) {
+function SocialPostCard({
+  post,
+  showScrollHint = false,
+}: {
+  post: SocialPost;
+  showScrollHint?: boolean;
+}) {
   const [broken, setBroken] = useState(false);
   const { src, ref, onError } = useEmployerLogo(post.fotoEmpresa || post.image);
   if (broken) return null;
@@ -75,6 +94,12 @@ function SocialPostCard({ post }: { post: SocialPost }) {
           <ChevronRight aria-hidden="true" />
         </span>
       </div>
+      {showScrollHint && (
+        <p className="social-scroll-hint" aria-hidden="true">
+          <span>Deslizá para ver más</span>
+          <ChevronDown />
+        </p>
+      )}
     </Link>
   );
 }

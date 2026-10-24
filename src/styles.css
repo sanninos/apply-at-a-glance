@@ -191,7 +191,7 @@ body:has(.access-screen) { background: var(--muted); }
 .access-account p { max-width: 100%; overflow-wrap: anywhere; font-size: 14px; color: var(--muted-foreground); }
 .access-account-icon { width: 44px; height: 44px; }
 @media (max-width: 360px) { .access-screen { padding-inline: 12px; }.access-content { padding-inline: 8px; }.access-brand h1 { font-size: 28px; } }
-.profile-screen { max-width: 28rem; min-height: 100dvh; margin: 0 auto; padding: 16px 12px 94px; background: var(--employment-surface); color: var(--primary); font-family: "Segoe UI", system-ui, sans-serif; }
+.profile-screen { max-width: 28rem; min-height: 100dvh; margin: 0 auto; padding: 16px 12px calc(108px + env(safe-area-inset-bottom, 0px)); background: var(--employment-surface); color: var(--primary); font-family: "Segoe UI", system-ui, sans-serif; }
 body:has(.profile-screen) { background: var(--muted); }
 .profile-block { background: var(--card); border: 1px solid var(--border); border-radius: 23px; padding: 14px 12px; box-shadow: var(--employment-shadow); margin-bottom: 16px; }
 .profile-heading { position: relative; padding-left: 16px; margin-bottom: 12px; }
@@ -308,7 +308,7 @@ body:has(.social-screen) { background: var(--muted); }
 .social-summary-loc span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .social-summary-company { margin-top: 2px; font-size: 10px; font-weight: 600; text-transform: uppercase; color: color-mix(in oklab, var(--muted-foreground) 80%, transparent); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 @media all {
-  .employment-screen { padding: 12px 12px 90px; }
+  .employment-screen { padding: 12px 12px calc(108px + env(safe-area-inset-bottom, 0px)); }
   .employment-search-row { gap: 8px; }
   .employment-search { height: 44px; gap: 8px; padding: 0 12px; border-radius: 16px; border-width: 1px; }
   .employment-search > svg { width: 18px; height: 18px; }
@@ -337,7 +337,7 @@ body:has(.social-screen) { background: var(--muted); }
   .employment-meta svg { width: 12px; height: 12px; }
   .employment-badges { margin-top: 8px; }
   .employment-badges span { font-size: 10px; font-weight: 600; padding: 3px 7px; border-radius: 10px; }
-  .employment-nav { height: 66px; bottom: 8px; border-radius: 33px; padding: 4px 7px; width: calc(100% - 18px); }
+  .employment-nav { height: 66px; bottom: calc(8px + env(safe-area-inset-bottom, 0px)); border-radius: 33px; padding: 4px 7px; width: calc(100% - 18px); }
   .employment-nav-item { height: 56px; font-size: 10px; font-weight: 500; gap: 2px; }
   .employment-nav-item .nav-icon { width: 34px; height: 30px; border-radius: 30px; }
   .employment-nav-item svg { width: 20px; height: 20px; }

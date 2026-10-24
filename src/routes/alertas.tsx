@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { Bell, Plus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { AppBottomNav } from '@/components/app-bottom-nav';
+import { AlertConfiguration } from '@/components/alert-configuration';
 
 export const Route = createFileRoute('/alertas')({
   head: () => ({ meta: [
@@ -18,6 +19,7 @@ export const Route = createFileRoute('/alertas')({
 
 function AlertsScreen() {
   const [tab, setTab] = useState<'alertas' | 'notificaciones'>('alertas');
+  const [configOpen, setConfigOpen] = useState(false);
   const isAlerts = tab === 'alertas';
   return <main className="alerts-screen">
     <header className="alerts-header">
@@ -29,8 +31,8 @@ function AlertsScreen() {
     </div>
     <div id="alerts-panel" role="tabpanel" aria-labelledby={isAlerts ? 'alerts-tab' : 'notifications-tab'}>
       {isAlerts && <div className="alerts-create">
-        <div><h2>Crear una nueva alerta</h2><p>Recibe avisos de nuevas ofertas</p><small>Próximamente</small></div>
-        <Button className="alerts-add" size="icon" disabled aria-label="Crear una nueva alerta" title="Crear alertas: próximamente"><Plus /></Button>
+        <div><h2>Crear una nueva alerta</h2><p>Recibe avisos de nuevas ofertas</p></div>
+        <Button className="alerts-add" size="icon" onClick={() => setConfigOpen(true)} aria-label="Crear una nueva alerta" title="Crear una nueva alerta"><Plus /></Button>
       </div>}
       <div className="alerts-empty">
         <Bell aria-hidden="true" />
@@ -39,5 +41,6 @@ function AlertsScreen() {
       </div>
     </div>
     <AppBottomNav active="alertas" />
+    <AlertConfiguration open={configOpen} onOpenChange={setConfigOpen} />
   </main>;
 }

@@ -279,10 +279,10 @@ body:has(.profile-screen) { background: var(--muted); }
 .employment-badges { display: flex; gap: 8px; margin-top: 12px; }
 .employment-badges span { border-radius: 13px; background: var(--accent); color: var(--accent-foreground); padding: 7px 14px; font-size: 17px; font-weight: 700; }
 .employment-nav { position: fixed; z-index: 20; bottom: 10px; left: 50%; transform: translateX(-50%); width: calc(100% - 28px); max-width: calc(28rem - 18px); height: 112px; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); align-items: center; padding: 10px 10px; background: var(--employment-nav); border-radius: 48px; box-shadow: var(--employment-shadow); }
-.employment-nav-item { display: flex; flex-direction: column; gap: 5px; height: 90px; min-width: 0; padding: 0; font-size: 15px; font-weight: 600; color: color-mix(in oklab, var(--primary-foreground) 75%, transparent); }
+nav .employment-nav-item, .employment-nav .employment-nav-item { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 5px; height: 90px; min-width: 0; padding: 0; margin: 0; text-align: center; font-size: 15px; font-weight: 600; color: color-mix(in oklab, var(--primary-foreground) 75%, transparent); }
 .employment-nav-item:disabled { opacity: 1; }
-.employment-nav-item .nav-icon { height: 52px; width: 58px; display: grid; place-items: center; border-radius: 30px; }
-.employment-nav-item svg { width: 33px; height: 33px; }
+.employment-nav-item .nav-icon { height: 52px; width: 58px; max-width: 100%; display: grid; place-items: center; border-radius: 30px; }
+.employment-nav-item svg { width: 33px; height: 33px; flex: none; }
 .employment-nav-item.active { color: var(--primary-foreground); }
 .employment-nav-item.active .nav-icon { background: var(--employment-yellow); color: var(--primary); }
 .employment-nav-item.active:hover { background: transparent; }
@@ -338,7 +338,7 @@ body:has(.social-screen) { background: var(--muted); }
   .employment-badges { margin-top: 8px; }
   .employment-badges span { font-size: 10px; font-weight: 600; padding: 3px 7px; border-radius: 10px; }
   .employment-nav { height: 66px; bottom: calc(8px + env(safe-area-inset-bottom, 0px)); border-radius: 33px; padding: 4px 7px; width: calc(100% - 18px); }
-  .employment-nav-item { height: 56px; font-size: 10px; font-weight: 500; gap: 2px; }
+  nav .employment-nav-item, .employment-nav .employment-nav-item { height: 56px; font-size: 10px; font-weight: 500; gap: 2px; }
   .employment-nav-item .nav-icon { width: 34px; height: 30px; border-radius: 30px; }
   .employment-nav-item svg { width: 20px; height: 20px; }
 }

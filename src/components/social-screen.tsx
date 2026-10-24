@@ -96,7 +96,7 @@ function SocialPostCard({
       </div>
       {showScrollHint && (
         <p className="social-scroll-hint" aria-hidden="true">
-          <span>Deslizá para ver más</span>
+          <span>Deslizá</span>
           <ChevronDown />
         </p>
       )}

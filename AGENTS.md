@@ -16,3 +16,4 @@
 - Radar uses Google Maps JavaScript with a callback-based asynchronous loader and public display-only paginated job reads; parse stored coordinates in a browser-safe helper to keep invalid locations off the map.
 - App access uses Supabase Auth, a single root session subscriber, and a private profiles table created by a signup trigger; keep public browsing available and clear query caches before sign-out.
 - Profile is a public session-aware screen linked from the bottom navigation; display actual account data and keep unimplemented access and consent controls disabled rather than inventing activity or consent.
+- Alertas is a public presentation screen with tabbed empty states; keep alert creation disabled until persistence and notification delivery are implemented rather than simulating saved alerts.

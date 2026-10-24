@@ -1,9 +1,8 @@
 import { Link } from "@tanstack/react-router";
 import { Bell, Radar, BriefcaseBusiness, Layers, UserRound } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
-type AppSection = "empleos" | "social" | "radar" | "perfil";
+type AppSection = "alertas" | "empleos" | "social" | "radar" | "perfil";
 
 const sections = [
   { id: "alertas", label: "Alertas", icon: Bell },
@@ -51,9 +50,9 @@ export function AppBottomNav({ active }: { active: AppSection }) {
           );
         if (id === 'perfil') return <Link key={label} to="/perfil" className={cn('employment-nav-item', isActive && 'active')} aria-current={isActive ? 'page' : undefined}>{inner}</Link>;
         return (
-          <Button key={label} variant="ghost" disabled title={`${label}: próximamente`} className="employment-nav-item">
+          <Link key={label} to="/alertas" aria-current={isActive ? "page" : undefined} className={cn("employment-nav-item", isActive && "active")}>
             {inner}
-          </Button>
+          </Link>
         );
       })}
     </nav>

@@ -424,6 +424,40 @@ body:has(.radar-screen) { background: var(--muted); }
 .radar-result small { display: block; margin-top: 3px; font-size: 11px; color: var(--muted-foreground); }
 .radar-result svg { flex-shrink: 0; color: var(--employment-blue); }
 
+.applications-screen { max-width: 28rem; min-height: 100dvh; margin: 0 auto; padding: 20px 12px calc(108px + env(safe-area-inset-bottom, 0px)); background: var(--employment-surface); color: var(--primary); font-family: "Segoe UI", system-ui, sans-serif; }
+body:has(.applications-screen) { background: var(--muted); }
+.applications-header { padding: 20px 18px; border: 1px solid var(--border); border-radius: 28px; background: var(--card); box-shadow: var(--employment-shadow); }
+.applications-heading { position: relative; padding-left: 18px; }
+.applications-heading::before { content: ''; position: absolute; inset: 0 auto 0 0; width: 6px; border-radius: 6px; background: var(--employment-yellow); }
+.applications-heading h1 { font-size: 19px; line-height: 1.4; font-weight: 800; overflow-wrap: anywhere; }
+.applications-heading p { margin-top: 7px; font-size: 13px; color: var(--muted-foreground); }
+.applications-note { margin: 18px 4px 0; font-size: 12px; color: var(--muted-foreground); }
+.applications-list { display: grid; gap: 10px; margin-top: 16px; }
+.applications-card { display: flex; align-items: flex-start; gap: 10px; padding: 14px 12px; border: 1px solid var(--border); border-radius: 22px; background: var(--card); box-shadow: var(--employment-shadow); color: var(--primary); text-decoration: none; }
+.applications-card:hover { border-color: var(--employment-blue); }
+.applications-copy { flex: 1; min-width: 0; }
+.applications-company { margin-bottom: 4px; font-size: 11px; font-weight: 600; color: var(--muted-foreground); overflow-wrap: anywhere; }
+.applications-copy h2 { font-size: 14px; line-height: 1.4; font-weight: 600; overflow-wrap: anywhere; }
+.applications-meta { display: flex; align-items: center; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+.applications-status { padding: 3px 8px; border-radius: 10px; font-size: 10px; font-weight: 700; }
+.applications-status.sent { background: color-mix(in oklab, var(--employment-blue) 14%, var(--card)); color: var(--employment-blue); }
+.applications-status.review { background: color-mix(in oklab, var(--employment-yellow) 32%, var(--card)); color: var(--primary); }
+.applications-status.interview { background: color-mix(in oklab, var(--employment-orange) 20%, var(--card)); color: var(--primary); }
+.applications-status.rejected { background: color-mix(in oklab, var(--employment-red) 12%, var(--card)); color: var(--employment-red); }
+.applications-date { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; color: var(--muted-foreground); }
+.applications-date svg { width: 12px; height: 12px; }
+.applications-arrow { width: 18px; height: 18px; flex-shrink: 0; align-self: center; color: var(--muted-foreground); }
+.applications-empty, .applications-login { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; margin: 26px 4px 0; min-height: 188px; padding: 26px 16px; border: 1px solid var(--border); border-radius: 28px; background: var(--card); text-align: center; }
+.applications-empty > svg, .applications-login > svg { width: 48px; height: 48px; color: var(--ring); stroke-width: 2.5; margin-bottom: 6px; }
+.applications-empty h2, .applications-login h2 { font-size: 16px; line-height: 1.4; font-weight: 750; }
+.applications-empty p, .applications-login p { max-width: 30ch; font-size: 12px; line-height: 1.5; color: var(--muted-foreground); }
+.applications-login-cta { height: 46px; padding: 0 20px; border-radius: 16px; background: var(--primary); color: var(--primary-foreground); font-size: 13px; font-weight: 650; }
+.applications-error { display: flex; flex-direction: column; align-items: center; gap: 12px; margin: 26px 4px 0; padding: 22px 16px; border: 1px solid var(--border); border-radius: 22px; background: var(--card); text-align: center; font-size: 12px; }
+.applications-error p { color: var(--destructive); }
+a.profile-access-row { display: flex; align-items: center; text-decoration: none; }
+a.profile-access-row:hover { background: var(--employment-surface); }
+.profile-access-arrow { width: 18px; height: 18px; margin-left: auto; color: var(--muted-foreground); }
+
 @layer base {
   html,
   body {

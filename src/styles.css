@@ -357,10 +357,10 @@ body:has(.social-screen) { background: var(--muted); }
 .social-summary-loc svg { width: 12px; height: 12px; flex-shrink: 0; color: var(--employment-red); }
 .social-summary-loc span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .social-summary-company { margin-top: 2px; font-size: 10px; font-weight: 600; text-transform: uppercase; color: color-mix(in oklab, var(--muted-foreground) 80%, transparent); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.social-scroll-hint { position: absolute; left: 50%; bottom: 122px; z-index: 3; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: 1px; margin: 0; padding: 8px 16px 5px; border-radius: 999px; background: color-mix(in oklab, var(--primary) 68%, transparent); color: var(--primary-foreground); font-size: 10px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; white-space: nowrap; pointer-events: none; animation: social-hint-in .45s ease-out both; }
-.social-scroll-hint svg { width: 20px; height: 20px; animation: social-hint-bob 1.35s ease-in-out infinite; }
-@keyframes social-hint-in { from { opacity: 0; transform: translate(-50%, 12px); } to { opacity: 1; transform: translate(-50%, 0); } }
-@keyframes social-hint-bob { 0%, 100% { transform: translateY(-3px); opacity: .5; } 50% { transform: translateY(5px); opacity: 1; } }
+.social-scroll-hint { position: absolute; left: 50%; bottom: 118px; z-index: 3; transform: translateX(-50%); display: flex; align-items: center; gap: 5px; margin: 0; padding: 6px 13px; border-radius: 999px; background: color-mix(in oklab, var(--primary) 72%, transparent); color: var(--primary-foreground); font-size: 10px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; white-space: nowrap; pointer-events: none; animation: social-hint-in .45s ease-out both; }
+.social-scroll-hint svg { width: 15px; height: 15px; animation: social-hint-bob 1.35s ease-in-out infinite; }
+@keyframes social-hint-in { from { opacity: 0; transform: translate(-50%, 10px); } to { opacity: 1; transform: translate(-50%, 0); } }
+@keyframes social-hint-bob { 0%, 100% { transform: translateY(-2px); opacity: .5; } 50% { transform: translateY(3px); opacity: 1; } }
 @media (prefers-reduced-motion: reduce) { .social-scroll-hint { animation: none; } .social-scroll-hint svg { animation: none; } }
 @media all {
   .employment-screen { padding: 12px 12px calc(108px + env(safe-area-inset-bottom, 0px)); }

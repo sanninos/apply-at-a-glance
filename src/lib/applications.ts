@@ -44,7 +44,10 @@ export function toApplicationItem(row: ApplicationRow): ApplicationItem | null {
 export function listApplications(rows: ApplicationRow[]): ApplicationItem[] {
   const items = rows.map(toApplicationItem).filter((item): item is ApplicationItem => item !== null);
   const byJob = new Map<number, ApplicationItem>();
-  for (const item of items) if (!byJob.has(item.jobId)) byJob.set(item.jobId, item);
+  for (const item of items) {
+    const current = byJob.get(item.jobId);
+    if (!current || Date.parse(item.appliedAt) > Date.parse(current.appliedAt)) byJob.set(item.jobId, item);
+  }
   return [...byJob.values()].sort((a, b) => Date.parse(b.appliedAt) - Date.parse(a.appliedAt));
 }
 

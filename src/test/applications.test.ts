@@ -41,7 +41,7 @@ describe('mis postulaciones list', () => {
   it('keeps a single card per offer', () => {
     const items = listApplications([row('a', 7, '2026-10-01T10:00:00Z'), row('b', 7, '2026-10-05T10:00:00Z')]);
     expect(items).toHaveLength(1);
-    expect(items[0].id).toBe('b');
+    expect(items[0]?.id).toBe('b');
   });
 
   it('shows the stored status with the accent tone', () => {

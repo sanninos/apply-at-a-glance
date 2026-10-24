@@ -17,3 +17,4 @@
 - App access uses Supabase Auth, a single root session subscriber, and a private profiles table created by a signup trigger; keep public browsing available and clear query caches before sign-out.
 - Profile is a public session-aware screen linked from the bottom navigation; display actual account data and keep unimplemented access and consent controls disabled rather than inventing activity or consent.
 - Alertas opens a focused configuration drawer with local draft preferences; do not simulate saved alerts or notification delivery until persistence and delivery are implemented, and explicitly disclose that submission does not save.
+- Mis postulaciones reads only the signed-in user's own rows from the postulaciones table (own-row RLS, one card per offer, offers only); the detail-screen action does not record applications yet, so the screen says so instead of showing invented applications.

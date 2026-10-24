@@ -74,7 +74,10 @@ function ProfileScreen() {
     </ProfileBlock>
     <ProfileBlock title="ACCESOS" subtitle="Acciones de tu cuenta" className="profile-access-block">
       <div className="profile-access-list">
-        {[{ label: 'Mis notificaciones', icon: Bell }, { label: 'Tus postulaciones', icon: UsersRound }, { label: 'Edita tu curriculum', icon: ListTodo }, { label: 'Visitas a tu perfil', icon: ChartNoAxesColumnIncreasing }].map(({ label, icon: Icon }) => <Button key={label} variant="outline" disabled className="profile-access-row" title={`${label}: próximamente`}><Icon /><span>{label}</span><small>Próximamente</small></Button>)}
+        <Button variant="outline" disabled className="profile-access-row" title="Mis notificaciones: próximamente"><Bell /><span>Mis notificaciones</span><small>Próximamente</small></Button>
+        <Link to="/mis-postulaciones" className="profile-access-row"><UsersRound /><span>Tus postulaciones</span><ChevronRight className="profile-access-arrow" /></Link>
+        <Button variant="outline" disabled className="profile-access-row" title="Edita tu curriculum: próximamente"><ListTodo /><span>Edita tu curriculum</span><small>Próximamente</small></Button>
+        <Button variant="outline" disabled className="profile-access-row" title="Visitas a tu perfil: próximamente"><ChartNoAxesColumnIncreasing /><span>Visitas a tu perfil</span><small>Próximamente</small></Button>
       </div>
     </ProfileBlock>
     <ProfileBlock title="DATOS DE TU CUENTA" subtitle="GDPR · privacidad y portabilidad">

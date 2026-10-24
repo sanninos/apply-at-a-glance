@@ -1,4 +1,4 @@
-- [ ] Create the reference Alertas screen and connect its bottom-navigation option; alert delivery remains unavailable.
+- [x] Create the reference Alertas screen and connect its bottom-navigation option; verified tabs and navigation on desktop/mobile, with alert creation disabled pending implementation.
 - [x] Add the account-data block, tutorial and reference-style sign-out controls to Profile; verified desktop/mobile, with unavailable actions disabled.
 - [x] Create the reference Profile screen and connect the bottom navigation (verified signed-out; actual account verification remains unavailable on external unmanaged Supabase).
 - [x] Add reference-style registration and sign-in with private profiles, Google access and session-aware account navigation.

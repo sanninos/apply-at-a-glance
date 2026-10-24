@@ -258,6 +258,33 @@ body:has(.alerts-screen) { background: var(--muted); }
 .alerts-empty > svg { width: 48px; height: 48px; color: var(--ring); stroke-width: 2.5; margin-bottom: 6px; }
 .alerts-empty h2 { font-size: 16px; line-height: 1.4; font-weight: 750; }
 .alerts-empty p { font-size: 12px; line-height: 1.5; color: var(--muted-foreground); }
+.alert-configuration { max-width: 28rem; margin-inline: auto; max-height: calc(100dvh - 20px); overflow-y: auto; border-radius: 28px 28px 0 0; background: var(--card); color: var(--foreground); }
+.alert-configuration > div:first-child { width: 48px; height: 5px; margin-top: 12px; background: var(--border); flex-shrink: 0; }
+.alert-config-content { padding: 24px 20px calc(20px + env(safe-area-inset-bottom, 0px)); }
+.alert-config-header { text-align: center; margin-bottom: 30px; }
+.alert-config-header h2 { font-size: 24px; line-height: 1.3; font-weight: 750; letter-spacing: 0; }
+.alert-config-header p { font-size: 14px; line-height: 1.5; margin-top: 10px; color: var(--muted-foreground); }
+.alert-type-field { margin: 0 auto 26px; width: 100%; max-width: 280px; }
+.alert-type-field legend, .alert-radius-field label, .alert-search-field label { font-size: 16px; font-weight: 650; margin-bottom: 14px; }
+.alert-type-options { display: flex; flex-wrap: wrap; gap: 18px 8px; padding: 20px 12px; background: var(--muted); border: 1px solid var(--border); border-radius: 16px; }
+.alert-type-options > button { flex: 1 1 auto; min-width: 0; height: 42px; border-radius: 12px; border-color: var(--foreground); background: var(--card); color: var(--foreground); font-size: 13px; padding-inline: 12px; }
+.alert-type-options > button:last-child { flex: 0 1 auto; }
+.alert-type-options > button.selected { border-color: transparent; background: color-mix(in oklab, var(--employment-yellow) 18%, var(--card)); color: var(--accent-foreground); }
+.alert-type-options svg { width: 15px; height: 15px; }
+.alert-radius-field > div:first-child { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.alert-radius-field label { margin: 0; }
+.alert-radius-field output { font-size: 16px; color: var(--accent-foreground); font-weight: 700; white-space: nowrap; }
+.alert-radius-slider { margin: 32px 0 24px; }
+.alert-radius-slider > span:first-child { height: 7px; background: var(--border); }
+.alert-radius-slider > span:first-child > span { background: var(--employment-yellow); }
+.alert-radius-slider [role=slider] { width: 24px; height: 24px; background: var(--employment-yellow); border-color: var(--employment-yellow); box-shadow: var(--employment-shadow); }
+.alert-radius-limits { display: flex; justify-content: space-between; font-size: 11px; color: var(--muted-foreground); }
+.alert-config-submit { width: 100%; height: 56px; margin-top: 28px; border-radius: 16px; background: var(--employment-yellow); color: var(--primary); font-size: 16px; font-weight: 700; }
+.alert-config-submit:hover { background: color-mix(in oklab, var(--employment-yellow) 85%, var(--card)); }
+.alert-search-field { display: grid; gap: 8px; }
+.alert-search-field label { margin-bottom: 0; }
+.alert-search-field input { width: 100%; min-width: 0; height: 44px; padding: 0 12px; border: 1px solid var(--border); border-radius: 12px; background: var(--card); color: var(--foreground); font-size: 13px; }
+.alert-config-notice { font-size: 12px; line-height: 1.5; color: var(--muted-foreground); margin-top: 20px; }
 .employment-header { margin-bottom: 24px; }
 .employment-search-row { display: flex; gap: 16px; }
 .employment-search { min-width: 0; flex: 1; display: flex; align-items: center; gap: 16px; border: 2px solid var(--border); border-radius: 22px; background: var(--card); padding: 0 22px; height: 80px; box-shadow: var(--employment-shadow); color: var(--muted-foreground); }

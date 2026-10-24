@@ -1,0 +1,1 @@
+export const ALERT_RADIUS = { min: 1, max: 50, initial: 10 } as const;

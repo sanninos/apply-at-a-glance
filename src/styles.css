@@ -258,7 +258,8 @@ body:has(.alerts-screen) { background: var(--muted); }
 .alerts-empty > svg { width: 48px; height: 48px; color: var(--ring); stroke-width: 2.5; margin-bottom: 6px; }
 .alerts-empty h2 { font-size: 16px; line-height: 1.4; font-weight: 750; }
 .alerts-empty p { font-size: 12px; line-height: 1.5; color: var(--muted-foreground); }
-.alert-configuration { max-width: 28rem; margin-inline: auto; max-height: calc(100dvh - 20px); overflow-y: auto; border-radius: 28px 28px 0 0; background: var(--card); color: var(--foreground); }
+.alert-configuration { max-width: 28rem; margin-inline: auto; max-height: calc(100dvh - 20px); overflow-y: auto; scrollbar-width: none; border-radius: 28px 28px 0 0; background: var(--card); color: var(--foreground); }
+.alert-configuration::-webkit-scrollbar { display: none; }
 .alert-configuration > div:first-child { width: 48px; height: 5px; margin-top: 12px; background: var(--border); flex-shrink: 0; }
 .alert-config-content { padding: 24px 20px calc(20px + env(safe-area-inset-bottom, 0px)); }
 .alert-config-header { text-align: center; margin-bottom: 30px; }

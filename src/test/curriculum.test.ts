@@ -37,7 +37,7 @@ describe('curriculum editor', () => {
     const draft = emptyCurriculum();
     draft.fullName = 'María Pérez';
     draft.experiences[0] = { ...draft.experiences[0], puesto: 'Cajera', empresa: 'Tienda' };
-    draft.experiences[1] = { ...draft.experiences[1], puesto: ' ', empresa: '  ' };
+    draft.experiences[1] = { id: 'blank-exp', puesto: ' ', empresa: '  ', desde: '', hasta: '', descripcion: '' };
     draft.education[0] = { ...draft.education[0], titulo: 'Bachillerato', institucion: 'Liceo 1' };
     const result = curriculumPayload(draft);
     expect(result.ok).toBe(true);

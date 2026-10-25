@@ -1,7 +1,7 @@
 import { createFileRoute, Link, useNavigate } from '@tanstack/react-router';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useState, type ReactNode } from 'react';
-import { UserCircle, Megaphone, Bell, UsersRound, ListTodo, ChartNoAxesColumnIncreasing, LogOut, ChevronRight, Download, Trash2, GraduationCap } from 'lucide-react';
+import { UserCircle, Megaphone, Bell, UsersRound, ListTodo, ChartNoAxesColumnIncreasing, LogOut, ChevronRight, Download, Trash2, GraduationCap, Bookmark } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
 import { AppBottomNav } from '@/components/app-bottom-nav';
@@ -78,6 +78,7 @@ function ProfileScreen() {
       <div className="profile-access-list">
         <Button variant="outline" disabled className="profile-access-row" title="Mis notificaciones: próximamente"><Bell /><span>Mis notificaciones</span><small>Próximamente</small></Button>
         <Link to="/mis-postulaciones" className="profile-access-row"><UsersRound /><span>Tus postulaciones</span><ChevronRight className="profile-access-arrow" /></Link>
+        <Link to="/ofertas-guardadas" className="profile-access-row"><Bookmark /><span>Ofertas guardadas</span><ChevronRight className="profile-access-arrow" /></Link>
         <Button variant="outline" disabled className="profile-access-row" title="Edita tu curriculum: próximamente"><ListTodo /><span>Edita tu curriculum</span><small>Próximamente</small></Button>
         <Button variant="outline" disabled className="profile-access-row" title="Visitas a tu perfil: próximamente"><ChartNoAxesColumnIncreasing /><span>Visitas a tu perfil</span><small>Próximamente</small></Button>
       </div>

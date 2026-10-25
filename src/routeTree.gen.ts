@@ -14,6 +14,7 @@ import { Route as AlertasRouteImport } from './routes/alertas'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as EmpleosRouteImport } from './routes/empleos'
 import { Route as MisPostulacionesRouteImport } from './routes/mis-postulaciones'
+import { Route as OfertasGuardadasRouteImport } from './routes/ofertas-guardadas'
 import { Route as PerfilRouteImport } from './routes/perfil'
 import { Route as RadarRouteImport } from './routes/radar'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
@@ -43,6 +44,11 @@ const EmpleosRoute = EmpleosRouteImport.update({
 const MisPostulacionesRoute = MisPostulacionesRouteImport.update({
   id: '/mis-postulaciones',
   path: '/mis-postulaciones',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OfertasGuardadasRoute = OfertasGuardadasRouteImport.update({
+  id: '/ofertas-guardadas',
+  path: '/ofertas-guardadas',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PerfilRoute = PerfilRouteImport.update({
@@ -77,6 +83,7 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRoute
   '/empleos': typeof EmpleosRoute
   '/mis-postulaciones': typeof MisPostulacionesRoute
+  '/ofertas-guardadas': typeof OfertasGuardadasRoute
   '/perfil': typeof PerfilRoute
   '/radar': typeof RadarRoute
   '/reset-password': typeof ResetPasswordRoute
@@ -89,6 +96,7 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
   '/empleos': typeof EmpleosRoute
   '/mis-postulaciones': typeof MisPostulacionesRoute
+  '/ofertas-guardadas': typeof OfertasGuardadasRoute
   '/perfil': typeof PerfilRoute
   '/radar': typeof RadarRoute
   '/reset-password': typeof ResetPasswordRoute
@@ -102,6 +110,7 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/empleos': typeof EmpleosRoute
   '/mis-postulaciones': typeof MisPostulacionesRoute
+  '/ofertas-guardadas': typeof OfertasGuardadasRoute
   '/perfil': typeof PerfilRoute
   '/radar': typeof RadarRoute
   '/reset-password': typeof ResetPasswordRoute
@@ -116,6 +125,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/empleos'
     | '/mis-postulaciones'
+    | '/ofertas-guardadas'
     | '/perfil'
     | '/radar'
     | '/reset-password'
@@ -128,6 +138,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/empleos'
     | '/mis-postulaciones'
+    | '/ofertas-guardadas'
     | '/perfil'
     | '/radar'
     | '/reset-password'
@@ -140,6 +151,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/empleos'
     | '/mis-postulaciones'
+    | '/ofertas-guardadas'
     | '/perfil'
     | '/radar'
     | '/reset-password'
@@ -153,6 +165,7 @@ export interface RootRouteChildren {
   AuthRoute: typeof AuthRoute
   EmpleosRoute: typeof EmpleosRoute
   MisPostulacionesRoute: typeof MisPostulacionesRoute
+  OfertasGuardadasRoute: typeof OfertasGuardadasRoute
   PerfilRoute: typeof PerfilRoute
   RadarRoute: typeof RadarRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
@@ -195,6 +208,13 @@ declare module '@tanstack/react-router' {
       path: '/mis-postulaciones'
       fullPath: '/mis-postulaciones'
       preLoaderRoute: typeof MisPostulacionesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/ofertas-guardadas': {
+      id: '/ofertas-guardadas'
+      path: '/ofertas-guardadas'
+      fullPath: '/ofertas-guardadas'
+      preLoaderRoute: typeof OfertasGuardadasRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/perfil': {
@@ -241,6 +261,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthRoute: AuthRoute,
   EmpleosRoute: EmpleosRoute,
   MisPostulacionesRoute: MisPostulacionesRoute,
+  OfertasGuardadasRoute: OfertasGuardadasRoute,
   PerfilRoute: PerfilRoute,
   RadarRoute: RadarRoute,
   ResetPasswordRoute: ResetPasswordRoute,

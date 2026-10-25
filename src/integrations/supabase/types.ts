@@ -457,6 +457,38 @@ export type Database = {
         }
         Relationships: []
       }
+      ofertas_guardadas: {
+        Row: {
+          created_at: string
+          id: string
+          job_id: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          job_id: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          job_id?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ofertas_guardadas_job_id_fkey"
+            columns: ["job_id"]
+            isOneToOne: false
+            referencedRelation: "JobsDetails"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       ofertas_vistas: {
         Row: {
           id: string

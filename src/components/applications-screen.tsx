@@ -3,6 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { BriefcaseBusiness, Building2, ChevronRight, Clock, LogIn, RefreshCw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { AppBottomNav } from "@/components/app-bottom-nav";
+import { useAccessDialog } from "@/components/access-dialog";
 import { useAccess } from "@/components/access-provider";
 import { supabase } from "@/integrations/supabase/client";
 import { applicationCountLabel, applicationStatus, listApplications, type ApplicationItem, type ApplicationRow } from "@/lib/applications";
@@ -17,6 +18,7 @@ function ApplicationLogo({ item }: { item: ApplicationItem }) {
 
 export function ApplicationsScreen() {
   const { user, ready } = useAccess();
+  const { open: openAccess } = useAccessDialog();
   const applications = useQuery({
     queryKey: ["applications", user?.id],
     enabled: ready && Boolean(user),
@@ -46,7 +48,7 @@ export function ApplicationsScreen() {
       <LogIn aria-hidden="true" />
       <h2>Ingresá para ver tus postulaciones</h2>
       <p>Solo vos podés verlas.</p>
-      <Button asChild className="applications-login-cta"><Link to="/auth">Ingresar o registrarse</Link></Button>
+      <Button className="applications-login-cta" onClick={openAccess}>Ingresar o registrarse</Button>
     </section>}
 
     {signedIn && applications.isPending && <p className="applications-note">Cargando tus postulaciones…</p>}
@@ -77,7 +79,7 @@ export function ApplicationsScreen() {
       : <section className="applications-empty">
         <BriefcaseBusiness aria-hidden="true" />
         <h2>Todavía no tenés postulaciones</h2>
-        <p>Por ahora el botón «Postularme» de cada oferta no guarda tu postulación, así que no hay nada que mostrar. Cuando lo activemos, tus ofertas aparecerán acá.</p>
+        <p>Todavía no te postulaste a ninguna oferta. Abrí una oferta y tocá «Postularme» para anotarla acá.</p>
         <Button asChild variant="outline"><Link to="/">Ver ofertas</Link></Button>
       </section>)}
 

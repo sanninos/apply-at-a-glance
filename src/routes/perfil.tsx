@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
 import { AppBottomNav } from '@/components/app-bottom-nav';
 import { useAccess } from '@/components/access-provider';
+import { useAccessDialog } from '@/components/access-dialog';
 import { supabase } from '@/integrations/supabase/client';
 
 export const Route = createFileRoute('/perfil')({
@@ -29,6 +30,7 @@ function ProfileBlock({ title, subtitle, children, className = '' }: { title: st
 
 function ProfileScreen() {
   const { user, ready } = useAccess();
+  const { open: openAccess } = useAccessDialog();
   const queryClient = useQueryClient();
   const navigate = useNavigate();
   const [busy, setBusy] = useState(false);
@@ -63,7 +65,7 @@ function ProfileScreen() {
         </div>
       </div>
       {profile.isError && <p className="profile-error" role="alert">No pudimos cargar el nombre de tu perfil.</p>}
-      {!user && ready && <Button asChild variant="outline" className="profile-login"><Link to="/auth">Ingresar o registrarse<ChevronRight /></Link></Button>}
+      {!user && ready && <Button variant="outline" className="profile-login" onClick={openAccess}>Ingresar o registrarse<ChevronRight /></Button>}
     </ProfileBlock>
     <ProfileBlock title="CONSENTIMIENTOS" subtitle="Gestiona tus comunicaciones">
       <div className="profile-consent-row">

@@ -1,6 +1,8 @@
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useAccess } from "@/components/access-provider";
-import { useSuspenseQuery } from "@tanstack/react-query";
+import { useAccessDialog } from "@/components/access-dialog";
+import { useSuspenseQuery, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useState } from "react";
 import {
   ArrowLeft,
   Bookmark,
@@ -16,6 +18,8 @@ import {
 } from "lucide-react";
 import { type JobDetailData } from "@/lib/jobs.functions";
 import { jobQueryOptions } from "@/lib/job-query";
+import { applicationStatus } from "@/lib/applications";
+import { supabase } from "@/integrations/supabase/client";
 import { useEmployerLogo } from "@/hooks/use-employer-logo";
 
 export const Route = createFileRoute("/llamado/$jobId")({
@@ -74,10 +78,45 @@ function formatSalario(salario: number | null): string {
 }
 
 function JobDetail() {
-  const navigate = useNavigate();
   const { user, ready } = useAccess();
+  const { open: openAccess } = useAccessDialog();
   const { jobId } = Route.useParams();
   const { data: job } = useSuspenseQuery(jobQueryOptions(Number(jobId)));
+  const queryClient = useQueryClient();
+  const [busy, setBusy] = useState(false);
+  const [applyError, setApplyError] = useState("");
+  const existing = useQuery({
+    queryKey: ["application", jobId, user?.id],
+    enabled: ready && Boolean(user),
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("postulaciones")
+        .select("estado")
+        .eq("job_id", Number(jobId))
+        .maybeSingle();
+      if (error) throw error;
+      return data;
+    },
+  });
+  const status = existing.data ? applicationStatus(existing.data.estado) : null;
+  async function apply() {
+    if (!user) {
+      openAccess();
+      return;
+    }
+    setBusy(true);
+    setApplyError("");
+    const { error } = await supabase
+      .from("postulaciones")
+      .upsert({ user_id: user.id, job_id: Number(jobId) }, { onConflict: "user_id,job_id", ignoreDuplicates: true });
+    setBusy(false);
+    if (error) {
+      setApplyError("No pudimos registrar tu postulación. Intentá nuevamente.");
+      return;
+    }
+    void queryClient.invalidateQueries({ queryKey: ["application", jobId] });
+    void queryClient.invalidateQueries({ queryKey: ["applications", user.id] });
+  }
 
   const ubicacion = job.ubicacion || job.ciudad || null;
   const datos = [
@@ -208,19 +247,20 @@ function JobDetail() {
           </section>
         )}
 
-        <footer className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-md bg-background/95 backdrop-blur border-t p-4 flex gap-3">
-          <button className="size-12 rounded-2xl border grid place-items-center text-foreground" aria-label="Guardar">
-            <Bookmark className="size-5" />
-          </button>
-          <button
-            disabled={cerrado || !ready}
-            onClick={() => {
-              if (!user) void navigate({ to: "/auth" });
-            }}
-            className="flex-1 h-12 rounded-2xl bg-primary text-primary-foreground font-semibold shadow-md disabled:opacity-50"
-          >
-            {cerrado ? "Llamado cerrado" : "Postularme"}
-          </button>
+        <footer className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-md bg-background/95 backdrop-blur border-t p-4 flex flex-col gap-2">
+          <div className="flex gap-3">
+            <button className="size-12 rounded-2xl border grid place-items-center text-foreground" aria-label="Guardar">
+              <Bookmark className="size-5" />
+            </button>
+            <button
+              disabled={cerrado || !ready || busy || status != null}
+              onClick={() => void apply()}
+              className="flex-1 h-12 rounded-2xl bg-primary text-primary-foreground font-semibold shadow-md disabled:opacity-50"
+            >
+              {cerrado ? "Llamado cerrado" : status ? `Postulado · ${status.label}` : busy ? "Enviando…" : "Postularme"}
+            </button>
+          </div>
+          {applyError && <p className="text-sm text-destructive" role="alert">{applyError}</p>}
         </footer>
       </div>
     </div>

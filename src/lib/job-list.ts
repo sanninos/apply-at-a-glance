@@ -21,10 +21,25 @@ const normalize = (value: string) => value.normalize("NFD").replace(/[\u0300-\u0
 export function filterJobs(jobs: JobListItem[], search: string, mode: JobListMode, location = "", contract = "") {
   const sorted = [...jobs].sort((a, b) => Date.parse(b.created_at) - Date.parse(a.created_at));
   const source = mode === "latest" ? sorted.slice(0, 36) : mode === "urgent" ? sorted.filter(isUrgent) : sorted;
-  return source.filter((job) => {
+  const result = source.filter((job) => {
     const text = normalize([job.titulo, job.Empresa, job.descripcion, job.ubicacion, job.ciudad].filter(Boolean).join(" "));
     return text.includes(normalize(search.trim())) && (!location || (job.ciudad || job.ubicacion) === location) && (!contract || job.tipoContrato === contract);
   }).sort((a, b) => mode === "all" ? Number(Boolean(b.isFeatured)) - Number(Boolean(a.isFeatured)) : 0);
+  return interleaveOffers(result);
+}
+
+/** Mixes the list so every 5 regular offers are followed by 1 llamado; leftovers go at the end. */
+export function interleaveOffers(jobs: JobListItem[], offersPerLlamado = 5) {
+  const offers = jobs.filter((job) => !job.isLlamado);
+  const llamados = jobs.filter((job) => job.isLlamado);
+  const mixed: JobListItem[] = [];
+  let o = 0, l = 0;
+  while (o < offers.length || l < llamados.length) {
+    for (let i = 0; i < offersPerLlamado && o < offers.length; i++) mixed.push(offers[o++]!);
+    if (l < llamados.length) mixed.push(llamados[l++]!);
+    if (o >= offers.length) while (l < llamados.length) mixed.push(llamados[l++]!);
+  }
+  return mixed;
 }
 
 export function isUrgent(job: JobListItem) {

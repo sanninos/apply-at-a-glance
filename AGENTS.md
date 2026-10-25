@@ -20,6 +20,7 @@
 - Radar uses Google Maps JavaScript with a callback-based asynchronous loader and public display-only paginated job reads; parse stored coordinates in a browser-safe helper to keep invalid locations off the map.
 - App access uses Supabase Auth, a single root session subscriber, and a private profiles table created by a signup trigger; keep public browsing available and clear query caches before sign-out.
 - Profile is a public session-aware screen linked from the bottom navigation; display actual account data and keep unimplemented access and consent controls disabled rather than inventing activity or consent.
+- Account deletion opens a separate validated, ephemeral request form; until delivery is implemented, explicitly report that nothing is sent or saved and never perform direct deletion.
 - Alertas opens a focused configuration drawer with local draft preferences; do not simulate saved alerts or notification delivery until persistence and delivery are implemented, and explicitly disclose that submission does not save.
 - Mis postulaciones reads only the signed-in user's own rows from the postulaciones table (own-row RLS, one card per offer, offers only); the detail-screen "Postularme" records the application with upsert (unique user_id+job_id) and the button reflects the stored estado.
 - Saved offers use authenticated server functions with own-row RLS and a unique user+job pair; both detail bookmarks share one query, and the session-aware list is accessed from Profile, keeping private reads out of public loaders.

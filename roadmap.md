@@ -36,3 +36,4 @@
 - [x] Investigate curriculum errors: empty loads return null, editing waits for loaded data, drafts reset per account and failed saves preserve edits; live own-row RLS, grants and unique account key checked.
 - [x] Replace manual saving with serialized automatic curriculum saves on typing pause and blur, queue changes during requests and offer retry on failure; 11 curriculum tests pass.
 - [x] Create the compact reference-style home filter drawer with real options; browser verifies opening, applying, clearing and closing on desktop/mobile.
+- [ ] Open an account-deletion request form from Profile, validate entries and disclose that request delivery is not yet connected.

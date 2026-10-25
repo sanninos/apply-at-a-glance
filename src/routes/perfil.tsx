@@ -8,6 +8,7 @@ import { AppBottomNav } from '@/components/app-bottom-nav';
 import { useAccess } from '@/components/access-provider';
 import { useAccessDialog } from '@/components/access-dialog';
 import { supabase } from '@/integrations/supabase/client';
+import { AccountDeletion } from '@/components/account-deletion';
 
 export const Route = createFileRoute('/perfil')({
   head: () => ({ meta: [
@@ -34,6 +35,7 @@ function ProfileScreen() {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
   const [busy, setBusy] = useState(false);
+  const [deletionOpen, setDeletionOpen] = useState(false);
   const [error, setError] = useState('');
   const profile = useQuery({
     queryKey: ['access-profile', user?.id],
@@ -90,9 +92,9 @@ function ProfileScreen() {
           <span className="profile-data-copy"><strong>Exportar mis datos</strong><span>Descarga un JSON con tu perfil, convocatorias guardadas y consentimientos.</span><small>Próximamente</small></span>
           <ChevronRight className="profile-data-arrow" />
         </Button>
-        <Button variant="ghost" className="profile-data-row profile-data-delete" disabled title="Eliminar mi cuenta: próximamente">
+        <Button variant="ghost" className="profile-data-row profile-data-delete" onClick={() => setDeletionOpen(true)}>
           <span className="profile-icon-tile"><Trash2 /></span>
-          <span className="profile-data-copy"><strong>Eliminar mi cuenta</strong><span>Borra tu cuenta y todos tus datos definitivamente.</span><small>Próximamente</small></span>
+          <span className="profile-data-copy"><strong>Eliminar mi cuenta</strong><span>Solicitá la eliminación de tu cuenta y sus datos.</span></span>
           <ChevronRight className="profile-data-arrow" />
         </Button>
       </div>
@@ -103,5 +105,6 @@ function ProfileScreen() {
     </div>
     {error && <p className="profile-error" role="alert">{error}</p>}
     <AppBottomNav active="perfil" />
+    <AccountDeletion key={user?.id ?? 'signed-out'} open={deletionOpen} onOpenChange={setDeletionOpen} fullName={fullName ?? undefined} email={user?.email} />
   </main>;
 }

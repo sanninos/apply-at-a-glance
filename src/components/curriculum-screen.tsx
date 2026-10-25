@@ -17,6 +17,11 @@ import {
 } from "@/lib/curriculum";
 
 export function CurriculumScreen() {
+  const { user } = useAccess();
+  return <AccountCurriculumScreen key={user?.id ?? "signed-out"} />;
+}
+
+function AccountCurriculumScreen() {
   const { user, ready } = useAccess();
   const { open: openAccess } = useAccessDialog();
   const queryClient = useQueryClient();
@@ -28,12 +33,14 @@ export function CurriculumScreen() {
   const [editingSummary, setEditingSummary] = useState(false);
   const [editingExperience, setEditingExperience] = useState<string | null>(null);
   const [editingEducation, setEditingEducation] = useState<string | null>(null);
+  const [initialized, setInitialized] = useState(false);
 
   const curriculum = useQuery({
     queryKey: ["curriculum", user?.id],
     enabled: ready && Boolean(user),
     queryFn: async () => {
-      const { data, error } = await supabase.from("curriculums").select("*").limit(1);
+      if (!user) return null;
+      const { data, error } = await supabase.from("curriculums").select("*").eq("user_id", user.id).limit(1);
       if (error) throw new Error(error.message);
       return (data[0] as CurriculumRow | undefined) ?? null;
     },
@@ -50,21 +57,29 @@ export function CurriculumScreen() {
   const draftLoaded = useRef(false);
   const seededRow = curriculum.data;
   useEffect(() => {
-    if (!signedIn || !seededRow || draftLoaded.current) return;
+    if (!signedIn || !curriculum.isSuccess || draftLoaded.current) return;
     draftLoaded.current = true;
-    setDraft(toCurriculumDraft(seededRow));
-  }, [signedIn, seededRow]);
+    if (seededRow) setDraft(toCurriculumDraft(seededRow));
+    else setDraft({ ...emptyCurriculum(), fullName: typeof user?.user_metadata?.['full_name'] === "string" ? user.user_metadata['full_name'] : "" });
+    setInitialized(true);
+  }, [signedIn, seededRow, curriculum.isSuccess, user]);
 
   async function save() {
-    if (!user || busy) return;
+    if (!user || busy || !initialized) return;
     const parsed = curriculumPayload(draft);
     if (!parsed.ok) { setError(parsed.error); return; }
     setBusy(true); setError(""); setSaved(false);
-    const { error } = await supabase.from("curriculums").upsert({ user_id: user.id, ...parsed.payload }, { onConflict: "user_id" });
-    setBusy(false);
-    if (error) { setError("No pudimos guardar tu curriculum. Intentá nuevamente."); return; }
-    void queryClient.invalidateQueries({ queryKey: ["curriculum", user.id] });
-    setSaved(true);
+    try {
+      const { error } = await supabase.from("curriculums").upsert({ user_id: user.id, ...parsed.payload }, { onConflict: "user_id" });
+      if (error) throw error;
+      void queryClient.invalidateQueries({ queryKey: ["curriculum", user.id] });
+      void queryClient.invalidateQueries({ queryKey: ["profile-stats", user.id] });
+      setSaved(true);
+    } catch {
+      setError("No pudimos guardar tu curriculum. Intentá nuevamente.");
+    } finally {
+      setBusy(false);
+    }
   }
 
   return <main className="curriculum-screen">
@@ -93,7 +108,8 @@ export function CurriculumScreen() {
       <Button variant="outline" onClick={() => void curriculum.refetch()}><RefreshCw />Reintentar</Button>
     </section>}
 
-    {signedIn && !curriculum.isError && <form className="curriculum-form" onSubmit={(event) => { event.preventDefault(); void save(); }}>
+    {signedIn && initialized && !curriculum.isError && <form className="curriculum-form" onSubmit={(event) => { event.preventDefault(); void save(); }}>
+      <fieldset disabled={busy} className="curriculum-fields">
       <section className="curriculum-block">
         <div className="curriculum-section-head"><h2 className="curriculum-block-title">SOBRE TI</h2><Button type="button" variant="ghost" size="icon" title="Editar datos personales" aria-label="Editar datos personales" onClick={() => setEditingAbout(!editingAbout)}><Pencil /></Button></div>
         {!editingAbout && <div className="curriculum-about">
@@ -180,6 +196,7 @@ export function CurriculumScreen() {
         </div>}
       </section>
 
+      </fieldset>
       {error && <p className="curriculum-error-inline" role="alert">{error}</p>}
       <Button type="submit" className="curriculum-save" disabled={busy}>{busy ? "Guardando…" : saved ? <><Check aria-hidden="true" />Guardado</> : <><Save aria-hidden="true" />Guardar curriculum</>}</Button>
       <p className="curriculum-privacy">Tu curriculum se guarda en tu cuenta y solo vos lo ves.</p>

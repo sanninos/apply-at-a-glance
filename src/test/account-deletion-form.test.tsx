@@ -4,6 +4,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import { AccountDeletion } from '../components/account-deletion';
 
 const mocks = vi.hoisted(() => ({ send: vi.fn(), read: vi.fn() }));
+vi.stubGlobal('ResizeObserver', class { observe() {} unobserve() {} disconnect() {} });
 vi.mock('@tanstack/react-start', () => ({ useServerFn: (fn: unknown) => fn }));
 vi.mock('../lib/account-deletion.functions', () => ({ sendDeletionRequest: mocks.send, getDeletionRequest: mocks.read }));
 vi.mock('../components/access-provider', () => ({ useAccess: () => ({ ready: true, user: { id: 'owner-1', email: 'ana@example.com' } }) }));

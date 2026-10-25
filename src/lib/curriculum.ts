@@ -60,13 +60,13 @@ function str(value: unknown): string {
 export function toCurriculumDraft(row: CurriculumRow): CurriculumDraft {
   const experiences = Array.isArray(row.experiences)
     ? row.experiences.map((entry) => {
-        const record = (entry ?? {}) as Record<string, unknown>;
+        const record = (entry ?? {}) as Partial<ExperienceDraft>;
         return { id: newDraftId(), puesto: str(record.puesto), empresa: str(record.empresa), desde: str(record.desde), hasta: str(record.hasta), descripcion: str(record.descripcion) };
       })
     : [];
   const education = Array.isArray(row.education)
     ? row.education.map((entry) => {
-        const record = (entry ?? {}) as Record<string, unknown>;
+        const record = (entry ?? {}) as Partial<EducationDraft>;
         return { id: newDraftId(), titulo: str(record.titulo), institucion: str(record.institucion), desde: str(record.desde), hasta: str(record.hasta) };
       })
     : [];

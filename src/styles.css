@@ -75,7 +75,7 @@
   --google-red: oklch(0.6 0.21 28);
   --employment-surface: oklch(0.975 0.015 245);
   --employment-blue: oklch(0.45 0.105 260);
-  --employment-nav: oklch(0.40 0.125 263);
+  --employment-nav: oklch(0.37 0.10 261);
   --employment-yellow: oklch(0.84 0.16 85);
   --employment-orange: oklch(0.72 0.17 55);
   --employment-red: oklch(0.58 0.21 25);
@@ -118,7 +118,7 @@
 .dark {
   --employment-surface: oklch(0.19 0.02 245);
   --employment-blue: oklch(0.7 0.1 260);
-  --employment-nav: oklch(0.32 0.09 263);
+  --employment-nav: oklch(0.28 0.08 261);
   --employment-yellow: oklch(0.84 0.16 85);
   --employment-orange: oklch(0.72 0.17 55);
   --employment-red: oklch(0.58 0.21 25);

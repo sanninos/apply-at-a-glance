@@ -27,4 +27,5 @@
 - [x] Pantalla «Editar curriculum» (/editar-curriculum) con guardado en tabla curriculums, enlace desde Perfil y pruebas.
 - [ ] Pantalla «Estadísticas del perfil» (/estadisticas) con datos reales (postulaciones, guardados, curriculum); las visitas al perfil aún no se registran y se muestran como próximas.
 - [x] Menú inferior: conservar el diseño actual (barra plana pegada abajo con píldora en el ítem activo) pero con fondo azul; no volver al diseño anterior.
-- [x] Badges en menú (Social: pósteres no vistos; Alertas: listo para futuro) + tono azul del menú ajustado
+- [x] Badges en menú (Social: pósteres no vistos) + tono azul del menú ajustado
+- [ ] Connect Alertas badge to the signed-in user's unread notifications, including alert notices, without counting configured active searches.

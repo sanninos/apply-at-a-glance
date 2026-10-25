@@ -13,5 +13,6 @@
 - [x] Show the Social offer details in a white highlighted rounded card floating at the bottom of each slide.
 - [x] Fill the space around a Social poster that does not cover the slide with the same poster blurred.
 - [x] Add Radar with real geolocated offers, map markers, filters and job-detail navigation (Google Maps rendering requires checking on the published authorized origin).
-- [x] Create the Mis postulaciones screen (/mis-postulaciones) linked from Profile, reading the user's own applications and stating that the apply button does not record them yet.
-- [ ] Wire the detail-screen apply button to record an application; blocked by the user's decision to keep the screen read-only for now.
+- [x] Create the Mis postulaciones screen (/mis-postulaciones) linked from Profile, reading the user's own applications.
+- [x] Wire the detail-screen "Postularme" button to record the application in the postulaciones table (upsert per user+offer) and show its estado on the button.
+- [x] Turn the /auth access screen into a reusable component: floating drawer available from any screen, with /auth kept as the OAuth and recovery callback route.

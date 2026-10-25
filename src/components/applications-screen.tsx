@@ -79,7 +79,7 @@ export function ApplicationsScreen() {
       : <section className="applications-empty">
         <BriefcaseBusiness aria-hidden="true" />
         <h2>Todavía no tenés postulaciones</h2>
-        <p>Por ahora el botón «Postularme» de cada oferta no guarda tu postulación, así que no hay nada que mostrar. Cuando lo activemos, tus ofertas aparecerán acá.</p>
+        <p>Todavía no te postulaste a ninguna oferta. Abrí una oferta y tocá «Postularme» para anotarla acá.</p>
         <Button asChild variant="outline"><Link to="/">Ver ofertas</Link></Button>
       </section>)}
 

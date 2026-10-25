@@ -81,4 +81,20 @@ describe('curriculum section editing', () => {
     await waitFor(() => expect(mocks.upsert).toHaveBeenCalledWith(expect.objectContaining({ full_name: 'Ana Pérez' }), { onConflict: 'user_id' }), { timeout: 1500 });
     view.unmount(); client.clear();
   });
+  it('queues newer edits while an automatic save is in progress', async () => {
+    mocks.load.mockResolvedValue({ data: [], error: null });
+    let finish: (value: unknown) => void = () => {};
+    mocks.upsert.mockReturnValueOnce(new Promise((resolve) => { finish = resolve; })).mockResolvedValue({ error: null });
+    const client = new QueryClient();
+    const view = render(<QueryClientProvider client={client}><CurriculumScreen /></QueryClientProvider>);
+    fireEvent.click(await screen.findByRole('button', { name: 'Editar datos personales' }));
+    fireEvent.change(screen.getByLabelText('Nombre completo'), { target: { value: 'Ana Pérez' } });
+    fireEvent.blur(screen.getByLabelText('Nombre completo'));
+    fireEvent.change(screen.getByLabelText('Teléfono'), { target: { value: '099123456' } });
+    expect(mocks.upsert).toHaveBeenCalledTimes(1);
+    finish({ error: null });
+    await waitFor(() => expect(mocks.upsert).toHaveBeenLastCalledWith(expect.objectContaining({ phone: '099123456' }), { onConflict: 'user_id' }), { timeout: 1500 });
+    expect(mocks.upsert).toHaveBeenCalledTimes(2);
+    view.unmount(); client.clear();
+  });
 });

@@ -1,3 +1,4 @@
+- [ ] Add account-persisted saved offers, connect both detail bookmarks, and link the list from Profile.
 - [x] Create the reference Alertas screen and connect its bottom-navigation option; verified tabs and navigation on desktop/mobile.
 - [x] Link new-alert creation to the reference configuration drawer with selectable types and 1–50 km radius (10 km default); verified controls and explicit unsaved notice, with persistence and delivery not implemented.
 - [x] Add the account-data block, tutorial and reference-style sign-out controls to Profile; verified desktop/mobile, with unavailable actions disabled.

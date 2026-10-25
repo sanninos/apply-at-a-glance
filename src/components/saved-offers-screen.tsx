@@ -1,7 +1,7 @@
 import { Link } from '@tanstack/react-router';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useServerFn } from '@tanstack/react-start';
-import { Bookmark, Building2, ChevronRight, LogIn, MapPin, RefreshCw, Loader2 } from 'lucide-react';
+import { Bookmark, Building2, ChevronRight, LogIn, RefreshCw, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { AppBottomNav } from '@/components/app-bottom-nav';
 import { useAccess } from '@/components/access-provider';
@@ -55,7 +55,7 @@ export function SavedOffersScreen() {
           <SavedLogo row={row} /><div className="applications-copy">
             <p className="applications-company">{row.JobsDetails?.Empresa || 'Empresa'}</p>
             <h2>{row.JobsDetails?.titulo || 'Oferta de empleo'}</h2>
-            <div className="applications-meta"><span className="applications-date"><MapPin />{row.JobsDetails?.ubicacion || row.JobsDetails?.ciudad || 'Ubicación no especificada'}</span></div>
+            <div className="applications-meta"><span className="applications-date"><span className="location-pin" aria-hidden="true">📍</span>{row.JobsDetails?.ubicacion || row.JobsDetails?.ciudad || 'Ubicación no especificada'}</span></div>
           </div><ChevronRight className="applications-arrow" />
         </Link>
         <Button variant="ghost" size="icon" className="shrink-0 text-primary" title="Quitar de guardadas" aria-label={`Quitar ${row.JobsDetails?.titulo || 'oferta'} de guardadas`} disabled={remove.isPending} onClick={() => remove.mutate(row.job_id)}>

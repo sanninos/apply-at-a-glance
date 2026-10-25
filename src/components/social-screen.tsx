@@ -1,7 +1,7 @@
 // ============= Full file contents =============
 import { useEffect, useRef, useState } from "react";
 import { Link } from "@tanstack/react-router";
-import { BriefcaseBusiness, ChevronDown, ChevronRight, MapPin } from "lucide-react";
+import { BriefcaseBusiness, ChevronDown, ChevronRight } from "lucide-react";
 import { AppBottomNav } from "@/components/app-bottom-nav";
 import { useEmployerLogo } from "@/hooks/use-employer-logo";
 import { publishedAgo } from "@/lib/job-list";
@@ -110,7 +110,7 @@ function SocialPostCard({
         <div className="social-summary-copy">
           <p className="social-summary-title">{post.titulo || "Oferta de empleo"}</p>
           <p className="social-summary-loc">
-            <MapPin aria-hidden="true" />
+            <span className="location-pin" aria-hidden="true">📍</span>
             <span>{location}</span>
           </p>
           <p className="social-summary-company">{post.Empresa || "Empresa"}</p>

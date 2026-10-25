@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Clock, Flame, MapPin, X } from "lucide-react";
+import { Clock, Flame, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Drawer, DrawerContent, DrawerDescription, DrawerTitle } from "@/components/ui/drawer";
 import type { JobListMode } from "@/lib/job-list";
@@ -29,7 +29,7 @@ function FilterContents({ value, locations, contracts, onApply, onClose }: {
       <section><h2>EMPLEOS</h2><div className="job-filter-chips">
         {([{ mode: "all", label: "Todos", icon: null }, { mode: "urgent", label: "Urgentes", icon: Flame }, { mode: "latest", label: "Últimos", icon: Clock }] as const).map(({ mode, label, icon: Icon }) => <Button key={mode} variant="ghost" aria-pressed={draft.mode === mode} className={draft.mode === mode ? "selected" : ""} onClick={() => setDraft({ ...draft, mode })}>{Icon && <Icon />}{label}</Button>)}
       </div></section>
-      <section><h2>UBICACIÓN</h2><div className="job-filter-chips"><Button variant="ghost" className={!draft.location ? "selected" : ""} aria-pressed={!draft.location} onClick={() => setDraft({ ...draft, location: "" })}><MapPin />Todas</Button></div>
+      <section><h2>UBICACIÓN</h2><div className="job-filter-chips"><Button variant="ghost" className={!draft.location ? "selected" : ""} aria-pressed={!draft.location} onClick={() => setDraft({ ...draft, location: "" })}><span className="location-pin" aria-hidden="true">📍</span>Todas</Button></div>
         <label className="job-filter-select"><span className="sr-only">Ubicación</span><select value={draft.location} onChange={(event) => setDraft({ ...draft, location: event.target.value })}><option value="">Todas las ubicaciones</option>{locations.map((location) => <option key={location}>{location}</option>)}</select></label>
       </section>
       <section><h2>TIPO DE CONTRATO</h2><div className="job-filter-chips"><Button variant="ghost" className={!draft.contract ? "selected" : ""} aria-pressed={!draft.contract} onClick={() => setDraft({ ...draft, contract: "" })}>Todos</Button></div><label className="job-filter-select"><span className="sr-only">Contrato</span><select value={draft.contract} onChange={(event) => setDraft({ ...draft, contract: event.target.value })}><option value="">Todos los contratos</option>{contracts.map((contract) => <option key={contract}>{contract}</option>)}</select></label></section>

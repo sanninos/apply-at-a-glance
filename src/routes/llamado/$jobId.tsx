@@ -1,5 +1,6 @@
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useAccess } from "@/components/access-provider";
+import { useAccessDialog } from "@/components/access-dialog";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import {
   ArrowLeft,
@@ -74,8 +75,8 @@ function formatSalario(salario: number | null): string {
 }
 
 function JobDetail() {
-  const navigate = useNavigate();
   const { user, ready } = useAccess();
+  const { open: openAccess } = useAccessDialog();
   const { jobId } = Route.useParams();
   const { data: job } = useSuspenseQuery(jobQueryOptions(Number(jobId)));
 
@@ -215,7 +216,7 @@ function JobDetail() {
           <button
             disabled={cerrado || !ready}
             onClick={() => {
-              if (!user) void navigate({ to: "/auth" });
+              if (!user) openAccess();
             }}
             className="flex-1 h-12 rounded-2xl bg-primary text-primary-foreground font-semibold shadow-md disabled:opacity-50"
           >

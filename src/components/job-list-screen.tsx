@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { BriefcaseBusiness, Search, SlidersHorizontal, Flame, Clock, ChevronRight, Building2 } from "lucide-react";
 import { Button } from "@/components/ui/button";

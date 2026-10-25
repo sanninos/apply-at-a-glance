@@ -624,3 +624,5 @@ nav .employment-nav-item, .employment-nav .employment-nav-item { position: relat
 @media (max-height: 760px) {
   .employment-nav-badge { top: 2px; left: calc(50% + 7px); min-width: 15px; height: 15px; font-size: 9px; padding: 0 4px; }
 }
+
+.employment-list-sentinel { height: 1px; }

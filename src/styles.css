@@ -557,10 +557,11 @@ body:has(.stats-screen) { background: var(--muted); }
   }
 }
 
-/* Material-style bottom navigation */
-.employment-nav { left: 0; right: 0; bottom: 0 !important; transform: none; width: 100% !important; max-width: 28rem; margin-inline: auto; height: calc(72px + env(safe-area-inset-bottom, 0px)) !important; padding: 6px 4px calc(6px + env(safe-area-inset-bottom, 0px)) !important; background: var(--card); border-radius: 0 !important; border-top: 1px solid var(--border); box-shadow: 0 -2px 12px color-mix(in oklab, var(--foreground) 6%, transparent); }
-nav .employment-nav-item, .employment-nav .employment-nav-item { height: 60px !important; gap: 4px !important; font-size: 12px !important; font-weight: 500 !important; color: var(--muted-foreground); }
+
+/* Bottom navigation: flat bar pinned to the bottom edge, blue background */
+.employment-nav { left: 0; right: 0; bottom: 0 !important; transform: none; width: 100% !important; max-width: 28rem; margin-inline: auto; height: calc(72px + env(safe-area-inset-bottom, 0px)) !important; padding: 6px 4px calc(6px + env(safe-area-inset-bottom, 0px)) !important; background: var(--employment-nav); border-radius: 0 !important; border-top: 1px solid color-mix(in oklab, var(--primary-foreground) 14%, transparent); box-shadow: 0 -2px 12px color-mix(in oklab, var(--foreground) 22%, transparent); }
+nav .employment-nav-item, .employment-nav .employment-nav-item { height: 60px !important; gap: 4px !important; font-size: 12px !important; font-weight: 500 !important; color: color-mix(in oklab, var(--primary-foreground) 62%, transparent); }
 .employment-nav-item .nav-icon { width: 56px !important; height: 30px !important; border-radius: 999px; transition: background-color .2s; }
 .employment-nav-item svg { width: 22px !important; height: 22px !important; stroke-width: 1.75; }
-.employment-nav-item.active { color: var(--employment-nav); font-weight: 600 !important; }
-.employment-nav-item.active .nav-icon { background: color-mix(in oklab, var(--employment-nav) 12%, var(--card)); color: var(--employment-nav); }
+.employment-nav-item.active { color: var(--primary-foreground); font-weight: 600 !important; }
+.employment-nav-item.active .nav-icon { background: color-mix(in oklab, var(--primary-foreground) 18%, transparent); color: var(--primary-foreground); }

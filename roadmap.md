@@ -24,3 +24,5 @@
 - [x] Show llamados (isLlamado=true) in the home employment list alongside regular offers; DB policy widened to public display columns and list verified in the browser (1,110 cards).
 - [x] Add a visible "Llamado público" badge on llamados cards in the home list so they are distinguishable from regular offers (blue pill, verified in the browser).
 - [x] Polish the Alertas screen: counter pill, tab icons, tappable create card with icon tile, and an empty state with decorated bell and yellow CTA; verified with the configuration drawer.
+- [x] Pantalla «Editar curriculum» (/editar-curriculum) con guardado en tabla curriculums, enlace desde Perfil y pruebas.
+- [ ] Pantalla «Estadísticas del perfil» (/estadisticas) con datos reales (postulaciones, guardados, curriculum); las visitas al perfil aún no se registran y se muestran como próximas.

@@ -12,7 +12,9 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AlertasRouteImport } from './routes/alertas'
 import { Route as AuthRouteImport } from './routes/auth'
+import { Route as EditarCurriculumRouteImport } from './routes/editar-curriculum'
 import { Route as EmpleosRouteImport } from './routes/empleos'
+import { Route as EstadisticasRouteImport } from './routes/estadisticas'
 import { Route as MisPostulacionesRouteImport } from './routes/mis-postulaciones'
 import { Route as OfertasGuardadasRouteImport } from './routes/ofertas-guardadas'
 import { Route as PerfilRouteImport } from './routes/perfil'
@@ -36,9 +38,19 @@ const AuthRoute = AuthRouteImport.update({
   path: '/auth',
   getParentRoute: () => rootRouteImport,
 } as any)
+const EditarCurriculumRoute = EditarCurriculumRouteImport.update({
+  id: '/editar-curriculum',
+  path: '/editar-curriculum',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const EmpleosRoute = EmpleosRouteImport.update({
   id: '/empleos',
   path: '/empleos',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EstadisticasRoute = EstadisticasRouteImport.update({
+  id: '/estadisticas',
+  path: '/estadisticas',
   getParentRoute: () => rootRouteImport,
 } as any)
 const MisPostulacionesRoute = MisPostulacionesRouteImport.update({
@@ -81,7 +93,9 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/alertas': typeof AlertasRoute
   '/auth': typeof AuthRoute
+  '/editar-curriculum': typeof EditarCurriculumRoute
   '/empleos': typeof EmpleosRoute
+  '/estadisticas': typeof EstadisticasRoute
   '/mis-postulaciones': typeof MisPostulacionesRoute
   '/ofertas-guardadas': typeof OfertasGuardadasRoute
   '/perfil': typeof PerfilRoute
@@ -94,7 +108,9 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/alertas': typeof AlertasRoute
   '/auth': typeof AuthRoute
+  '/editar-curriculum': typeof EditarCurriculumRoute
   '/empleos': typeof EmpleosRoute
+  '/estadisticas': typeof EstadisticasRoute
   '/mis-postulaciones': typeof MisPostulacionesRoute
   '/ofertas-guardadas': typeof OfertasGuardadasRoute
   '/perfil': typeof PerfilRoute
@@ -108,7 +124,9 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/alertas': typeof AlertasRoute
   '/auth': typeof AuthRoute
+  '/editar-curriculum': typeof EditarCurriculumRoute
   '/empleos': typeof EmpleosRoute
+  '/estadisticas': typeof EstadisticasRoute
   '/mis-postulaciones': typeof MisPostulacionesRoute
   '/ofertas-guardadas': typeof OfertasGuardadasRoute
   '/perfil': typeof PerfilRoute
@@ -123,7 +141,9 @@ export interface FileRouteTypes {
     | '/'
     | '/alertas'
     | '/auth'
+    | '/editar-curriculum'
     | '/empleos'
+    | '/estadisticas'
     | '/mis-postulaciones'
     | '/ofertas-guardadas'
     | '/perfil'
@@ -136,7 +156,9 @@ export interface FileRouteTypes {
     | '/'
     | '/alertas'
     | '/auth'
+    | '/editar-curriculum'
     | '/empleos'
+    | '/estadisticas'
     | '/mis-postulaciones'
     | '/ofertas-guardadas'
     | '/perfil'
@@ -149,7 +171,9 @@ export interface FileRouteTypes {
     | '/'
     | '/alertas'
     | '/auth'
+    | '/editar-curriculum'
     | '/empleos'
+    | '/estadisticas'
     | '/mis-postulaciones'
     | '/ofertas-guardadas'
     | '/perfil'
@@ -163,7 +187,9 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AlertasRoute: typeof AlertasRoute
   AuthRoute: typeof AuthRoute
+  EditarCurriculumRoute: typeof EditarCurriculumRoute
   EmpleosRoute: typeof EmpleosRoute
+  EstadisticasRoute: typeof EstadisticasRoute
   MisPostulacionesRoute: typeof MisPostulacionesRoute
   OfertasGuardadasRoute: typeof OfertasGuardadasRoute
   PerfilRoute: typeof PerfilRoute
@@ -196,11 +222,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/editar-curriculum': {
+      id: '/editar-curriculum'
+      path: '/editar-curriculum'
+      fullPath: '/editar-curriculum'
+      preLoaderRoute: typeof EditarCurriculumRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/empleos': {
       id: '/empleos'
       path: '/empleos'
       fullPath: '/empleos'
       preLoaderRoute: typeof EmpleosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/estadisticas': {
+      id: '/estadisticas'
+      path: '/estadisticas'
+      fullPath: '/estadisticas'
+      preLoaderRoute: typeof EstadisticasRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/mis-postulaciones': {
@@ -259,7 +299,9 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AlertasRoute: AlertasRoute,
   AuthRoute: AuthRoute,
+  EditarCurriculumRoute: EditarCurriculumRoute,
   EmpleosRoute: EmpleosRoute,
+  EstadisticasRoute: EstadisticasRoute,
   MisPostulacionesRoute: MisPostulacionesRoute,
   OfertasGuardadasRoute: OfertasGuardadasRoute,
   PerfilRoute: PerfilRoute,

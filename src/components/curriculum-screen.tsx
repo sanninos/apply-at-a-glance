@@ -72,7 +72,7 @@ export function CurriculumScreen() {
       <div className="curriculum-avatar" aria-hidden="true"><User /><span><Camera /></span></div>
       <div className="curriculum-heading">
         <span className="curriculum-profile-tag">Mi perfil</span>
-        <h1>{draft.fullName || user?.user_metadata?.full_name || "Mi curriculum"}</h1>
+        <h1>{draft.fullName || user?.user_metadata?.['full_name'] || "Mi curriculum"}</h1>
         <p>{draft.experiences.find((entry) => entry.puesto.trim())?.puesto || "Tu profesión"}</p>
       </div>
     </header>

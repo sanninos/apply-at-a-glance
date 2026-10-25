@@ -20,4 +20,5 @@
 - [x] Create the Mis postulaciones screen (/mis-postulaciones) linked from Profile, reading the user's own applications.
 - [x] Wire the detail-screen "Postularme" button to record the application in the postulaciones table (upsert per user+offer) and show its estado on the button.
 - [x] Turn the /auth access screen into a reusable component: floating drawer available from any screen, with /auth kept as the OAuth and recovery callback route.
-- [x] Restore the visible back, share and save buttons in the job-detail header; back returns to the previous screen and share copies or system-shares the offer link.
+- [x] Restore the visible back, share and save buttons in the job-detail header; back returns to the previous screen and share copies or system-shares the offer link.- [x] Show llamados (isLlamado=true) in the home employment list alongside regular offers; DB policy widened to public display columns and list verified in the browser (1,110 cards).
+- [x] Polish the Alertas screen: counter pill, tab icons, tappable create card with icon tile, and an empty state with decorated bell and yellow CTA; verified with the configuration drawer.

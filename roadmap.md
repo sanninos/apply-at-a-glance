@@ -29,3 +29,4 @@
 - [x] Menú inferior: conservar el diseño actual (barra plana pegada abajo con píldora en el ítem activo) pero con fondo azul; no volver al diseño anterior.
 - [x] Badges en menú (Social: pósteres no vistos) + tono azul del menú ajustado
 - [ ] Connect Alertas badge to the signed-in user's unread notifications, including alert notices, without counting configured active searches.
+- [ ] Add a reserved custom advertisement frame at the top of home, above the search field, following the uploaded reference without inventing a campaign.

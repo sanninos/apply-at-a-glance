@@ -33,3 +33,4 @@
 - [x] Add a reserved blue advertisement frame above home search; desktop/mobile screenshots verified, no campaign content or delivery invented.
 - [x] Adapt Editar curriculum to the reference with avatar, white sections, yellow accents and expandable editors; six tests pass and public access works on desktop/mobile.
 - [ ] Verify the redesigned curriculum with real signed-in data; blocked by external unmanaged Supabase authenticated testing.
+- [ ] Investigate curriculum load/save errors from preview logs and validate account isolation, loading and failed-save recovery.

@@ -1,3 +1,4 @@
+import { Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { BarChart3, Bookmark, ChartNoAxesColumnIncreasing, FileText, LogIn, RefreshCw, Send } from "lucide-react";
 import { Button } from "@/components/ui/button";

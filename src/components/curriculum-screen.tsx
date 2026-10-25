@@ -1,6 +1,6 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useRef, useState } from "react";
-import { BriefcaseBusiness, Camera, Check, GraduationCap, Lightbulb, LogIn, Mail, Pencil, Plus, RefreshCw, Save, Smartphone, Trash2, User } from "lucide-react";
+import { BriefcaseBusiness, Camera, Check, GraduationCap, Lightbulb, LogIn, Mail, Pencil, Plus, RefreshCw, Smartphone, Trash2, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { AppBottomNav } from "@/components/app-bottom-nav";
 import { useAccessDialog } from "@/components/access-dialog";
@@ -34,6 +34,11 @@ function AccountCurriculumScreen() {
   const [editingExperience, setEditingExperience] = useState<string | null>(null);
   const [editingEducation, setEditingEducation] = useState<string | null>(null);
   const [initialized, setInitialized] = useState(false);
+  const dirty = useRef(false);
+  const saving = useRef(false);
+  const version = useRef(0);
+  const lastAttempt = useRef(-1);
+  const flush = useRef<() => void>(() => {});
 
   const curriculum = useQuery({
     queryKey: ["curriculum", user?.id],
@@ -47,6 +52,8 @@ function AccountCurriculumScreen() {
   });
 
   function edit(patch: Partial<CurriculumDraft>) {
+    dirty.current = true;
+    version.current += 1;
     setDraft((prev) => ({ ...prev, ...patch }));
     setSaved(false);
   }
@@ -65,22 +72,37 @@ function AccountCurriculumScreen() {
   }, [signedIn, seededRow, curriculum.isSuccess, user]);
 
   async function save() {
-    if (!user || busy || !initialized) return;
+    if (!user || saving.current || !initialized || !dirty.current) return;
+    const currentVersion = version.current;
+    lastAttempt.current = currentVersion;
     const parsed = curriculumPayload(draft);
     if (!parsed.ok) { setError(parsed.error); return; }
+    saving.current = true;
     setBusy(true); setError(""); setSaved(false);
     try {
       const { error } = await supabase.from("curriculums").upsert({ user_id: user.id, ...parsed.payload }, { onConflict: "user_id" });
       if (error) throw error;
       void queryClient.invalidateQueries({ queryKey: ["curriculum", user.id] });
       void queryClient.invalidateQueries({ queryKey: ["profile-stats", user.id] });
-      setSaved(true);
+      if (version.current === currentVersion) {
+        dirty.current = false;
+        setSaved(true);
+      }
     } catch {
       setError("No pudimos guardar tu curriculum. Intentá nuevamente.");
     } finally {
+      saving.current = false;
       setBusy(false);
     }
   }
+
+  flush.current = () => { void save(); };
+  useEffect(() => {
+    if (!initialized || busy || !dirty.current || lastAttempt.current === version.current) return;
+    const timer = window.setTimeout(() => flush.current(), 600);
+    return () => window.clearTimeout(timer);
+  }, [draft, initialized, busy]);
+  useEffect(() => () => { flush.current(); }, []);
 
   return <main className="curriculum-screen">
     <header className="curriculum-header">
@@ -108,8 +130,8 @@ function AccountCurriculumScreen() {
       <Button variant="outline" onClick={() => void curriculum.refetch()}><RefreshCw />Reintentar</Button>
     </section>}
 
-    {signedIn && initialized && !curriculum.isError && <form className="curriculum-form" onSubmit={(event) => { event.preventDefault(); void save(); }}>
-      <fieldset disabled={busy} className="curriculum-fields">
+    {signedIn && initialized && !curriculum.isError && <form className="curriculum-form" onBlur={() => { if (lastAttempt.current !== version.current) void save(); }} onSubmit={(event) => { event.preventDefault(); void save(); }}>
+      <fieldset className="curriculum-fields">
       <section className="curriculum-block">
         <div className="curriculum-section-head"><h2 className="curriculum-block-title">SOBRE TI</h2><Button type="button" variant="ghost" size="icon" title="Editar datos personales" aria-label="Editar datos personales" onClick={() => setEditingAbout(!editingAbout)}><Pencil /></Button></div>
         {!editingAbout && <div className="curriculum-about">
@@ -197,8 +219,8 @@ function AccountCurriculumScreen() {
       </section>
 
       </fieldset>
-      {error && <p className="curriculum-error-inline" role="alert">{error}</p>}
-      <Button type="submit" className="curriculum-save" disabled={busy}>{busy ? "Guardando…" : saved ? <><Check aria-hidden="true" />Guardado</> : <><Save aria-hidden="true" />Guardar curriculum</>}</Button>
+      {error && <div className="curriculum-error-inline" role="alert">{error}<Button type="button" variant="ghost" size="icon" title="Reintentar guardado" aria-label="Reintentar guardado" disabled={busy} onClick={() => void save()}><RefreshCw /></Button></div>}
+      <p className="curriculum-privacy" role="status" aria-live="polite">{busy ? "Guardando…" : saved ? "Cambios guardados" : ""}</p>
       <p className="curriculum-privacy">Tu curriculum se guarda en tu cuenta y solo vos lo ves.</p>
     </form>}
 

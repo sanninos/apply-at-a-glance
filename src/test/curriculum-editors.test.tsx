@@ -27,7 +27,7 @@ describe('curriculum section editing', () => {
     fireEvent.change(screen.getByLabelText('Puesto'), { target: { value: 'Analista' } });
     fireEvent.change(screen.getByLabelText('Empresa'), { target: { value: 'Empresa de prueba' } });
     fireEvent.click(screen.getByRole('button', { name: 'Listo' }));
-    fireEvent.click(screen.getByRole('button', { name: 'Guardar curriculum' }));
+    fireEvent.blur(screen.getByRole('button', { name: 'Listo' }));
     await waitFor(() => expect(mocks.upsert).toHaveBeenCalledWith(expect.objectContaining({
       user_id: 'test-account', full_name: 'Ana Pérez', phone: '099123456',
       experiences: [{ puesto: 'Analista', empresa: 'Empresa de prueba', desde: '', hasta: '', descripcion: '' }],
@@ -39,7 +39,7 @@ describe('curriculum section editing', () => {
     mocks.load.mockReturnValue(new Promise((resolve) => { finish = resolve; }));
     const client = new QueryClient();
     const view = render(<QueryClientProvider client={client}><CurriculumScreen /></QueryClientProvider>);
-    expect(screen.queryByRole('button', { name: 'Guardar curriculum' })).toBeNull();
+    expect(screen.queryByRole('button', { name: 'Editar datos personales' })).toBeNull();
     finish({ data: [{ full_name: 'Nombre guardado', phone: '123', summary: '', experiences: [], education: [], skills: [] }], error: null });
     fireEvent.click(await screen.findByRole('button', { name: 'Editar datos personales' }));
     expect(screen.getByLabelText('Nombre completo')).toHaveValue('Nombre guardado');
@@ -64,10 +64,10 @@ describe('curriculum section editing', () => {
     const view = render(<QueryClientProvider client={client}><CurriculumScreen /></QueryClientProvider>);
     fireEvent.click(await screen.findByRole('button', { name: 'Editar datos personales' }));
     fireEvent.change(screen.getByLabelText('Nombre completo'), { target: { value: 'Ana Pérez' } });
-    fireEvent.click(screen.getByRole('button', { name: 'Guardar curriculum' }));
+    fireEvent.blur(screen.getByLabelText('Nombre completo'));
     await screen.findByRole('alert');
     expect(screen.getByLabelText('Nombre completo')).toHaveValue('Ana Pérez');
-    fireEvent.click(screen.getByRole('button', { name: 'Guardar curriculum' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Reintentar guardado' }));
     await waitFor(() => expect(mocks.upsert).toHaveBeenCalledTimes(2));
     view.unmount(); client.clear();
   });

@@ -1,13 +1,12 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useRef, useState } from "react";
-import { BriefcaseBusiness, Check, GraduationCap, LogIn, Plus, RefreshCw, Save, Trash2, User } from "lucide-react";
+import { BriefcaseBusiness, Camera, Check, GraduationCap, Lightbulb, LogIn, Mail, Pencil, Plus, RefreshCw, Save, Smartphone, Trash2, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { AppBottomNav } from "@/components/app-bottom-nav";
 import { useAccessDialog } from "@/components/access-dialog";
 import { useAccess } from "@/components/access-provider";
 import { supabase } from "@/integrations/supabase/client";
 import {
-  curriculumCountLabel,
   curriculumPayload,
   emptyCurriculum,
   emptyEducation,
@@ -25,6 +24,10 @@ export function CurriculumScreen() {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
   const [saved, setSaved] = useState(false);
+  const [editingAbout, setEditingAbout] = useState(false);
+  const [editingSummary, setEditingSummary] = useState(false);
+  const [editingExperience, setEditingExperience] = useState<string | null>(null);
+  const [editingEducation, setEditingEducation] = useState<string | null>(null);
 
   const curriculum = useQuery({
     queryKey: ["curriculum", user?.id],
@@ -66,9 +69,11 @@ export function CurriculumScreen() {
 
   return <main className="curriculum-screen">
     <header className="curriculum-header">
+      <div className="curriculum-avatar" aria-hidden="true"><User /><span><Camera /></span></div>
       <div className="curriculum-heading">
-        <h1>MI CURRICULUM</h1>
-        <p>{signedIn ? curriculumCountLabel(draft.skills.split(",").filter((skill) => skill.trim()).length) : "Tu experiencia, en tu cuenta"}</p>
+        <span className="curriculum-profile-tag">Mi perfil</span>
+        <h1>{draft.fullName || user?.user_metadata?.full_name || "Mi curriculum"}</h1>
+        <p>{draft.experiences.find((entry) => entry.puesto.trim())?.puesto || "Tu profesión"}</p>
       </div>
     </header>
 
@@ -90,7 +95,12 @@ export function CurriculumScreen() {
 
     {signedIn && !curriculum.isError && <form className="curriculum-form" onSubmit={(event) => { event.preventDefault(); void save(); }}>
       <section className="curriculum-block">
-        <h2 className="curriculum-block-title">DATOS PERSONALES</h2>
+        <div className="curriculum-section-head"><h2 className="curriculum-block-title">SOBRE TI</h2><Button type="button" variant="ghost" size="icon" title="Editar datos personales" aria-label="Editar datos personales" onClick={() => setEditingAbout(!editingAbout)}><Pencil /></Button></div>
+        {!editingAbout && <div className="curriculum-about">
+          <p><Smartphone aria-hidden="true" /><span>{draft.phone || "Sin teléfono"}</span></p>
+          <p><Mail aria-hidden="true" /><span>{user?.email || "Sin correo electrónico"}</span></p>
+        </div>}
+        {editingAbout && <div>
         <div className="curriculum-field">
           <label htmlFor="cv-name">Nombre completo</label>
           <input id="cv-name" value={draft.fullName} onChange={(event) => edit({ fullName: event.target.value })} placeholder="Ej: María Pérez" autoComplete="name" />
@@ -99,25 +109,29 @@ export function CurriculumScreen() {
           <label htmlFor="cv-phone">Teléfono</label>
           <input id="cv-phone" value={draft.phone} onChange={(event) => edit({ phone: event.target.value })} placeholder="Ej: 099 123 456" type="tel" autoComplete="tel" />
         </div>
+        <Button type="button" variant="ghost" className="curriculum-done" onClick={() => setEditingAbout(false)}><Check />Listo</Button></div>}
       </section>
 
-      <section className="curriculum-block">
-        <h2 className="curriculum-block-title">RESUMEN PROFESIONAL</h2>
+      <section className="curriculum-summary">
+        <div className="curriculum-summary-copy"><p>{draft.summary || "Una descripción bien detallada y extensa de tu perfil profesional te ayudará a destacar entre otros candidatos."}</p><Button type="button" variant="ghost" size="icon" title="Editar resumen profesional" aria-label="Editar resumen profesional" onClick={() => setEditingSummary(!editingSummary)}>{draft.summary ? <Pencil /> : <Lightbulb />}</Button></div>
+        {editingSummary && <div>
         <div className="curriculum-field">
           <label htmlFor="cv-summary">Contá en pocas líneas quién sos y qué buscás</label>
           <textarea id="cv-summary" value={draft.summary} onChange={(event) => edit({ summary: event.target.value })} rows={4} placeholder="Ej: Atención al cliente con 3 años de experiencia en retail." />
         </div>
+        <Button type="button" variant="ghost" className="curriculum-done" onClick={() => setEditingSummary(false)}><Check />Listo</Button></div>}
       </section>
 
       <section className="curriculum-block">
-        <h2 className="curriculum-block-title">EXPERIENCIA</h2>
+        <div className="curriculum-section-head"><h2 className="curriculum-block-title">EXPERIENCIA PROFESIONAL</h2><Button type="button" variant="ghost" size="icon" title="Añadir experiencia" aria-label="Añadir experiencia" onClick={() => { const entry = emptyExperience(); edit({ experiences: [...draft.experiences, entry] }); setEditingExperience(entry.id); }}><Plus /></Button></div>
         {draft.experiences.map((entry, index) => (
-          <div className="curriculum-entry" key={entry.id}>
-            <div className="curriculum-entry-head">
+          (entry.puesto || entry.empresa || entry.desde || entry.hasta || entry.descripcion || editingExperience === entry.id) && <div className="curriculum-entry" key={entry.id}>
+            {editingExperience !== entry.id && <div className="curriculum-item-summary"><span className="curriculum-timeline-dot" /><div><h3>{entry.puesto || "Experiencia"}{entry.empresa && ` en ${entry.empresa}`}</h3><p>{[entry.desde, entry.hasta].filter(Boolean).join(" - ")}</p></div><Button type="button" variant="ghost" size="icon" title="Editar experiencia" aria-label={`Editar experiencia ${index + 1}`} onClick={() => setEditingExperience(entry.id)}><Pencil /></Button></div>}
+            {editingExperience === entry.id && <div className="curriculum-editor"><div className="curriculum-entry-head">
               <span className="curriculum-entry-label"><BriefcaseBusiness aria-hidden="true" />Experiencia {index + 1}</span>
-              <button type="button" className="curriculum-remove" aria-label={`Quitar experiencia ${index + 1}`} onClick={() => edit({ experiences: draft.experiences.filter((row) => row.id !== entry.id) })}>
+              <Button variant="ghost" size="icon" type="button" className="curriculum-remove" aria-label={`Quitar experiencia ${index + 1}`} onClick={() => edit({ experiences: draft.experiences.filter((row) => row.id !== entry.id) })}>
                 <Trash2 aria-hidden="true" />
-              </button>
+              </Button>
             </div>
             <div className="curriculum-grid-2">
               <div className="curriculum-field"><label htmlFor={`cv-exp-puesto-${index}`}>Puesto</label><input id={`cv-exp-puesto-${index}`} value={entry.puesto} onChange={(event) => edit({ experiences: draft.experiences.map((row) => row.id === entry.id ? { ...row, puesto: event.target.value } : row) })} /></div>
@@ -126,20 +140,22 @@ export function CurriculumScreen() {
               <div className="curriculum-field"><label htmlFor={`cv-exp-hasta-${index}`}>Hasta</label><input id={`cv-exp-hasta-${index}`} value={entry.hasta} onChange={(event) => edit({ experiences: draft.experiences.map((row) => row.id === entry.id ? { ...row, hasta: event.target.value } : row) })} placeholder="Ej: Actualidad" /></div>
             </div>
             <div className="curriculum-field"><label htmlFor={`cv-exp-desc-${index}`}>Descripción</label><textarea id={`cv-exp-desc-${index}`} value={entry.descripcion} onChange={(event) => edit({ experiences: draft.experiences.map((row) => row.id === entry.id ? { ...row, descripcion: event.target.value } : row) })} rows={2} /></div>
+            <Button type="button" variant="ghost" className="curriculum-done" onClick={() => setEditingExperience(null)}><Check />Listo</Button></div>}
           </div>
         ))}
-        <Button type="button" variant="outline" className="curriculum-add" onClick={() => edit({ experiences: [...draft.experiences, emptyExperience()] })}><Plus />Agregar experiencia</Button>
+        <Button type="button" variant="ghost" className="curriculum-add" onClick={() => { const entry = emptyExperience(); edit({ experiences: [...draft.experiences, entry] }); setEditingExperience(entry.id); }}>Añadir experiencia</Button>
       </section>
 
       <section className="curriculum-block">
-        <h2 className="curriculum-block-title">EDUCACIÓN</h2>
+        <div className="curriculum-section-head"><h2 className="curriculum-block-title">EDUCACIÓN</h2><GraduationCap aria-hidden="true" /></div>
         {draft.education.map((entry, index) => (
-          <div className="curriculum-entry" key={entry.id}>
-            <div className="curriculum-entry-head">
+          (entry.titulo || entry.institucion || entry.desde || entry.hasta || editingEducation === entry.id) && <div className="curriculum-entry" key={entry.id}>
+            {editingEducation !== entry.id && <div className="curriculum-item-summary"><span className="curriculum-timeline-dot" /><div><h3>{entry.titulo || "Educación"}{entry.institucion && ` · ${entry.institucion}`}</h3><p>{[entry.desde, entry.hasta].filter(Boolean).join(" - ")}</p></div><Button type="button" variant="ghost" size="icon" title="Editar educación" aria-label={`Editar educación ${index + 1}`} onClick={() => setEditingEducation(entry.id)}><Pencil /></Button></div>}
+            {editingEducation === entry.id && <div className="curriculum-editor"><div className="curriculum-entry-head">
               <span className="curriculum-entry-label"><GraduationCap aria-hidden="true" />Educación {index + 1}</span>
-              <button type="button" className="curriculum-remove" aria-label={`Quitar educación ${index + 1}`} onClick={() => edit({ education: draft.education.filter((row) => row.id !== entry.id) })}>
+              <Button variant="ghost" size="icon" type="button" className="curriculum-remove" aria-label={`Quitar educación ${index + 1}`} onClick={() => edit({ education: draft.education.filter((row) => row.id !== entry.id) })}>
                 <Trash2 aria-hidden="true" />
-              </button>
+              </Button>
             </div>
             <div className="curriculum-grid-2">
               <div className="curriculum-field"><label htmlFor={`cv-edu-titulo-${index}`}>Título</label><input id={`cv-edu-titulo-${index}`} value={entry.titulo} onChange={(event) => edit({ education: draft.education.map((row) => row.id === entry.id ? { ...row, titulo: event.target.value } : row) })} /></div>
@@ -147,9 +163,10 @@ export function CurriculumScreen() {
               <div className="curriculum-field"><label htmlFor={`cv-edu-desde-${index}`}>Desde</label><input id={`cv-edu-desde-${index}`} value={entry.desde} onChange={(event) => edit({ education: draft.education.map((row) => row.id === entry.id ? { ...row, desde: event.target.value } : row) })} placeholder="Ej: 2018" /></div>
               <div className="curriculum-field"><label htmlFor={`cv-edu-hasta-${index}`}>Hasta</label><input id={`cv-edu-hasta-${index}`} value={entry.hasta} onChange={(event) => edit({ education: draft.education.map((row) => row.id === entry.id ? { ...row, hasta: event.target.value } : row) })} placeholder="Ej: 2021" /></div>
             </div>
+            <Button type="button" variant="ghost" className="curriculum-done" onClick={() => setEditingEducation(null)}><Check />Listo</Button></div>}
           </div>
         ))}
-        <Button type="button" variant="outline" className="curriculum-add" onClick={() => edit({ education: [...draft.education, emptyEducation()] })}><Plus />Agregar educación</Button>
+        <Button type="button" variant="ghost" className="curriculum-add" onClick={() => { const entry = emptyEducation(); edit({ education: [...draft.education, entry] }); setEditingEducation(entry.id); }}>Añadir educación</Button>
       </section>
 
       <section className="curriculum-block">

@@ -3,6 +3,7 @@ import { queryOptions, useSuspenseQuery } from '@tanstack/react-query';
 import { getRadarJobs } from '@/lib/jobs.functions';
 import { toRadarJobs } from '@/lib/radar-jobs';
 import { RadarScreen } from '@/components/radar-screen';
+import { NavigationLoading } from '@/components/navigation-loading';
 
 const radarQuery = queryOptions({ queryKey: ['radar-jobs'], queryFn: async () => toRadarJobs(await getRadarJobs()), staleTime: 60000 });
 export const Route = createFileRoute('/radar')({
@@ -16,6 +17,9 @@ export const Route = createFileRoute('/radar')({
     { name: 'twitter:card', content: 'summary' },
   ] }),
   loader: ({ context }) => context.queryClient.ensureQueryData(radarQuery),
+  pendingMs: 100,
+  pendingMinMs: 0,
+  pendingComponent: () => <NavigationLoading active="radar" />,
   component: RadarPage,
   errorComponent: () => <div className="employment-empty">No pudimos cargar las ofertas del Radar. Intentá nuevamente.</div>,
   notFoundComponent: () => <div className="employment-empty">Radar no disponible.</div>,

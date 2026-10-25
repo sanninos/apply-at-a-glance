@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useAccess } from "@/components/access-provider";
 import { useAccessDialog } from "@/components/access-dialog";
 import { useSuspenseQuery, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -85,6 +85,8 @@ function JobDetail() {
   const queryClient = useQueryClient();
   const [busy, setBusy] = useState(false);
   const [applyError, setApplyError] = useState("");
+  const [shareNote, setShareNote] = useState("");
+  const navigate = useNavigate();
   const existing = useQuery({
     queryKey: ["application", jobId, user?.id],
     enabled: ready && Boolean(user),
@@ -118,6 +120,32 @@ function JobDetail() {
     void queryClient.invalidateQueries({ queryKey: ["applications", user.id] });
   }
 
+  function flash(message: string) {
+    setShareNote(message);
+    window.setTimeout(() => setShareNote(""), 2200);
+  }
+
+  function goBack() {
+    if (window.history.length > 1) window.history.back();
+    else void navigate({ to: "/" });
+  }
+
+  async function shareJob() {
+    const url = window.location.href;
+    const title = job.titulo || "Llamado laboral";
+    try {
+      if (typeof navigator.share === "function") {
+        await navigator.share({ title, url });
+        return;
+      }
+      await navigator.clipboard.writeText(url);
+      flash("Enlace copiado");
+    } catch (error) {
+      if (error instanceof DOMException && error.name === "AbortError") return;
+      flash("No pudimos copiar el enlace");
+    }
+  }
+
   const ubicacion = job.ubicacion || job.ciudad || null;
   const datos = [
     { icon: MapPin, label: "Ubicación", value: ubicacion ?? "No especificada" },
@@ -135,20 +163,40 @@ function JobDetail() {
     <div className="min-h-screen bg-muted flex justify-center [--primary:var(--employment-blue)]">
       <div className="relative w-full max-w-md bg-background min-h-screen pb-28">
         <header className="bg-primary text-primary-foreground px-5 pt-6 pb-16 rounded-b-[2rem]">
-          <div className="flex items-center justify-between invisible" aria-hidden="true">
-            <Link to="/" aria-label="Volver" className="size-10 grid place-items-center rounded-full bg-primary-foreground/15">
+          <div className="flex items-center justify-between">
+            <button
+              type="button"
+              onClick={goBack}
+              aria-label="Volver"
+              className="size-10 grid place-items-center rounded-full bg-primary-foreground/15 active:bg-primary-foreground/30"
+            >
               <ArrowLeft className="size-5" />
-            </Link>
+            </button>
             <div className="flex gap-2">
-              <button aria-label="Compartir" className="size-10 grid place-items-center rounded-full bg-primary-foreground/15">
+              <button
+                type="button"
+                onClick={() => void shareJob()}
+                aria-label="Compartir"
+                className="size-10 grid place-items-center rounded-full bg-primary-foreground/15 active:bg-primary-foreground/30"
+              >
                 <Share2 className="size-5" />
               </button>
-              <button aria-label="Guardar" className="size-10 grid place-items-center rounded-full bg-primary-foreground/15">
+              <button
+                type="button"
+                aria-label="Guardar"
+                className="size-10 grid place-items-center rounded-full bg-primary-foreground/15 active:bg-primary-foreground/30"
+              >
                 <Bookmark className="size-5" />
               </button>
             </div>
           </div>
         </header>
+
+        {shareNote && (
+          <p className="fixed left-1/2 top-4 z-50 -translate-x-1/2 rounded-full bg-foreground/90 px-3 py-1.5 text-[11px] font-semibold text-background">
+            {shareNote}
+          </p>
+        )}
 
         <section className="-mt-12 mx-5 rounded-3xl bg-card shadow-lg p-5 text-center">
           <div className="mx-auto -mt-12 size-16 rounded-2xl bg-accent text-accent-foreground grid place-items-center shadow-md overflow-hidden">

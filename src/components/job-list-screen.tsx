@@ -15,13 +15,32 @@ function EmployerLogo({ job }: { job: JobListItem }) {
   return <div className="job-logo">{src ? <img ref={ref} src={src} alt={job.Empresa || "Empresa"} onError={onError} /> : <Building2 aria-hidden="true" />}</div>;
 }
 
+const CARD_BATCH = 40;
+
 export function JobListScreen({ jobs }: { jobs: JobListItem[] }) {
   const [search, setSearch] = useState("");
   const [mode, setMode] = useState<JobListMode>("all");
   const [filtersOpen, setFiltersOpen] = useState(false);
   const [location, setLocation] = useState("");
   const [contract, setContract] = useState("");
+  const [limit, setLimit] = useState(CARD_BATCH);
+  const sentinelRef = useRef<HTMLDivElement | null>(null);
   const visible = filterJobs(jobs, search, mode, location, contract);
+  const shown = visible.slice(0, limit);
+
+  // Restart incremental rendering whenever the result set changes.
+  useEffect(() => { setLimit(CARD_BATCH); }, [search, mode, location, contract]);
+
+  // Mount the next batch only when the user scrolls near the end.
+  useEffect(() => {
+    const sentinel = sentinelRef.current;
+    if (!sentinel || shown.length >= visible.length) return;
+    const observer = new IntersectionObserver((entries) => {
+      if (entries.some(entry => entry.isIntersecting)) setLimit(current => current + CARD_BATCH);
+    }, { rootMargin: "600px 0px" });
+    observer.observe(sentinel);
+    return () => observer.disconnect();
+  }, [shown.length, visible.length]);
   const locations = [...new Set(jobs.map(job => job.ciudad || job.ubicacion).filter((value): value is string => Boolean(value)))].sort();
   const contracts = [...new Set(jobs.map(job => job.tipoContrato).filter((value): value is string => Boolean(value)))].sort();
   const tabs = [

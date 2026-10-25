@@ -35,3 +35,11 @@ export function publishedAgo(date: string, now = Date.now()) {
   if (!Number.isFinite(days)) return "";
   return days === 0 ? "Hoy" : days === 1 ? "Hace 1 día" : `Hace ${days} días`;
 }
+
+export function publishedInLastDaysCount(jobs: JobListItem[], days = 7, now = Date.now()) {
+  const cutoff = now - days * 86400000;
+  return jobs.filter((job) => {
+    const published = Date.parse(job.created_at);
+    return Number.isFinite(published) && published >= cutoff;
+  }).length;
+}

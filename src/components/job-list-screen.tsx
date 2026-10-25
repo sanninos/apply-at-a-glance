@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { AppBottomNav } from "@/components/app-bottom-nav";
-import { filterJobs, isUrgent, publishedAgo, type JobListItem, type JobListMode } from "@/lib/job-list";
+import { filterJobs, isUrgent, publishedAgo, publishedInLastDaysCount, type JobListItem, type JobListMode } from "@/lib/job-list";
 import { useEmployerLogo } from "@/hooks/use-employer-logo";
 import { cn } from "@/lib/utils";
 
@@ -24,7 +24,7 @@ export function JobListScreen({ jobs }: { jobs: JobListItem[] }) {
   const locations = [...new Set(jobs.map(job => job.ciudad || job.ubicacion).filter((value): value is string => Boolean(value)))].sort();
   const contracts = [...new Set(jobs.map(job => job.tipoContrato).filter((value): value is string => Boolean(value)))].sort();
   const tabs = [
-    { id: "all" as const, label: "Todas", icon: BriefcaseBusiness, count: jobs.length },
+    { id: "all" as const, label: "Todas", icon: BriefcaseBusiness, count: `+${publishedInLastDaysCount(jobs)}` },
     { id: "urgent" as const, label: "Urgentes", icon: Flame, count: undefined },
     { id: "latest" as const, label: "Últimos", icon: Clock, count: Math.min(36, jobs.length) },
   ];

@@ -9,6 +9,7 @@ export type JobListItem = {
   image: string | null;
   created_at: string;
   isFeatured: boolean | null;
+  isLlamado: boolean | null;
   estado_postulacion: string | null;
   tipoContrato: string | null;
 };

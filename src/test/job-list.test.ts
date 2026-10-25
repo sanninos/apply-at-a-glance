@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { filterJobs, publishedAgo, publishedInLastDaysCount, type JobListItem } from "@/lib/job-list";
 
-const job = (id: number, extra: Partial<JobListItem> = {}): JobListItem => ({ id, titulo: "Cajera", descripcion: "Atención al público", Empresa: "Empresa", ubicacion: "Montevideo", ciudad: "Montevideo", fotoEmpresa: null, image: null, created_at: "2026-10-22T00:00:00Z", isFeatured: false, estado_postulacion: "Normal", tipoContrato: "Permanente", ...extra });
+const job = (id: number, extra: Partial<JobListItem> = {}): JobListItem => ({ id, titulo: "Cajera", descripcion: "Atención al público", Empresa: "Empresa", ubicacion: "Montevideo", ciudad: "Montevideo", fotoEmpresa: null, image: null, created_at: "2026-10-22T00:00:00Z", isFeatured: false, isLlamado: false, estado_postulacion: "Normal", tipoContrato: "Permanente", ...extra });
 describe("employment list filters", () => {
   it("matches searches without accents and combines location and contract filters", () => {
     expect(filterJobs([job(1), job(2, { ciudad: "Salto" })], "atencion", "all", "Montevideo", "Permanente").map(item => item.id)).toEqual([1]);

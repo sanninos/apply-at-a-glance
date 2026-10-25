@@ -21,6 +21,8 @@ import { jobQueryOptions } from "@/lib/job-query";
 import { applicationStatus } from "@/lib/applications";
 import { supabase } from "@/integrations/supabase/client";
 import { useEmployerLogo } from "@/hooks/use-employer-logo";
+import { useSavedOffer } from '@/hooks/use-saved-offer';
+import { Button } from '@/components/ui/button';
 
 export const Route = createFileRoute("/llamado/$jobId")({
   loader: ({ params, context }) =>
@@ -83,6 +85,8 @@ function JobDetail() {
   const { jobId } = Route.useParams();
   const { data: job } = useSuspenseQuery(jobQueryOptions(Number(jobId)));
   const queryClient = useQueryClient();
+  const savedOffer = useSavedOffer(Number(jobId));
+  const saveLabel = savedOffer.saved ? 'Quitar de guardadas' : 'Guardar';
   const [busy, setBusy] = useState(false);
   const [applyError, setApplyError] = useState("");
   const [shareNote, setShareNote] = useState("");
@@ -181,13 +185,19 @@ function JobDetail() {
               >
                 <Share2 className="size-5" />
               </button>
-              <button
+              <Button
                 type="button"
-                aria-label="Guardar"
+                variant="ghost"
+                size="icon"
+                onClick={savedOffer.toggle}
+                disabled={savedOffer.busy}
+                aria-label={saveLabel}
+                title={saveLabel}
+                aria-pressed={savedOffer.saved}
                 className="size-10 grid place-items-center rounded-full bg-primary-foreground/15 active:bg-primary-foreground/30"
               >
-                <Bookmark className="size-5" />
-              </button>
+                <Bookmark className={savedOffer.saved ? 'size-5 fill-current' : 'size-5'} />
+              </Button>
             </div>
           </div>
         </header>
@@ -297,9 +307,9 @@ function JobDetail() {
 
         <footer className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-md bg-background/95 backdrop-blur border-t p-4 flex flex-col gap-2">
           <div className="flex gap-3">
-            <button className="size-12 rounded-2xl border grid place-items-center text-foreground" aria-label="Guardar">
-              <Bookmark className="size-5" />
-            </button>
+            <Button variant="outline" size="icon" className="size-12 rounded-2xl border grid place-items-center text-foreground" aria-label={saveLabel} title={saveLabel} aria-pressed={savedOffer.saved} disabled={savedOffer.busy} onClick={savedOffer.toggle}>
+              <Bookmark className={savedOffer.saved ? 'size-5 fill-current' : 'size-5'} />
+            </Button>
             <button
               disabled={cerrado || !ready || busy || status != null}
               onClick={() => void apply()}
@@ -309,6 +319,7 @@ function JobDetail() {
             </button>
           </div>
           {applyError && <p className="text-sm text-destructive" role="alert">{applyError}</p>}
+          {savedOffer.error && <p className="text-sm text-destructive" role="alert">{savedOffer.error}</p>}
         </footer>
       </div>
     </div>

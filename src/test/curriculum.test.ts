@@ -36,9 +36,9 @@ describe('curriculum editor', () => {
   it('drops blank experience and education rows', () => {
     const draft = emptyCurriculum();
     draft.fullName = 'María Pérez';
-    draft.experiences[0] = { ...draft.experiences[0], puesto: 'Cajera', empresa: 'Tienda' };
+    draft.experiences[0] = { id: 'exp-1', puesto: 'Cajera', empresa: 'Tienda', desde: '', hasta: '', descripcion: '' };
     draft.experiences[1] = { id: 'blank-exp', puesto: ' ', empresa: '  ', desde: '', hasta: '', descripcion: '' };
-    draft.education[0] = { ...draft.education[0], titulo: 'Bachillerato', institucion: 'Liceo 1' };
+    draft.education[0] = { id: 'edu-1', titulo: 'Bachillerato', institucion: 'Liceo 1', desde: '', hasta: '' };
     const result = curriculumPayload(draft);
     expect(result.ok).toBe(true);
     if (!result.ok) return;

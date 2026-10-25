@@ -86,6 +86,45 @@ export type Database = {
         }
         Relationships: []
       }
+      anuncios_home: {
+        Row: {
+          activo: boolean
+          created_at: string
+          enlace_url: string | null
+          fecha_fin: string | null
+          fecha_inicio: string | null
+          id: string
+          imagen_url: string
+          orden: number
+          titulo: string
+          updated_at: string
+        }
+        Insert: {
+          activo?: boolean
+          created_at?: string
+          enlace_url?: string | null
+          fecha_fin?: string | null
+          fecha_inicio?: string | null
+          id?: string
+          imagen_url: string
+          orden?: number
+          titulo: string
+          updated_at?: string
+        }
+        Update: {
+          activo?: boolean
+          created_at?: string
+          enlace_url?: string | null
+          fecha_fin?: string | null
+          fecha_inicio?: string | null
+          id?: string
+          imagen_url?: string
+          orden?: number
+          titulo?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       Autopostulacion: {
         Row: {
           created_at: string

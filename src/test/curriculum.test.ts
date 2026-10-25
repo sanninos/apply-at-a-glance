@@ -35,6 +35,7 @@ describe('curriculum editor', () => {
 
   it('drops blank experience and education rows', () => {
     const draft = emptyCurriculum();
+    draft.fullName = 'María Pérez';
     draft.experiences[0] = { ...draft.experiences[0], puesto: 'Cajera', empresa: 'Tienda' };
     draft.experiences[1] = { ...draft.experiences[1], puesto: ' ', empresa: '  ' };
     draft.education[0] = { ...draft.education[0], titulo: 'Bachillerato', institucion: 'Liceo 1' };

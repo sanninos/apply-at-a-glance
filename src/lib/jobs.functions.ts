@@ -93,7 +93,7 @@ export const getJobsList = createServerFn({ method: "GET" }).handler(async (): P
     const { data, error } = await supabase
       .from("JobsDetails")
       .select("id, titulo, descripcion, Empresa, ubicacion, ciudad, fotoEmpresa, image, created_at, isFeatured, estado_postulacion, tipoContrato")
-      .eq("isLlamado", false)
+      // Public home shows all offers and llamados; RLS restricts to display columns only.
       .order("created_at", { ascending: false })
       .order("id", { ascending: false })
       .range(offset, offset + 999);

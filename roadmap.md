@@ -35,3 +35,4 @@
 - [ ] Verify the redesigned curriculum with real signed-in data; blocked by external unmanaged Supabase authenticated testing.
 - [ ] Investigate curriculum load/save errors from preview logs and validate account isolation, loading and failed-save recovery.
 - [ ] Replace manual curriculum saving with automatic saving as fields are completed, preserving account isolation and failed-save recovery.
+- [ ] Create the home filter component from the uploaded reference and open it from the filter icon.

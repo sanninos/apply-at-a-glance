@@ -35,9 +35,9 @@ export function interleaveOffers(jobs: JobListItem[], offersPerLlamado = 5) {
   const mixed: JobListItem[] = [];
   let o = 0, l = 0;
   while (o < offers.length || l < llamados.length) {
-    for (let i = 0; i < offersPerLlamado && o < offers.length; i++) mixed.push(offers[o++]);
-    if (l < llamados.length) mixed.push(llamados[l++]);
-    if (o >= offers.length) while (l < llamados.length) mixed.push(llamados[l++]);
+    for (let i = 0; i < offersPerLlamado && o < offers.length; i++) mixed.push(offers[o++]!);
+    if (l < llamados.length) mixed.push(llamados[l++]!);
+    if (o >= offers.length) while (l < llamados.length) mixed.push(llamados[l++]!);
   }
   return mixed;
 }

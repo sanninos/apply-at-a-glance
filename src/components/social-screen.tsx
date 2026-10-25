@@ -1,14 +1,20 @@
 // ============= Full file contents =============
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { BriefcaseBusiness, ChevronDown, ChevronRight, MapPin } from "lucide-react";
 import { AppBottomNav } from "@/components/app-bottom-nav";
 import { useEmployerLogo } from "@/hooks/use-employer-logo";
 import { publishedAgo } from "@/lib/job-list";
+import { markPosterSeen, recordSocialPosterIds } from "@/lib/social-badge";
 import type { SocialPost } from "@/lib/social-posts";
 
 export function SocialScreen({ posts }: { posts: SocialPost[] }) {
   const [seenScroll, setSeenScroll] = useState(false);
+
+  useEffect(() => {
+    recordSocialPosterIds(posts.map((post) => String(post.id)));
+  }, [posts]);
+
 
   return (
     <main className="social-screen">
@@ -48,11 +54,30 @@ function SocialPostCard({
   showScrollHint?: boolean;
 }) {
   const [broken, setBroken] = useState(false);
+  const cardRef = useRef<HTMLAnchorElement>(null);
   const { src, ref, onError } = useEmployerLogo(post.fotoEmpresa || post.image);
+
+  useEffect(() => {
+    const element = cardRef.current;
+    if (!element || typeof IntersectionObserver === "undefined") return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((entry) => entry.isIntersecting)) {
+          markPosterSeen(String(post.id));
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.4 },
+    );
+    observer.observe(element);
+    return () => observer.disconnect();
+  }, [post.id]);
+
   if (broken) return null;
   const location = post.ubicacion || post.ciudad || "Uruguay";
   return (
     <Link
+      ref={cardRef}
       className="social-post"
       to="/llamado/$jobId"
       params={{ jobId: String(post.id) }}

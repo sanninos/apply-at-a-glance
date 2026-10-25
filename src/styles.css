@@ -75,7 +75,7 @@
   --google-red: oklch(0.6 0.21 28);
   --employment-surface: oklch(0.975 0.015 245);
   --employment-blue: oklch(0.45 0.105 260);
-  --employment-nav: oklch(0.40 0.125 263);
+  --employment-nav: oklch(0.37 0.10 261);
   --employment-yellow: oklch(0.84 0.16 85);
   --employment-orange: oklch(0.72 0.17 55);
   --employment-red: oklch(0.58 0.21 25);
@@ -118,7 +118,7 @@
 .dark {
   --employment-surface: oklch(0.19 0.02 245);
   --employment-blue: oklch(0.7 0.1 260);
-  --employment-nav: oklch(0.32 0.09 263);
+  --employment-nav: oklch(0.28 0.08 261);
   --employment-yellow: oklch(0.84 0.16 85);
   --employment-orange: oklch(0.72 0.17 55);
   --employment-red: oklch(0.58 0.21 25);
@@ -565,3 +565,10 @@ nav .employment-nav-item, .employment-nav .employment-nav-item { height: 60px !i
 .employment-nav-item svg { width: 22px !important; height: 22px !important; stroke-width: 1.75; }
 .employment-nav-item.active { color: var(--primary-foreground); font-weight: 600 !important; }
 .employment-nav-item.active .nav-icon { background: color-mix(in oklab, var(--primary-foreground) 18%, transparent); color: var(--primary-foreground); }
+
+/* Navigation badge: unread posters on Social, future alerts/notifications */
+nav .employment-nav-item, .employment-nav .employment-nav-item { position: relative; }
+.employment-nav-badge { position: absolute; top: 7px; left: calc(50% + 9px); min-width: 17px; height: 17px; padding: 0 5px; display: grid; place-items: center; border-radius: 999px; background: var(--employment-red); color: var(--primary-foreground); font-size: 10px; font-weight: 700; line-height: 1; pointer-events: none; box-shadow: 0 1px 4px color-mix(in oklab, var(--foreground) 25%, transparent); }
+@media (max-height: 760px) {
+  .employment-nav-badge { top: 2px; left: calc(50% + 7px); min-width: 15px; height: 15px; font-size: 9px; padding: 0 4px; }
+}

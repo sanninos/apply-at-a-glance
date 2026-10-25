@@ -6,7 +6,7 @@ import { Drawer, DrawerContent, DrawerTitle, DrawerDescription } from '@/compone
 import { accountDeletionSchema } from '@/lib/account-deletion';
 import './account-deletion.css';
 
-type Props = { open: boolean; onOpenChange: (open: boolean) => void; fullName?: string; email?: string };
+type Props = { open: boolean; onOpenChange: (open: boolean) => void; fullName?: string | undefined; email?: string | undefined };
 
 export function AccountDeletion({ open, onOpenChange, fullName, email }: Props) {
   return <Drawer open={open} onOpenChange={onOpenChange} shouldScaleBackground={false}>
@@ -16,9 +16,9 @@ export function AccountDeletion({ open, onOpenChange, fullName, email }: Props) 
   </Drawer>;
 }
 
-function DeletionForm({ fullName = '', email = '', onClose }: { fullName?: string; email?: string; onClose: () => void }) {
+function DeletionForm({ fullName = '', email = '', onClose }: { fullName?: string | undefined; email?: string | undefined; onClose: () => void }) {
   const [values, setValues] = useState({ fullName, email, reason: '', confirmed: false });
-  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [errors, setErrors] = useState<Partial<Record<keyof typeof values, string>>>({});
   const [reviewed, setReviewed] = useState(false);
   function update<K extends keyof typeof values>(field: K, value: (typeof values)[K]) {
     setValues(current => ({ ...current, [field]: value }));
@@ -40,8 +40,8 @@ function DeletionForm({ fullName = '', email = '', onClose }: { fullName?: strin
       }
       setErrors({}); setReviewed(true);
     }}>
-      <label className="account-deletion-field" htmlFor="deletion-name">Nombre completo<input id="deletion-name" autoComplete="name" maxLength={100} value={values.fullName} onChange={event => update('fullName', event.target.value)} aria-invalid={Boolean(errors.fullName)} aria-describedby={errors.fullName ? 'deletion-name-error' : undefined} />{errors.fullName && <span id="deletion-name-error" className="account-deletion-error">{errors.fullName}</span>}</label>
-      <label className="account-deletion-field" htmlFor="deletion-email">Correo de la cuenta<input id="deletion-email" type="email" autoComplete="email" maxLength={255} value={values.email} onChange={event => update('email', event.target.value)} aria-invalid={Boolean(errors.email)} aria-describedby={errors.email ? 'deletion-email-error' : undefined} />{errors.email && <span id="deletion-email-error" className="account-deletion-error">{errors.email}</span>}</label>
+      <div className="account-deletion-field"><label htmlFor="deletion-name">Nombre completo</label><input id="deletion-name" autoComplete="name" maxLength={100} value={values.fullName} onChange={event => update('fullName', event.target.value)} aria-invalid={Boolean(errors.fullName)} aria-describedby={errors.fullName ? 'deletion-name-error' : undefined} />{errors.fullName && <span id="deletion-name-error" className="account-deletion-error">{errors.fullName}</span>}</div>
+      <div className="account-deletion-field"><label htmlFor="deletion-email">Correo de la cuenta</label><input id="deletion-email" type="email" autoComplete="email" maxLength={255} value={values.email} onChange={event => update('email', event.target.value)} aria-invalid={Boolean(errors.email)} aria-describedby={errors.email ? 'deletion-email-error' : undefined} />{errors.email && <span id="deletion-email-error" className="account-deletion-error">{errors.email}</span>}</div>
       <label className="account-deletion-field" htmlFor="deletion-reason">Motivo (opcional)<textarea id="deletion-reason" maxLength={1000} value={values.reason} onChange={event => update('reason', event.target.value)} /></label>
       <div><label className="account-deletion-check" htmlFor="deletion-confirm"><Checkbox id="deletion-confirm" checked={values.confirmed} onCheckedChange={checked => update('confirmed', checked === true)} aria-invalid={Boolean(errors.confirmed)} aria-describedby={errors.confirmed ? 'deletion-confirm-error' : undefined} /><span>Quiero solicitar la eliminación definitiva de mi cuenta y sus datos.</span></label>{errors.confirmed && <p id="deletion-confirm-error" className="account-deletion-error">{errors.confirmed}</p>}</div>
       <p className="account-deletion-notice" role={reviewed ? 'status' : undefined}>{reviewed ? 'La solicitud no se envió ni se guardó. El envío todavía no está habilitado; tu cuenta no se modificó.' : 'El envío de solicitudes todavía no está habilitado. Los datos de este formulario no se guardan.'}</p>

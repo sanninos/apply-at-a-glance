@@ -3,7 +3,7 @@ import {
   countUnseenSocialPosters,
   markPosterSeen,
   recordSocialPosterIds,
-} from "./social-badge";
+} from "../lib/social-badge";
 
 const IDS_KEY = "uru-social-poster-ids";
 const SEEN_KEY = "uru-social-seen-posters";

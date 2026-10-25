@@ -17,7 +17,9 @@ describe('curriculum section editing', () => {
     fireEvent.change(screen.getByLabelText('Nombre completo'), { target: { value: 'Ana Pérez' } });
     fireEvent.change(screen.getByLabelText('Teléfono'), { target: { value: '099123456' } });
     fireEvent.click(screen.getByRole('button', { name: 'Listo' }));
-    fireEvent.click(screen.getAllByRole('button', { name: 'Añadir experiencia' })[0]);
+    const addExperience = screen.getAllByRole('button', { name: 'Añadir experiencia' }).find((button) => button.getAttribute('aria-label') === 'Añadir experiencia');
+    if (!addExperience) throw new Error('Missing experience action');
+    fireEvent.click(addExperience);
     fireEvent.change(screen.getByLabelText('Puesto'), { target: { value: 'Analista' } });
     fireEvent.change(screen.getByLabelText('Empresa'), { target: { value: 'Empresa de prueba' } });
     fireEvent.click(screen.getByRole('button', { name: 'Listo' }));

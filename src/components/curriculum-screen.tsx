@@ -35,7 +35,7 @@ export function CurriculumScreen() {
     queryFn: async () => {
       const { data, error } = await supabase.from("curriculums").select("*").limit(1);
       if (error) throw new Error(error.message);
-      return data[0] as CurriculumRow | undefined;
+      return (data[0] as CurriculumRow | undefined) ?? null;
     },
   });
 

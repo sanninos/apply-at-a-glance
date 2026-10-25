@@ -37,3 +37,4 @@
 - [x] Replace manual saving with serialized automatic curriculum saves on typing pause and blur, queue changes during requests and offer retry on failure; 11 curriculum tests pass.
 - [x] Create the compact reference-style home filter drawer with real options; browser verifies opening, applying, clearing and closing on desktop/mobile.
 - [x] Open an account-deletion request form from Profile; validation tests and desktop/mobile open, review, cancel and reset checks pass. Delivery is not connected and explicitly disclosed; no account deletion occurs.
+- [ ] Enable authenticated account-deletion request submission and durable confirmation; verify rules and signed-out access.

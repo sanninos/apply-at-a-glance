@@ -67,6 +67,7 @@ export function JobListScreen({ jobs }: { jobs: JobListItem[] }) {
         {(job.isLlamado || job.isFeatured || isUrgent(job)) && <div className="employment-badges">{job.isLlamado && <span className="llamado-badge">Llamado público</span>}{job.isFeatured && <span>Destacada</span>}{isUrgent(job) && <span>Urgente</span>}</div>}
       </Link>)}
       {!visible.length && <div className="employment-empty"><Search /><h2>No se encontraron empleos</h2><Button variant="outline" onClick={() => { setSearch(""); setLocation(""); setContract(""); setMode("all"); }}>Ver todos</Button></div>}
+      {shown.length < visible.length && <div ref={sentinelRef} className="employment-list-sentinel" aria-hidden="true" />}
     </section>
     <AppBottomNav active="empleos" />
     <JobFilterPanel open={filtersOpen} onOpenChange={setFiltersOpen} value={{ mode, location, contract }} locations={locations} contracts={contracts} onApply={(value) => { setMode(value.mode); setLocation(value.location); setContract(value.contract); }} />

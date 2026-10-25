@@ -87,7 +87,7 @@ export function RadarScreen({ jobs, search, onSearch }: { jobs: RadarJob[]; sear
         <DialogTitle>Ofertas en el Radar</DialogTitle>
         <DialogDescription>Ofertas con ubicación publicada.</DialogDescription>
         <Input aria-label="Buscar ofertas en Radar" placeholder="Puesto, empresa o ubicación" value={search} onChange={(event) => onSearch(event.target.value)} />
-        <div className="radar-results">{visible.map((job) => <Button key={job.id} variant="ghost" className="radar-result" onClick={() => { setSelected(job); setOpen(false); map.current?.panTo(job.position); }}><MapPin /><span>{job.titulo || 'Oferta de empleo'}<small>{job.ubicacion || job.ciudad || 'Uruguay'}</small></span><ChevronRight /></Button>)}</div>
+        <div className="radar-results">{visible.map((job) => <Button key={job.id} variant="ghost" className="radar-result" onClick={() => { setSelected(job); setOpen(false); map.current?.panTo(job.position); }}><span className="location-pin" aria-hidden="true">📍</span><span>{job.titulo || 'Oferta de empleo'}<small>{job.ubicacion || job.ciudad || 'Uruguay'}</small></span><ChevronRight /></Button>)}</div>
         {!visible.length && <p className="text-sm text-muted-foreground">No hay ofertas para esta búsqueda.</p>}
       </DialogContent>
     </Dialog>
@@ -99,7 +99,7 @@ function RadarOffer({ job }: { job: RadarJob }) {
   const { src, ref, onError } = useEmployerLogo(job.fotoEmpresa || job.image);
   return <Link to="/llamado/$jobId" params={{ jobId: String(job.id) }} preload="intent" preloadDelay={0} className="radar-offer">
     <div className="job-logo">{src ? <img ref={ref} src={src} onError={onError} alt={job.Empresa || 'Empresa'} /> : <BriefcaseBusiness />}</div>
-    <div className="social-summary-copy"><p className="social-summary-title">{job.titulo || 'Oferta de empleo'}</p><p className="social-summary-loc"><MapPin /><span>{job.ubicacion || job.ciudad || 'Uruguay'}</span></p><p className="social-summary-company">{job.Empresa || 'Empresa'}</p></div>
+    <div className="social-summary-copy"><p className="social-summary-title">{job.titulo || 'Oferta de empleo'}</p><p className="social-summary-loc"><span className="location-pin" aria-hidden="true">📍</span><span>{job.ubicacion || job.ciudad || 'Uruguay'}</span></p><p className="social-summary-company">{job.Empresa || 'Empresa'}</p></div>
     <span className="employment-arrow"><ChevronRight /></span>
   </Link>;
 }

@@ -340,6 +340,9 @@ body:has(.alerts-screen) { background: var(--muted); }
 .location-chip span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .location-chip svg { color: var(--destructive); }
 .employment-meta svg { width: 19px; height: 19px; flex-shrink: 0; }
+.location-pin { flex-shrink: 0; line-height: 1; }
+.location-chip .location-pin { font-size: 17px; }
+.detail-tile-emoji { font-size: 18px; line-height: 1; }
 .date-chip { white-space: nowrap; flex-shrink: 0; }
 .employment-badges { display: flex; gap: 8px; margin-top: 12px; }
 .employment-badges span { border-radius: 13px; background: var(--accent); color: var(--accent-foreground); padding: 7px 14px; font-size: 17px; font-weight: 700; }
@@ -370,6 +373,7 @@ body:has(.social-screen) { background: var(--muted); }
 .social-summary-title { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; font-size: 14px; line-height: 1.4; font-weight: 600; color: var(--foreground); overflow-wrap: anywhere; }
 .social-summary-loc { display: flex; align-items: center; gap: 4px; margin-top: 2px; font-size: 11px; color: var(--muted-foreground); }
 .social-summary-loc svg { width: 12px; height: 12px; flex-shrink: 0; color: var(--employment-red); }
+.social-summary-loc .location-pin { font-size: 12px; }
 .social-summary-loc span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .social-summary-company { margin-top: 2px; font-size: 10px; font-weight: 600; text-transform: uppercase; color: color-mix(in oklab, var(--muted-foreground) 80%, transparent); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .social-scroll-hint { position: absolute; left: 50%; bottom: 113px; z-index: 3; transform: translateX(-50%); display: flex; align-items: center; gap: 5px; margin: 0; padding: 6px 13px; border-radius: 999px; background: color-mix(in oklab, var(--primary) 72%, transparent); color: var(--primary-foreground); font-size: 10px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; white-space: nowrap; pointer-events: none; animation: social-hint-in .45s ease-out both; }
@@ -405,6 +409,7 @@ body:has(.social-screen) { background: var(--muted); }
   .location-chip, .date-chip { gap: 4px; padding: 4px 6px; border-radius: 11px; }
   .location-chip { max-width: 60%; }
   .employment-meta svg { width: 12px; height: 12px; }
+  .location-chip .location-pin { font-size: 12px; }
   .employment-badges { margin-top: 8px; }
   .employment-badges span { font-size: 10px; font-weight: 600; padding: 3px 7px; border-radius: 10px; }
   .employment-nav { height: 66px; bottom: calc(8px + env(safe-area-inset-bottom, 0px)); border-radius: 33px; padding: 4px 7px; width: calc(100% - 18px); }
@@ -438,6 +443,7 @@ body:has(.radar-screen) { background: var(--muted); }
 .radar-result > span { flex: 1; min-width: 0; font-size: 12px; }
 .radar-result small { display: block; margin-top: 3px; font-size: 11px; color: var(--muted-foreground); }
 .radar-result svg { flex-shrink: 0; color: var(--employment-blue); }
+.radar-result .location-pin { font-size: 16px; }
 
 .applications-screen { max-width: 28rem; min-height: 100dvh; margin: 0 auto; padding: 20px 12px calc(108px + env(safe-area-inset-bottom, 0px)); background: var(--employment-surface); color: var(--primary); font-family: "Segoe UI", system-ui, sans-serif; }
 body:has(.applications-screen) { background: var(--muted); }
@@ -461,6 +467,7 @@ body:has(.applications-screen) { background: var(--muted); }
 .applications-status.rejected { background: color-mix(in oklab, var(--employment-red) 12%, var(--card)); color: var(--employment-red); }
 .applications-date { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; color: var(--muted-foreground); }
 .applications-date svg { width: 12px; height: 12px; }
+.applications-date .location-pin { font-size: 12px; }
 .applications-arrow { width: 18px; height: 18px; flex-shrink: 0; align-self: center; color: var(--muted-foreground); }
 .applications-empty, .applications-login { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; margin: 26px 4px 0; min-height: 188px; padding: 26px 16px; border: 1px solid var(--border); border-radius: 28px; background: var(--card); text-align: center; }
 .applications-empty > svg, .applications-login > svg { width: 48px; height: 48px; color: var(--ring); stroke-width: 2.5; margin-bottom: 6px; }
@@ -498,6 +505,7 @@ body:has(.curriculum-screen) { background: var(--muted); }
 .job-filter-chips { display: flex; flex-wrap: wrap; gap: 9px; }
 .job-filter-chips button { min-height: 43px; height: auto; padding: 10px 17px; border-radius: 999px; border: 1px solid var(--border); background: var(--employment-surface); color: var(--muted-foreground); font-size: 14px; font-weight: 650; white-space: normal; text-align: left; }
 .job-filter-chips button.selected { background: var(--employment-blue); color: var(--primary-foreground); border-color: var(--employment-blue); }
+.job-filter-chips .location-pin { font-size: 16px; }
 .job-filter-select { display: block; margin-top: 10px; }
 .job-filter-select select { width: 100%; height: 44px; border: 1px solid var(--border); border-radius: 14px; padding: 0 12px; color: var(--primary); background: var(--employment-surface); font-size: 13px; }
 .job-filter-footer { padding: 16px 20px calc(18px + env(safe-area-inset-bottom, 0px)); display: grid; grid-template-columns: 1fr 2fr; gap: 12px; border-top: 1px solid var(--border); }

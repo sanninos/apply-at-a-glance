@@ -7,7 +7,6 @@ import {
   ArrowLeft,
   Bookmark,
   Share2,
-  MapPin,
   Clock,
   Briefcase,
   Wallet,
@@ -152,10 +151,10 @@ function JobDetail() {
 
   const ubicacion = job.ubicacion || job.ciudad || null;
   const datos = [
-    { icon: MapPin, label: "Ubicación", value: ubicacion ?? "No especificada" },
-    { icon: Clock, label: "Jornada", value: job.jornada ?? "No especificada" },
-    { icon: Briefcase, label: "Contrato", value: job.tipoContrato ?? "No especificado" },
-    { icon: Wallet, label: "Salario", value: formatSalario(job.salario) },
+    { icon: <span className="detail-tile-emoji" aria-hidden="true">📍</span>, label: "Ubicación", value: ubicacion ?? "No especificada" },
+    { icon: <Clock className="size-4" />, label: "Jornada", value: job.jornada ?? "No especificada" },
+    { icon: <Briefcase className="size-4" />, label: "Contrato", value: job.tipoContrato ?? "No especificado" },
+    { icon: <Wallet className="size-4" />, label: "Salario", value: formatSalario(job.salario) },
   ];
 
   const fechaCierre = formatFecha(job.fechaCierre);
@@ -239,10 +238,10 @@ function JobDetail() {
         </section>
 
         <section className="mx-5 mt-5 grid grid-cols-2 gap-3">
-          {datos.map(({ icon: Icon, label, value }) => (
+          {datos.map(({ icon, label, value }) => (
             <div key={label} className="rounded-2xl border bg-card p-3 flex items-center gap-3">
               <div className="size-9 rounded-xl bg-accent text-accent-foreground grid place-items-center shrink-0">
-                <Icon className="size-4" />
+                {icon}
               </div>
               <div className="min-w-0">
                 <p className="text-[11px] text-muted-foreground">{label}</p>

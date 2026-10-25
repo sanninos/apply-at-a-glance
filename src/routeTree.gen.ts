@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AlertasRouteImport } from './routes/alertas'
 import { Route as AuthRouteImport } from './routes/auth'
+import { Route as EditarCurriculumRouteImport } from './routes/editar-curriculum'
 import { Route as EmpleosRouteImport } from './routes/empleos'
 import { Route as MisPostulacionesRouteImport } from './routes/mis-postulaciones'
 import { Route as OfertasGuardadasRouteImport } from './routes/ofertas-guardadas'
@@ -34,6 +35,11 @@ const AlertasRoute = AlertasRouteImport.update({
 const AuthRoute = AuthRouteImport.update({
   id: '/auth',
   path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EditarCurriculumRoute = EditarCurriculumRouteImport.update({
+  id: '/editar-curriculum',
+  path: '/editar-curriculum',
   getParentRoute: () => rootRouteImport,
 } as any)
 const EmpleosRoute = EmpleosRouteImport.update({
@@ -81,6 +87,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/alertas': typeof AlertasRoute
   '/auth': typeof AuthRoute
+  '/editar-curriculum': typeof EditarCurriculumRoute
   '/empleos': typeof EmpleosRoute
   '/mis-postulaciones': typeof MisPostulacionesRoute
   '/ofertas-guardadas': typeof OfertasGuardadasRoute
@@ -94,6 +101,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/alertas': typeof AlertasRoute
   '/auth': typeof AuthRoute
+  '/editar-curriculum': typeof EditarCurriculumRoute
   '/empleos': typeof EmpleosRoute
   '/mis-postulaciones': typeof MisPostulacionesRoute
   '/ofertas-guardadas': typeof OfertasGuardadasRoute
@@ -108,6 +116,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/alertas': typeof AlertasRoute
   '/auth': typeof AuthRoute
+  '/editar-curriculum': typeof EditarCurriculumRoute
   '/empleos': typeof EmpleosRoute
   '/mis-postulaciones': typeof MisPostulacionesRoute
   '/ofertas-guardadas': typeof OfertasGuardadasRoute
@@ -123,6 +132,7 @@ export interface FileRouteTypes {
     | '/'
     | '/alertas'
     | '/auth'
+    | '/editar-curriculum'
     | '/empleos'
     | '/mis-postulaciones'
     | '/ofertas-guardadas'
@@ -136,6 +146,7 @@ export interface FileRouteTypes {
     | '/'
     | '/alertas'
     | '/auth'
+    | '/editar-curriculum'
     | '/empleos'
     | '/mis-postulaciones'
     | '/ofertas-guardadas'
@@ -149,6 +160,7 @@ export interface FileRouteTypes {
     | '/'
     | '/alertas'
     | '/auth'
+    | '/editar-curriculum'
     | '/empleos'
     | '/mis-postulaciones'
     | '/ofertas-guardadas'
@@ -163,6 +175,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AlertasRoute: typeof AlertasRoute
   AuthRoute: typeof AuthRoute
+  EditarCurriculumRoute: typeof EditarCurriculumRoute
   EmpleosRoute: typeof EmpleosRoute
   MisPostulacionesRoute: typeof MisPostulacionesRoute
   OfertasGuardadasRoute: typeof OfertasGuardadasRoute
@@ -194,6 +207,13 @@ declare module '@tanstack/react-router' {
       path: '/auth'
       fullPath: '/auth'
       preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/editar-curriculum': {
+      id: '/editar-curriculum'
+      path: '/editar-curriculum'
+      fullPath: '/editar-curriculum'
+      preLoaderRoute: typeof EditarCurriculumRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/empleos': {
@@ -259,6 +279,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AlertasRoute: AlertasRoute,
   AuthRoute: AuthRoute,
+  EditarCurriculumRoute: EditarCurriculumRoute,
   EmpleosRoute: EmpleosRoute,
   MisPostulacionesRoute: MisPostulacionesRoute,
   OfertasGuardadasRoute: OfertasGuardadasRoute,

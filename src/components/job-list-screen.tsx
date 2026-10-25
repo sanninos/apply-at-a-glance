@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { AppBottomNav } from "@/components/app-bottom-nav";
+import { HomeAdvertisement } from "@/components/home-advertisement";
 import { filterJobs, isUrgent, publishedAgo, publishedInLastDaysCount, type JobListItem, type JobListMode } from "@/lib/job-list";
 import { useEmployerLogo } from "@/hooks/use-employer-logo";
 import { cn } from "@/lib/utils";
@@ -30,6 +31,7 @@ export function JobListScreen({ jobs }: { jobs: JobListItem[] }) {
   ];
   return <main className="employment-screen">
     <h1 className="sr-only">Empleos en Uruguay</h1>
+    <HomeAdvertisement />
     <header className="employment-header">
       <div className="employment-search-row">
         <div className="employment-search"><Search aria-hidden="true" /><Input aria-label="Buscar un puesto de trabajo" placeholder="Busca un puesto de trabajo" value={search} onChange={event => setSearch(event.target.value)} /></div>

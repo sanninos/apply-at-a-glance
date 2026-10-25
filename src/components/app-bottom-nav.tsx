@@ -41,6 +41,7 @@ export function AppBottomNav({ active }: { active: AppSection }) {
             preload="intent"
             preloadDelay={0}
             aria-current={isActive ? "page" : undefined}
+            aria-label={badge > 0 ? `${label}, ${badge} ${id === 'alertas' ? 'avisos sin leer' : 'pósteres sin ver'}` : label}
             className={cn("employment-nav-item", isActive && "active")}
           >
             {inner}

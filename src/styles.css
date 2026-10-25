@@ -296,6 +296,10 @@ body:has(.alerts-screen) { background: var(--muted); }
 .alert-search-field label { margin-bottom: 0; }
 .alert-search-field input { width: 100%; min-width: 0; height: 44px; padding: 0 12px; border: 1px solid var(--border); border-radius: 12px; background: var(--card); color: var(--foreground); font-size: 13px; }
 .alert-config-notice { font-size: 12px; line-height: 1.5; color: var(--muted-foreground); margin-top: 20px; }
+.home-advertisement { position: relative; width: 100%; aspect-ratio: 1.75; overflow: hidden; margin-bottom: 14px; border-radius: 22px; background: var(--employment-blue); color: var(--primary-foreground); border: 1px solid color-mix(in oklab, var(--primary-foreground) 14%, var(--employment-blue)); box-shadow: var(--employment-shadow); }
+.home-advertisement-label { position: absolute; top: 14px; right: 16px; font-size: 10px; font-weight: 500; line-height: 1.4; letter-spacing: 0; }
+.home-advertisement-content { width: 100%; height: 100%; }
+.home-advertisement-content img { width: 100%; height: 100%; object-fit: contain; }
 .employment-header { margin-bottom: 24px; }
 .employment-search-row { display: flex; gap: 16px; }
 .employment-search { min-width: 0; flex: 1; display: flex; align-items: center; gap: 16px; border: 2px solid var(--border); border-radius: 22px; background: var(--card); padding: 0 22px; height: 80px; box-shadow: var(--employment-shadow); color: var(--muted-foreground); }
@@ -566,7 +570,7 @@ nav .employment-nav-item, .employment-nav .employment-nav-item { height: 60px !i
 .employment-nav-item.active { color: var(--primary-foreground); font-weight: 600 !important; }
 .employment-nav-item.active .nav-icon { background: color-mix(in oklab, var(--primary-foreground) 18%, transparent); color: var(--primary-foreground); }
 
-/* Navigation badge: unread posters on Social, future alerts/notifications */
+/* Navigation badge: unread posters on Social and real unread notices on Alertas */
 nav .employment-nav-item, .employment-nav .employment-nav-item { position: relative; }
 .employment-nav-badge { position: absolute; top: 7px; left: calc(50% + 9px); min-width: 17px; height: 17px; padding: 0 5px; display: grid; place-items: center; border-radius: 999px; background: var(--employment-red); color: var(--primary-foreground); font-size: 10px; font-weight: 700; line-height: 1; pointer-events: none; box-shadow: 0 1px 4px color-mix(in oklab, var(--foreground) 25%, transparent); }
 @media (max-height: 760px) {

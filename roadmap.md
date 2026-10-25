@@ -27,4 +27,7 @@
 - [x] Pantalla «Editar curriculum» (/editar-curriculum) con guardado en tabla curriculums, enlace desde Perfil y pruebas.
 - [ ] Pantalla «Estadísticas del perfil» (/estadisticas) con datos reales (postulaciones, guardados, curriculum); las visitas al perfil aún no se registran y se muestran como próximas.
 - [x] Menú inferior: conservar el diseño actual (barra plana pegada abajo con píldora en el ítem activo) pero con fondo azul; no volver al diseño anterior.
-- [x] Badges en menú (Social: pósteres no vistos; Alertas: listo para futuro) + tono azul del menú ajustado
+- [x] Badges en menú (Social: pósteres no vistos) + tono azul del menú ajustado
+- [x] Connect Alertas badge to own unread Notificaciones (all notice types, no active searches); 13 tests pass, live SELECT/RLS checked, signed-out badge and navigation verified.
+- [ ] Verify Alertas badge with real signed-in notices and read-state changes; blocked by external unmanaged Supabase authenticated testing.
+- [x] Add a reserved blue advertisement frame above home search; desktop/mobile screenshots verified, no campaign content or delivery invented.

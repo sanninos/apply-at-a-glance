@@ -31,3 +31,4 @@
 - [x] Connect Alertas badge to own unread Notificaciones (all notice types, no active searches); 13 tests pass, live SELECT/RLS checked, signed-out badge and navigation verified.
 - [ ] Verify Alertas badge with real signed-in notices and read-state changes; blocked by external unmanaged Supabase authenticated testing.
 - [x] Add a reserved blue advertisement frame above home search; desktop/mobile screenshots verified, no campaign content or delivery invented.
+- [ ] Adapt Editar curriculum to the uploaded reference, preserving existing account saving and using real profile data only.

@@ -13,6 +13,7 @@ import { useEffect, type ReactNode } from "react";
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { AccessProvider } from '@/components/access-provider';
+import { AccessDialogProvider } from '@/components/access-dialog';
 
 function NotFoundComponent() {
   return (
@@ -116,7 +117,9 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-      <AccessProvider><Outlet /></AccessProvider>
+      <AccessProvider>
+        <AccessDialogProvider><Outlet /></AccessDialogProvider>
+      </AccessProvider>
     </QueryClientProvider>
   );
 }

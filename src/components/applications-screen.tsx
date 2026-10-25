@@ -17,6 +17,7 @@ function ApplicationLogo({ item }: { item: ApplicationItem }) {
 
 export function ApplicationsScreen() {
   const { user, ready } = useAccess();
+  const { open: openAccess } = useAccessDialog();
   const applications = useQuery({
     queryKey: ["applications", user?.id],
     enabled: ready && Boolean(user),
@@ -46,7 +47,7 @@ export function ApplicationsScreen() {
       <LogIn aria-hidden="true" />
       <h2>Ingresá para ver tus postulaciones</h2>
       <p>Solo vos podés verlas.</p>
-      <Button asChild className="applications-login-cta"><Link to="/auth">Ingresar o registrarse</Link></Button>
+      <Button className="applications-login-cta" onClick={openAccess}>Ingresar o registrarse</Button>
     </section>}
 
     {signedIn && applications.isPending && <p className="applications-note">Cargando tus postulaciones…</p>}

@@ -191,6 +191,8 @@ body:has(.access-screen) { background: var(--muted); }
 .access-account p { max-width: 100%; overflow-wrap: anywhere; font-size: 14px; color: var(--muted-foreground); }
 .access-account-icon { width: 44px; height: 44px; }
 @media (max-width: 360px) { .access-screen { padding-inline: 12px; }.access-content { padding-inline: 8px; }.access-brand h1 { font-size: 28px; } }
+.access-drawer { max-width: 28rem; margin: 0 auto; background: var(--background); color: var(--employment-blue); padding: 4px 20px calc(22px + env(safe-area-inset-bottom, 0px)); border-radius: 2rem 2rem 0 0; font-family: "Segoe UI", system-ui, sans-serif; }
+.access-drawer .access-close { position: absolute; top: 14px; right: 16px; }
 .profile-screen { max-width: 28rem; min-height: 100dvh; margin: 0 auto; padding: 16px 12px calc(108px + env(safe-area-inset-bottom, 0px)); background: var(--employment-surface); color: var(--primary); font-family: "Segoe UI", system-ui, sans-serif; }
 body:has(.profile-screen) { background: var(--muted); }
 .profile-block { background: var(--card); border: 1px solid var(--border); border-radius: 23px; padding: 14px 12px; box-shadow: var(--employment-shadow); margin-bottom: 16px; }

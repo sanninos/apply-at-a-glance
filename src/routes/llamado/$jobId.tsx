@@ -1,4 +1,5 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { useAccess } from "@/components/access-provider";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import {
   ArrowLeft,
@@ -73,6 +74,8 @@ function formatSalario(salario: number | null): string {
 }
 
 function JobDetail() {
+  const navigate = useNavigate();
+  const { user, ready } = useAccess();
   const { jobId } = Route.useParams();
   const { data: job } = useSuspenseQuery(jobQueryOptions(Number(jobId)));
 
@@ -210,7 +213,10 @@ function JobDetail() {
             <Bookmark className="size-5" />
           </button>
           <button
-            disabled={cerrado}
+            disabled={cerrado || !ready}
+            onClick={() => {
+              if (!user) void navigate({ to: "/auth" });
+            }}
             className="flex-1 h-12 rounded-2xl bg-primary text-primary-foreground font-semibold shadow-md disabled:opacity-50"
           >
             {cerrado ? "Llamado cerrado" : "Postularme"}

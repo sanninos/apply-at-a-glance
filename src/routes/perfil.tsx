@@ -79,7 +79,7 @@ function ProfileScreen() {
         <Link to="/alertas" className="profile-access-row"><Bell /><span>Mis notificaciones</span><ChevronRight className="profile-access-arrow" /></Link>
         <Link to="/mis-postulaciones" className="profile-access-row"><UsersRound /><span>Tus postulaciones</span><ChevronRight className="profile-access-arrow" /></Link>
         <Link to="/ofertas-guardadas" className="profile-access-row"><Bookmark /><span>Ofertas guardadas</span><ChevronRight className="profile-access-arrow" /></Link>
-        <Button variant="outline" disabled className="profile-access-row" title="Edita tu curriculum: próximamente"><ListTodo /><span>Edita tu curriculum</span><small>Próximamente</small></Button>
+        <Link to="/editar-curriculum" className="profile-access-row"><ListTodo /><span>Edita tu curriculum</span><ChevronRight className="profile-access-arrow" /></Link>
         <Button variant="outline" disabled className="profile-access-row" title="Visitas a tu perfil: próximamente"><ChartNoAxesColumnIncreasing /><span>Visitas a tu perfil</span><small>Próximamente</small></Button>
       </div>
     </ProfileBlock>

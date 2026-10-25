@@ -1,4 +1,4 @@
-- [ ] Review and correct the six blocking security findings; verify database access and public browsing afterward.
+- [x] Correct the six blocking security findings; live database regression checks pass, rescan has zero errors, and public offers/detail/Social remain working. Real authenticated UI checks remain unavailable on external unmanaged Supabase.
 - [x] Add account-persisted saved offers, connect both detail bookmarks, and link the list from Profile; mutation tests and signed-out browser flow pass.
 - [ ] Verify saving, reloading and removing an offer through a real signed-in account; blocked by external unmanaged Supabase authenticated testing.
 - [x] Create the reference Alertas screen and connect its bottom-navigation option; verified tabs and navigation on desktop/mobile.

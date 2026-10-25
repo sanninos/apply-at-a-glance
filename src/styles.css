@@ -353,9 +353,9 @@ nav .employment-nav-item, .employment-nav .employment-nav-item { display: flex; 
 .employment-nav-item.active .nav-icon { background: var(--employment-yellow); color: var(--primary); }
 .employment-nav-item.active:hover { background: transparent; }
 .employment-empty { min-height: 300px; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 16px; color: var(--muted-foreground); }
-.social-screen { max-width: 28rem; min-height: 100dvh; margin: 0 auto; background: var(--employment-surface); padding: 12px 12px 90px; font-family: "Segoe UI", system-ui, sans-serif; }
+.social-screen { max-width: 28rem; min-height: 100dvh; margin: 0 auto; background: var(--employment-surface); padding: 12px 12px 0; font-family: "Segoe UI", system-ui, sans-serif; }
 body:has(.social-screen) { background: var(--muted); }
-.social-feed { display: flex; flex-direction: column; height: calc(100dvh - 94px); min-height: 460px; overflow-y: auto; overscroll-behavior: contain; scroll-snap-type: y mandatory; scroll-behavior: smooth; border-radius: 22px; }
+.social-feed { display: flex; flex-direction: column; height: calc(100dvh - 84px - env(safe-area-inset-bottom, 0px)); min-height: 460px; overflow-y: auto; overscroll-behavior: contain; scroll-snap-type: y mandatory; scroll-behavior: smooth; border-radius: 22px 22px 0 0; }
 .social-feed::-webkit-scrollbar { display: none; }
 .social-feed { scrollbar-width: none; }
 .social-post { position: relative; scroll-snap-align: start; scroll-snap-stop: always; display: flex; flex-direction: column; flex: 0 0 calc(100% - 64px); overflow: hidden; background: var(--primary); }

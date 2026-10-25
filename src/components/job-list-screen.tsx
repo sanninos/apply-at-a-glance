@@ -3,7 +3,7 @@ import { Link } from "@tanstack/react-router";
 import { BriefcaseBusiness, Search, SlidersHorizontal, Flame, Clock, ChevronRight, MapPin, Building2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+import { JobFilterPanel } from "@/components/job-filter-panel";
 import { AppBottomNav } from "@/components/app-bottom-nav";
 import { HomeAdvertisement } from "@/components/home-advertisement";
 import { filterJobs, isUrgent, publishedAgo, publishedInLastDaysCount, type JobListItem, type JobListMode } from "@/lib/job-list";
@@ -50,10 +50,6 @@ export function JobListScreen({ jobs }: { jobs: JobListItem[] }) {
       {!visible.length && <div className="employment-empty"><Search /><h2>No se encontraron empleos</h2><Button variant="outline" onClick={() => { setSearch(""); setLocation(""); setContract(""); setMode("all"); }}>Ver todos</Button></div>}
     </section>
     <AppBottomNav active="empleos" />
-    <Dialog open={filtersOpen} onOpenChange={setFiltersOpen}><DialogContent className="max-w-sm rounded-lg"><DialogHeader><DialogTitle>Filtrar empleos</DialogTitle><DialogDescription>Ubicación y tipo de contrato</DialogDescription></DialogHeader>
-      <label className="grid gap-2 text-sm font-medium">Ubicación<select className="h-11 rounded-md border bg-background px-3 text-foreground" value={location} onChange={event => setLocation(event.target.value)}><option value="">Todas las ubicaciones</option>{locations.map(value => <option key={value}>{value}</option>)}</select></label>
-      <label className="grid gap-2 text-sm font-medium">Contrato<select className="h-11 rounded-md border bg-background px-3 text-foreground" value={contract} onChange={event => setContract(event.target.value)}><option value="">Todos los contratos</option>{contracts.map(value => <option key={value}>{value}</option>)}</select></label>
-      <div className="flex gap-2"><Button variant="outline" onClick={() => { setLocation(""); setContract(""); }}>Limpiar</Button><Button className="flex-1" onClick={() => setFiltersOpen(false)}>Ver empleos</Button></div>
-    </DialogContent></Dialog>
+    <JobFilterPanel open={filtersOpen} onOpenChange={setFiltersOpen} value={{ mode, location, contract }} locations={locations} contracts={contracts} onApply={(value) => { setMode(value.mode); setLocation(value.location); setContract(value.contract); }} />
   </main>;
 }

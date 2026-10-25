@@ -27,7 +27,7 @@ describe('curriculum section editing', () => {
     fireEvent.change(screen.getByLabelText('Puesto'), { target: { value: 'Analista' } });
     fireEvent.change(screen.getByLabelText('Empresa'), { target: { value: 'Empresa de prueba' } });
     fireEvent.click(screen.getByRole('button', { name: 'Listo' }));
-    fireEvent.blur(screen.getByRole('button', { name: 'Listo' }));
+    fireEvent.blur(screen.getByLabelText('Separá tus habilidades con comas'));
     await waitFor(() => expect(mocks.upsert).toHaveBeenCalledWith(expect.objectContaining({
       user_id: 'test-account', full_name: 'Ana Pérez', phone: '099123456',
       experiences: [{ puesto: 'Analista', empresa: 'Empresa de prueba', desde: '', hasta: '', descripcion: '' }],
@@ -69,6 +69,16 @@ describe('curriculum section editing', () => {
     expect(screen.getByLabelText('Nombre completo')).toHaveValue('Ana Pérez');
     fireEvent.click(screen.getByRole('button', { name: 'Reintentar guardado' }));
     await waitFor(() => expect(mocks.upsert).toHaveBeenCalledTimes(2));
+    view.unmount(); client.clear();
+  });
+  it('saves after typing pauses without a manual command', async () => {
+    mocks.load.mockResolvedValue({ data: [], error: null });
+    mocks.upsert.mockResolvedValue({ error: null });
+    const client = new QueryClient();
+    const view = render(<QueryClientProvider client={client}><CurriculumScreen /></QueryClientProvider>);
+    fireEvent.click(await screen.findByRole('button', { name: 'Editar datos personales' }));
+    fireEvent.change(screen.getByLabelText('Nombre completo'), { target: { value: 'Ana Pérez' } });
+    await waitFor(() => expect(mocks.upsert).toHaveBeenCalledWith(expect.objectContaining({ full_name: 'Ana Pérez' }), { onConflict: 'user_id' }), { timeout: 1500 });
     view.unmount(); client.clear();
   });
 });

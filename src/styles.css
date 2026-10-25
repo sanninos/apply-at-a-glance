@@ -358,11 +358,10 @@ body:has(.social-screen) { background: var(--muted); }
 .social-feed { display: flex; flex-direction: column; height: calc(100dvh - 94px); min-height: 460px; overflow-y: auto; overscroll-behavior: contain; scroll-snap-type: y mandatory; scroll-behavior: smooth; border-radius: 22px; }
 .social-feed::-webkit-scrollbar { display: none; }
 .social-feed { scrollbar-width: none; }
-.social-post { position: relative; scroll-snap-align: start; scroll-snap-stop: always; display: flex; flex-direction: column; flex: 0 0 calc(100% - 68px); overflow: hidden; background: var(--primary); border: 1px solid var(--border); border-radius: 22px; box-shadow: var(--employment-shadow); }
-.social-post + .social-post { margin-top: 12px; }
+.social-post { position: relative; scroll-snap-align: start; scroll-snap-stop: always; display: flex; flex-direction: column; flex: 0 0 calc(100% - 64px); overflow: hidden; background: var(--primary); }
+.social-post + .social-post { box-shadow: inset 0 1px 0 color-mix(in oklab, var(--primary-foreground) 20%, transparent); }
 .social-post:last-child { flex-basis: 100%; }
-.social-post:hover { border-color: var(--employment-blue); }
-.social-post:focus-visible { outline: 2px solid var(--employment-blue); outline-offset: 3px; }
+.social-post:focus-visible { outline: 2px solid var(--employment-blue); outline-offset: -4px; }
 .social-poster-blur { position: absolute; inset: 0; z-index: 0; width: 100%; height: 100%; object-fit: cover; filter: blur(28px) saturate(135%) brightness(0.92); transform: scale(1.16); }
 .social-poster { position: relative; z-index: 1; flex: 1; min-height: 0; width: 100%; object-fit: contain; background: transparent; }
 .social-summary { position: absolute; left: 12px; right: 12px; bottom: 12px; display: flex; align-items: center; gap: 10px; padding: 10px 12px; background: var(--card); border-radius: 22px; box-shadow: 0 10px 28px color-mix(in oklab, var(--primary) 38%, transparent), 0 2px 6px color-mix(in oklab, var(--primary) 22%, transparent); }

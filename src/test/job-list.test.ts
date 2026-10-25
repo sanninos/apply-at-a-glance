@@ -27,3 +27,10 @@ describe("employment list filters", () => {
     expect(publishedInLastDaysCount([job(4, { created_at: "not-a-date" })], 7, now)).toBe(0);
   });
 });
+import { interleaveOffers as mix } from "@/lib/job-list";
+describe("ratio 5 ofertas : 1 llamado", () => {
+  it("intercala 5 ofertas y luego 1 llamado", () => {
+    const jobs = [...Array.from({ length: 10 }, (_, i) => ({ id: i, isLlamado: false })), ...Array.from({ length: 3 }, (_, i) => ({ id: 100 + i, isLlamado: true }))] as never[];
+    expect(mix(jobs).map((j: { isLlamado: boolean }) => j.isLlamado)).toEqual([false,false,false,false,false,true,false,false,false,false,false,true,true]);
+  });
+});

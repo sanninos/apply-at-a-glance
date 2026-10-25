@@ -358,8 +358,8 @@ body:has(.social-screen) { background: var(--muted); }
 .social-feed { display: flex; flex-direction: column; gap: 14px; height: calc(100dvh - 84px - env(safe-area-inset-bottom, 0px)); min-height: 460px; overflow-y: auto; overscroll-behavior: contain; scroll-snap-type: y mandatory; scroll-behavior: smooth; border-radius: 22px 22px 0 0; }
 .social-feed::-webkit-scrollbar { display: none; }
 .social-feed { scrollbar-width: none; }
-.social-post { position: relative; scroll-snap-align: start; scroll-snap-stop: always; display: flex; flex-direction: column; flex: 0 0 calc(100% - 72px); overflow: hidden; background: var(--primary); }
-.social-post:last-child { flex-basis: 100%; }
+.social-post { position: relative; scroll-snap-align: start; scroll-snap-stop: always; display: flex; flex-direction: column; flex: 0 0 calc(100% - 72px); overflow: hidden; border-radius: 22px; background: var(--primary); }
+.social-post:last-child { flex-basis: 100%; border-radius: 22px 22px 0 0; }
 .social-post:focus-visible { outline: 2px solid var(--employment-blue); outline-offset: -4px; }
 .social-poster-blur { position: absolute; inset: 0; z-index: 0; width: 100%; height: 100%; object-fit: cover; filter: blur(28px) saturate(135%) brightness(0.92); transform: scale(1.16); }
 .social-poster { position: relative; z-index: 1; flex: 1; min-height: 0; width: 100%; object-fit: contain; background: transparent; }

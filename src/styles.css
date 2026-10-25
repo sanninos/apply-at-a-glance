@@ -75,6 +75,7 @@
   --google-red: oklch(0.6 0.21 28);
   --employment-surface: oklch(0.975 0.015 245);
   --employment-blue: oklch(0.45 0.105 260);
+  --employment-card-border: color-mix(in oklab, var(--employment-blue) 30%, var(--card));
   --employment-nav: oklch(0.37 0.10 261);
   --employment-yellow: oklch(0.84 0.16 85);
   --employment-orange: oklch(0.72 0.17 55);
@@ -317,7 +318,7 @@ body:has(.alerts-screen) { background: var(--muted); }
 .tab-count { font-size: 14px; padding: 2px 11px; border-radius: 20px; background: var(--employment-surface); color: var(--employment-blue); }
 .selected .tab-count { background: color-mix(in oklab, var(--primary-foreground) 24%, transparent); color: inherit; }
 .employment-list { display: grid; gap: 22px; }
-.employment-card { --employment-card-radius: 30px; position: relative; overflow: hidden; display: block; background: var(--card); border: 2px solid var(--border); border-radius: var(--employment-card-radius); padding: 30px; box-shadow: var(--employment-shadow); transition: border-color 150ms; }
+.employment-card { --employment-card-radius: 30px; position: relative; overflow: hidden; display: block; background: var(--card); border: 1px solid var(--employment-card-border); border-radius: var(--employment-card-radius); padding: 30px; box-shadow: var(--employment-shadow); transition: border-color 150ms; }
 .employment-card:hover { border-color: var(--employment-blue); }
 .employment-card:focus-visible { outline: 2px solid var(--employment-blue); outline-offset: 3px; }
 .employment-card.featured::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 9px; background: var(--employment-orange); border-radius: var(--employment-card-radius) 0 0 var(--employment-card-radius); }

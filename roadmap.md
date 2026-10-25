@@ -28,5 +28,6 @@
 - [ ] Pantalla «Estadísticas del perfil» (/estadisticas) con datos reales (postulaciones, guardados, curriculum); las visitas al perfil aún no se registran y se muestran como próximas.
 - [x] Menú inferior: conservar el diseño actual (barra plana pegada abajo con píldora en el ítem activo) pero con fondo azul; no volver al diseño anterior.
 - [x] Badges en menú (Social: pósteres no vistos) + tono azul del menú ajustado
-- [ ] Connect Alertas badge to the signed-in user's unread notifications, including alert notices, without counting configured active searches.
-- [ ] Add a reserved custom advertisement frame at the top of home, above the search field, following the uploaded reference without inventing a campaign.
+- [x] Connect Alertas badge to own unread Notificaciones (all notice types, no active searches); 13 tests pass, live SELECT/RLS checked, signed-out badge and navigation verified.
+- [ ] Verify Alertas badge with real signed-in notices and read-state changes; blocked by external unmanaged Supabase authenticated testing.
+- [x] Add a reserved blue advertisement frame above home search; desktop/mobile screenshots verified, no campaign content or delivery invented.

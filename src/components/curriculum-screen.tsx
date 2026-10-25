@@ -1,5 +1,5 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { BriefcaseBusiness, Check, GraduationCap, LogIn, Plus, RefreshCw, Save, Trash2, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { AppBottomNav } from "@/components/app-bottom-nav";
@@ -42,13 +42,15 @@ export function CurriculumScreen() {
   }
 
   const signedIn = ready && Boolean(user);
-  // Seeded once the stored curriculum arrives; a stored row with no entries
-  // keeps its (empty) trailing rows instead of starting over.
-  if (signedIn && curriculum.data && !curriculum.isFetching && !draftLoaded.current) {
-    draftLoaded.current = true;
-    setDraft(toCurriculumDraft(curriculum.data));
-  }
+  // Seed the draft once from the stored curriculum; a stored row with entries
+  // keeps a trailing blank row so the user can keep adding.
   const draftLoaded = useRef(false);
+  const seededRow = curriculum.data;
+  useEffect(() => {
+    if (!signedIn || !seededRow || draftLoaded.current) return;
+    draftLoaded.current = true;
+    setDraft(toCurriculumDraft(seededRow));
+  }, [signedIn, seededRow]);
 
   async function save() {
     if (!user || busy) return;

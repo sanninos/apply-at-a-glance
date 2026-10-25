@@ -1,4 +1,4 @@
-- [ ] Speed up bottom-navigation transitions and verify cached visits plus navigation during slow initial reads.
+- [x] Speed up bottom-navigation transitions: avoid duplicate public reads, preload on intent, and keep navigation usable during slow initial reads; routing tests and browser checks pass.
 - [x] Correct the six blocking security findings; live database regression checks pass, rescan has zero errors, and public offers/detail/Social remain working. Real authenticated UI checks remain unavailable on external unmanaged Supabase.
 - [x] Add account-persisted saved offers, connect both detail bookmarks, and link the list from Profile; mutation tests and signed-out browser flow pass.
 - [ ] Verify saving, reloading and removing an offer through a real signed-in account; blocked by external unmanaged Supabase authenticated testing.

@@ -299,7 +299,7 @@ body:has(.alerts-screen) { background: var(--muted); }
 .alert-config-notice { font-size: 12px; line-height: 1.5; color: var(--muted-foreground); margin-top: 20px; }
 .home-advertisement { position: relative; width: 100%; aspect-ratio: 1.75; overflow: hidden; margin-bottom: 14px; border-radius: 22px; background: var(--employment-blue); color: var(--primary-foreground); border: 1px solid color-mix(in oklab, var(--primary-foreground) 14%, var(--employment-blue)); box-shadow: var(--employment-shadow); }
 .home-advertisement-label { position: absolute; top: 14px; right: 16px; font-size: 10px; font-weight: 500; line-height: 1.4; letter-spacing: 0; }
-.home-advertisement-content { width: 100%; height: 100%; }
+.home-advertisement-content, .home-advertisement-content a { display: block; width: 100%; height: 100%; }
 .home-advertisement-content img { width: 100%; height: 100%; object-fit: contain; }
 .employment-header { margin-bottom: 24px; }
 .employment-search-row { display: flex; gap: 16px; }

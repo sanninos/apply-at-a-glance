@@ -11,8 +11,9 @@
 
 - The employment list is the home screen ("/"); /empleos redirects there so older links keep working, and /llamado/$jobId retains the original detail screen.
 - Job list presentation and filtering live in a focused component and browser-safe helper; public list reads project only display fields and paginate Supabase results to avoid silently missing rows.
+- Home filters use a separate drawer with a local draft applied on confirmation; use selectors for high-cardinality real location and contract options to keep the panel compact.
 - Home advertisement placement is a separate reserved frame before the search header; keep its dimensions stable and do not invent campaign content or personalized delivery without a real source.
-- Curriculum presents summary sections with expandable local editors over the existing draft and save flow; unsupported personal fields and photo uploads must not pretend to persist.
+- Curriculum uses account-keyed expandable editors and serialized automatic saves after a brief typing pause or field blur; wait for initial loading, retain failed drafts and queue edits made during a save. Unsupported personal fields and photo uploads must not pretend to persist.
 - Bottom navigation preloads only on intent; public screen queries retain a short freshness window to avoid duplicate reads, and slow initial reads show a shared pending screen with navigation available and no minimum wait.
 - Job detail uses shared query options with a short freshness window and intent-based link preloading so navigation reuses complete detail responses without duplicate reads or prefetching the entire list.
 - Company and poster images resolve through a shared browser-safe fallback attached to the current element, so a photo that fails after mount still falls back instead of rendering a broken image.

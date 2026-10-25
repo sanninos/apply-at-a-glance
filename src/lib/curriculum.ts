@@ -82,7 +82,7 @@ export function toCurriculumDraft(row: CurriculumRow): CurriculumDraft {
 }
 
 function isBlank(...values: string[]): boolean {
-  return values.every((value) => value.trim() === "");
+  return values.every((value) => String(value ?? "").trim() === "");
 }
 
 /** Builds the upsert payload, dropping blank rows; requires a name. */

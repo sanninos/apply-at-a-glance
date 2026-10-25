@@ -3,6 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { BriefcaseBusiness, Building2, ChevronRight, Clock, LogIn, RefreshCw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { AppBottomNav } from "@/components/app-bottom-nav";
+import { useAccessDialog } from "@/components/access-dialog";
 import { useAccess } from "@/components/access-provider";
 import { supabase } from "@/integrations/supabase/client";
 import { applicationCountLabel, applicationStatus, listApplications, type ApplicationItem, type ApplicationRow } from "@/lib/applications";

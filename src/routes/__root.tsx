@@ -14,6 +14,7 @@ import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { AccessProvider } from '@/components/access-provider';
 import { AccessDialogProvider } from '@/components/access-dialog';
+import { PushTokenRegistrar } from '@/components/push-token-registrar';
 
 function NotFoundComponent() {
   return (
@@ -118,7 +119,7 @@ function RootComponent() {
     <QueryClientProvider client={queryClient}>
       {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
       <AccessProvider>
-        <AccessDialogProvider><Outlet /></AccessDialogProvider>
+        <PushTokenRegistrar /><AccessDialogProvider><Outlet /></AccessDialogProvider>
       </AccessProvider>
     </QueryClientProvider>
   );

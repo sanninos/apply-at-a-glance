@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { JobFilterPanel } from "@/components/job-filter-panel";
 import { AppBottomNav } from "@/components/app-bottom-nav";
 import { HomeAdvertisement } from "@/components/home-advertisement";
-import { filterJobs, isUrgent, publishedAgo, publishedInLastDaysCount, type JobListItem, type JobListMode } from "@/lib/job-list";
+import { filterJobs, isUrgent, publishedAgo, publishedInLastDaysCount, searchSuggestions, type JobListItem, type JobListMode } from "@/lib/job-list";
 import { useEmployerLogo } from "@/hooks/use-employer-logo";
 import { cn } from "@/lib/utils";
 
@@ -28,7 +28,9 @@ export function JobListScreen({ jobs, variant = "home" }: { jobs: JobListItem[];
   const [limit, setLimit] = useState(CARD_BATCH);
   const sentinelRef = useRef<HTMLDivElement | null>(null);
   const visible = filterJobs(jobs, search, mode, location, contract);
-  const shown = visible.slice(0, limit);
+  const idle = isSearch && !search.trim();
+  const shown = idle ? [] : visible.slice(0, limit);
+  const suggestions = isSearch ? searchSuggestions(jobs, search) : [];
 
   // Restart incremental rendering whenever the result set changes.
   useEffect(() => { setLimit(CARD_BATCH); }, [search, mode, location, contract]);
@@ -65,14 +67,16 @@ export function JobListScreen({ jobs, variant = "home" }: { jobs: JobListItem[];
         {tabs.map(({ id, label, icon: Icon, count }) => <Button key={id} role="tab" aria-selected={mode === id} variant="ghost" className={cn("employment-tab", mode === id && "selected")} onClick={() => setMode(id)}><Icon /><span>{label}</span>{count !== undefined && <span className="tab-count">{count}</span>}</Button>)}
       </div>}
     </header>
+    {idle && <div className="search-idle"><Search aria-hidden="true" /><p>Escribí un puesto, empresa o ciudad para ver ofertas.</p></div>}
+    {suggestions.length > 0 && <ul className="search-suggestions" aria-label="Sugerencias de búsqueda">{suggestions.map(title => <li key={title}><button type="button" onClick={() => setSearch(title)}><Search aria-hidden="true" /><span>{title}</span></button></li>)}</ul>}
     <section className="employment-list" aria-label="Empleos disponibles">
       {shown.map(job => <Link className={cn("employment-card", job.isFeatured && "featured", isUrgent(job) && "urgent")} key={job.id} to="/llamado/$jobId" params={{ jobId: String(job.id) }} preload="intent" preloadDelay={0}>
         <div className="employment-card-main"><EmployerLogo job={job} /><div className="employment-copy"><p className="employment-company">{job.Empresa || "Empresa"}</p><h2>{job.titulo || "Oferta de empleo"}</h2><p className="employment-description">{job.descripcion}</p></div><span className="employment-arrow"><ChevronRight aria-hidden="true" /></span></div>
         <div className="employment-meta"><span className="location-chip"><span className="location-pin" aria-hidden="true">📍</span><span>{job.ubicacion || job.ciudad || "Uruguay"}</span></span><span className="date-chip"><Clock aria-hidden="true" />{publishedAgo(job.created_at)}</span></div>
         {(job.isLlamado || job.isFeatured || isUrgent(job)) && <div className="employment-badges">{job.isLlamado && <span className="llamado-badge">Llamado público</span>}{job.isFeatured && <span>Destacada</span>}{isUrgent(job) && <span>Urgente</span>}</div>}
       </Link>)}
-      {!visible.length && <div className="employment-empty"><Search /><h2>No se encontraron empleos</h2><Button variant="outline" onClick={() => { setSearch(""); setLocation(""); setContract(""); setMode("all"); }}>Ver todos</Button></div>}
-      {shown.length < visible.length && <div ref={sentinelRef} className="employment-list-sentinel" aria-hidden="true" />}
+      {!idle && !visible.length && <div className="employment-empty"><Search /><h2>No se encontraron empleos</h2><Button variant="outline" onClick={() => { setSearch(""); setLocation(""); setContract(""); setMode("all"); }}>Ver todos</Button></div>}
+      {!idle && shown.length < visible.length && <div ref={sentinelRef} className="employment-list-sentinel" aria-hidden="true" />}
     </section>
     <AppBottomNav active="empleos" />
     <JobFilterPanel open={filtersOpen} onOpenChange={setFiltersOpen} value={{ mode, location, contract }} locations={locations} contracts={contracts} onApply={(value) => { setMode(value.mode); setLocation(value.location); setContract(value.contract); }} />

@@ -59,3 +59,16 @@ export function publishedInLastDaysCount(jobs: JobListItem[], days = 7, now = Da
     return Number.isFinite(published) && published >= cutoff;
   }).length;
 }
+/** Unique job titles that contain the typed text (accent-insensitive), best matches first. */
+export function searchSuggestions(jobs: JobListItem[], query: string, max = 6) {
+  const q = normalize(query.trim());
+  if (!q) return [];
+  const seen = new Map<string, string>();
+  for (const job of jobs) {
+    const title = job.titulo?.trim();
+    if (!title) continue;
+    const key = normalize(title);
+    if (key.includes(q) && key !== q && !seen.has(key)) seen.set(key, title);
+  }
+  return [...seen.entries()].sort(([a], [b]) => Number(!a.startsWith(q)) - Number(!b.startsWith(q)) || a.length - b.length).slice(0, max).map(([, title]) => title);
+}

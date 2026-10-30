@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
-import { Link } from "@tanstack/react-router";
-import { BriefcaseBusiness, Search, SlidersHorizontal, Flame, Clock, ChevronRight, Building2 } from "lucide-react";
+import { Link, useRouter } from "@tanstack/react-router";
+import { BriefcaseBusiness, Search, SlidersHorizontal, Flame, Clock, ChevronRight, Building2, ArrowLeft, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { JobFilterPanel } from "@/components/job-filter-panel";
@@ -17,7 +17,9 @@ function EmployerLogo({ job }: { job: JobListItem }) {
 
 const CARD_BATCH = 40;
 
-export function JobListScreen({ jobs }: { jobs: JobListItem[] }) {
+export function JobListScreen({ jobs, variant = "home" }: { jobs: JobListItem[]; variant?: "home" | "search" }) {
+  const router = useRouter();
+  const isSearch = variant === "search";
   const [search, setSearch] = useState("");
   const [mode, setMode] = useState<JobListMode>("all");
   const [filtersOpen, setFiltersOpen] = useState(false);
@@ -48,17 +50,20 @@ export function JobListScreen({ jobs }: { jobs: JobListItem[] }) {
     { id: "urgent" as const, label: "Urgentes", icon: Flame, count: undefined },
     { id: "latest" as const, label: "Últimos", icon: Clock, count: Math.min(36, jobs.length) },
   ];
-  return <main className="employment-screen">
+  return <main className={cn("employment-screen", isSearch && "search-screen")}>
     <h1 className="sr-only">Empleos en Uruguay</h1>
-    <HomeAdvertisement />
+    {!isSearch && <HomeAdvertisement />}
     <header className="employment-header">
       <div className="employment-search-row">
-        <div className="employment-search"><Search aria-hidden="true" /><Input aria-label="Buscar un puesto de trabajo" placeholder="Busca un puesto de trabajo" value={search} onChange={event => setSearch(event.target.value)} /></div>
+        {isSearch && <Button variant="ghost" size="icon" className="search-back" aria-label="Volver" onClick={() => (window.history.length > 1 ? router.history.back() : router.navigate({ to: "/" }))}><ArrowLeft /></Button>}
+        {isSearch
+          ? <div className="employment-search"><Search aria-hidden="true" /><Input autoFocus type="search" aria-label="Buscar un puesto de trabajo" placeholder="Busca un puesto de trabajo" value={search} onChange={event => setSearch(event.target.value)} />{search && <button type="button" className="search-clear" aria-label="Borrar búsqueda" onClick={() => setSearch("")}><X /></button>}</div>
+          : <Link to="/buscar" preload="intent" preloadDelay={0} className="employment-search employment-search-link" aria-label="Buscar un puesto de trabajo"><Search aria-hidden="true" /><span>Busca un puesto de trabajo</span></Link>}
         <Button variant="outline" size="icon" className={cn("employment-filter", (location || contract) && "filter-active")} aria-label="Filtrar empleos" title="Filtrar empleos" onClick={() => setFiltersOpen(true)}><SlidersHorizontal /></Button>
       </div>
-      <div className="employment-tabs" role="tablist" aria-label="Tipo de empleos">
+      {!isSearch && <div className="employment-tabs" role="tablist" aria-label="Tipo de empleos">
         {tabs.map(({ id, label, icon: Icon, count }) => <Button key={id} role="tab" aria-selected={mode === id} variant="ghost" className={cn("employment-tab", mode === id && "selected")} onClick={() => setMode(id)}><Icon /><span>{label}</span>{count !== undefined && <span className="tab-count">{count}</span>}</Button>)}
-      </div>
+      </div>}
     </header>
     <section className="employment-list" aria-label="Empleos disponibles">
       {shown.map(job => <Link className={cn("employment-card", job.isFeatured && "featured", isUrgent(job) && "urgent")} key={job.id} to="/llamado/$jobId" params={{ jobId: String(job.id) }} preload="intent" preloadDelay={0}>

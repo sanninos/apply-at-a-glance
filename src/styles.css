@@ -631,3 +631,11 @@ nav .employment-nav-item, .employment-nav .employment-nav-item { position: relat
   .rotate-lock { position: fixed; inset: 0; z-index: 1000; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; padding: 24px; background: var(--primary); color: var(--primary-foreground); text-align: center; font-size: 16px; font-weight: 650; }
   .rotate-lock span { font-size: 44px; transform: rotate(90deg); }
 }
+
+/* Search screen */
+.employment-search-link { text-decoration: none; color: var(--muted-foreground); cursor: text; }
+.employment-search-link span { flex: 1; font-size: 15px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.search-back { flex-shrink: 0; color: var(--primary); }
+.search-clear { display: grid; place-items: center; flex-shrink: 0; background: none; border: 0; color: var(--muted-foreground); padding: 4px; cursor: pointer; }
+.search-clear svg { width: 18px; height: 18px; }
+.search-screen .employment-search input::-webkit-search-cancel-button { display: none; }

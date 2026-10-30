@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AlertasRouteImport } from './routes/alertas'
 import { Route as AuthRouteImport } from './routes/auth'
+import { Route as BuscarRouteImport } from './routes/buscar'
 import { Route as EditarCurriculumRouteImport } from './routes/editar-curriculum'
 import { Route as EmpleosRouteImport } from './routes/empleos'
 import { Route as EstadisticasRouteImport } from './routes/estadisticas'
@@ -36,6 +37,11 @@ const AlertasRoute = AlertasRouteImport.update({
 const AuthRoute = AuthRouteImport.update({
   id: '/auth',
   path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BuscarRoute = BuscarRouteImport.update({
+  id: '/buscar',
+  path: '/buscar',
   getParentRoute: () => rootRouteImport,
 } as any)
 const EditarCurriculumRoute = EditarCurriculumRouteImport.update({
@@ -93,6 +99,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/alertas': typeof AlertasRoute
   '/auth': typeof AuthRoute
+  '/buscar': typeof BuscarRoute
   '/editar-curriculum': typeof EditarCurriculumRoute
   '/empleos': typeof EmpleosRoute
   '/estadisticas': typeof EstadisticasRoute
@@ -108,6 +115,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/alertas': typeof AlertasRoute
   '/auth': typeof AuthRoute
+  '/buscar': typeof BuscarRoute
   '/editar-curriculum': typeof EditarCurriculumRoute
   '/empleos': typeof EmpleosRoute
   '/estadisticas': typeof EstadisticasRoute
@@ -124,6 +132,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/alertas': typeof AlertasRoute
   '/auth': typeof AuthRoute
+  '/buscar': typeof BuscarRoute
   '/editar-curriculum': typeof EditarCurriculumRoute
   '/empleos': typeof EmpleosRoute
   '/estadisticas': typeof EstadisticasRoute
@@ -141,6 +150,7 @@ export interface FileRouteTypes {
     | '/'
     | '/alertas'
     | '/auth'
+    | '/buscar'
     | '/editar-curriculum'
     | '/empleos'
     | '/estadisticas'
@@ -156,6 +166,7 @@ export interface FileRouteTypes {
     | '/'
     | '/alertas'
     | '/auth'
+    | '/buscar'
     | '/editar-curriculum'
     | '/empleos'
     | '/estadisticas'
@@ -171,6 +182,7 @@ export interface FileRouteTypes {
     | '/'
     | '/alertas'
     | '/auth'
+    | '/buscar'
     | '/editar-curriculum'
     | '/empleos'
     | '/estadisticas'
@@ -187,6 +199,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AlertasRoute: typeof AlertasRoute
   AuthRoute: typeof AuthRoute
+  BuscarRoute: typeof BuscarRoute
   EditarCurriculumRoute: typeof EditarCurriculumRoute
   EmpleosRoute: typeof EmpleosRoute
   EstadisticasRoute: typeof EstadisticasRoute
@@ -220,6 +233,13 @@ declare module '@tanstack/react-router' {
       path: '/auth'
       fullPath: '/auth'
       preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/buscar': {
+      id: '/buscar'
+      path: '/buscar'
+      fullPath: '/buscar'
+      preLoaderRoute: typeof BuscarRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/editar-curriculum': {
@@ -299,6 +319,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AlertasRoute: AlertasRoute,
   AuthRoute: AuthRoute,
+  BuscarRoute: BuscarRoute,
   EditarCurriculumRoute: EditarCurriculumRoute,
   EmpleosRoute: EmpleosRoute,
   EstadisticasRoute: EstadisticasRoute,

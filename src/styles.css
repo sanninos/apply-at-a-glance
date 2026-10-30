@@ -639,3 +639,10 @@ nav .employment-nav-item, .employment-nav .employment-nav-item { position: relat
 .search-clear { display: grid; place-items: center; flex-shrink: 0; background: none; border: 0; color: var(--muted-foreground); padding: 4px; cursor: pointer; }
 .search-clear svg { width: 18px; height: 18px; }
 .search-screen .employment-search input::-webkit-search-cancel-button { display: none; }
+.search-idle { display: flex; flex-direction: column; align-items: center; gap: 10px; padding: 48px 24px; text-align: center; color: var(--muted-foreground); }
+.search-idle svg { width: 36px; height: 36px; opacity: .5; }
+.search-suggestions { list-style: none; margin: 0 16px 12px; padding: 4px 0; background: var(--card); border: 1px solid var(--employment-card-border); border-radius: 16px; }
+.search-suggestions button { display: flex; align-items: center; gap: 12px; width: 100%; padding: 10px 16px; background: none; border: 0; text-align: left; color: var(--foreground); font-size: 15px; cursor: pointer; }
+.search-suggestions button:hover { background: var(--muted); }
+.search-suggestions svg { width: 16px; height: 16px; flex-shrink: 0; color: var(--muted-foreground); }
+.search-suggestions span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }

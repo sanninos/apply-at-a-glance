@@ -119,7 +119,7 @@ function RootComponent() {
     <QueryClientProvider client={queryClient}>
       {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
       <AccessProvider>
-        <PushTokenRegistrar /><AccessDialogProvider><Outlet /></AccessDialogProvider>
+        <PushTokenRegistrar /><div className="rotate-lock" role="alert"><span aria-hidden="true">📱</span><p>Girá el teléfono a vertical para usar URUJOBS</p></div><AccessDialogProvider><Outlet /></AccessDialogProvider>
       </AccessProvider>
     </QueryClientProvider>
   );

@@ -1,11 +1,13 @@
 import { useState } from 'react';
-import { Check } from 'lucide-react';
+import { Building2, BriefcaseBusiness, MapPinned } from 'lucide-react';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
 import { Drawer, DrawerContent, DrawerTitle, DrawerDescription } from '@/components/ui/drawer';
 import { Slider } from '@/components/ui/slider';
 import { ALERT_RADIUS } from '@/lib/alert-preferences';
 
 const types = ['Por empresa', 'Por puesto', 'Proximidad'] as const;
+const typeIcons = { 'Por empresa': Building2, 'Por puesto': BriefcaseBusiness, 'Proximidad': MapPinned } as const;
 
 export function AlertConfiguration({ open, onOpenChange }: { open: boolean; onOpenChange: (open: boolean) => void }) {
   const [type, setType] = useState<(typeof types)[number]>('Proximidad');
@@ -18,12 +20,15 @@ export function AlertConfiguration({ open, onOpenChange }: { open: boolean; onOp
           <DrawerTitle>Configurar Alertas</DrawerTitle>
           <DrawerDescription>Configura tus preferencias de alertas</DrawerDescription>
         </header>
-        <fieldset className="alert-type-field">
-          <legend>Tipo de Alerta</legend>
-          <div className="alert-type-options" role="group" aria-label="Tipo de Alerta">
-            {types.map(option => <Button key={option} variant="outline" aria-pressed={type === option} className={type === option ? 'selected' : ''} onClick={() => { setType(option); setNotice(false); }}>{type === option && <Check />}{option}</Button>)}
-          </div>
-        </fieldset>
+        <div className="alert-type-field">
+          <label id="alert-type-label">Tipo de alerta</label>
+          <Select value={type} onValueChange={value => { setType(value as (typeof types)[number]); setNotice(false); }}>
+            <SelectTrigger aria-labelledby="alert-type-label" className="alert-type-select"><SelectValue /></SelectTrigger>
+            <SelectContent className="alert-type-menu">
+              {types.map(option => { const Icon = typeIcons[option]; return <SelectItem key={option} value={option}><span className="alert-type-item"><Icon />{option}</span></SelectItem>; })}
+            </SelectContent>
+          </Select>
+        </div>
         {type === 'Proximidad' ? <div className="alert-radius-field">
           <div><label id="alert-radius-label">Área de búsqueda</label><output>{radius} km</output></div>
           <Slider aria-labelledby="alert-radius-label" aria-valuetext={`${radius} kilómetros`} min={ALERT_RADIUS.min} max={ALERT_RADIUS.max} step={1} value={[radius]} onValueChange={values => { setRadius(values[0] ?? ALERT_RADIUS.initial); setNotice(false); }} className="alert-radius-slider" />

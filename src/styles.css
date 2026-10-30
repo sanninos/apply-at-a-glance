@@ -276,13 +276,13 @@ body:has(.alerts-screen) { background: var(--muted); }
 .alert-config-header { text-align: center; margin-bottom: 30px; }
 .alert-config-header h2 { font-size: 24px; line-height: 1.3; font-weight: 750; letter-spacing: 0; }
 .alert-config-header p { font-size: 14px; line-height: 1.5; margin-top: 10px; color: var(--muted-foreground); }
-.alert-type-field { margin: 0 auto 26px; width: 100%; max-width: 280px; }
-.alert-type-field legend, .alert-radius-field label, .alert-search-field label { font-size: 16px; font-weight: 650; margin-bottom: 14px; }
-.alert-type-options { display: flex; flex-wrap: wrap; gap: 18px 8px; padding: 20px 12px; background: var(--muted); border: 1px solid var(--border); border-radius: 16px; }
-.alert-type-options > button { flex: 1 1 auto; min-width: 0; height: 42px; border-radius: 12px; border-color: var(--foreground); background: var(--card); color: var(--foreground); font-size: 13px; padding-inline: 12px; }
-.alert-type-options > button:last-child { flex: 0 1 auto; }
-.alert-type-options > button.selected { border-color: transparent; background: color-mix(in oklab, var(--employment-yellow) 18%, var(--card)); color: var(--accent-foreground); }
-.alert-type-options svg { width: 15px; height: 15px; }
+.alert-type-field { display: grid; gap: 8px; margin-bottom: 26px; }
+.alert-type-field label, .alert-radius-field label, .alert-search-field label { font-size: 15px; font-weight: 650; }
+.alert-type-select { width: 100%; height: 48px; padding-inline: 14px; border-radius: 14px; border: 1px solid var(--employment-card-border); background: var(--card); font-size: 15px; }
+.alert-type-select:focus { border-color: var(--employment-blue); }
+.alert-type-menu { z-index: 60; border-radius: 14px; }
+.alert-type-item { display: inline-flex; align-items: center; gap: 10px; }
+.alert-type-item svg { width: 17px; height: 17px; color: var(--employment-blue); }
 .alert-radius-field > div:first-child { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
 .alert-radius-field label { margin: 0; }
 .alert-radius-field output { font-size: 16px; color: var(--accent-foreground); font-weight: 700; white-space: nowrap; }

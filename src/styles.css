@@ -626,3 +626,8 @@ nav .employment-nav-item, .employment-nav .employment-nav-item { position: relat
 }
 
 .employment-list-sentinel { height: 1px; }
+.rotate-lock { display: none; }
+@media (orientation: landscape) and (max-height: 500px) and (pointer: coarse) {
+  .rotate-lock { position: fixed; inset: 0; z-index: 1000; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; padding: 24px; background: var(--primary); color: var(--primary-foreground); text-align: center; font-size: 16px; font-weight: 650; }
+  .rotate-lock span { font-size: 44px; transform: rotate(90deg); }
+}

@@ -31,7 +31,7 @@ export function SocialScreen({ posts }: { posts: SocialPost[] }) {
             <SocialPostCard
               key={post.id}
               post={post}
-              showScrollHint={index === 0 && posts.length > 1 && !seenScroll}
+              showScrollHint={false}
             />
           ))}
         </section>

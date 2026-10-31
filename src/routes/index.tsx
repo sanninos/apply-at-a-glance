@@ -3,6 +3,7 @@ import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { getJobsList } from "@/lib/jobs.functions";
 import { JobListScreen } from "@/components/job-list-screen";
 import { NavigationLoading } from '@/components/navigation-loading';
+import { positionsQueryOptions } from '@/lib/job-positions-query';
 
 export const jobsQueryOptions = queryOptions({ queryKey: ["employment-list"], queryFn: () => getJobsList(), staleTime: 60_000 });
 
@@ -17,7 +18,9 @@ export const Route = createFileRoute("/")({
       { name: "twitter:card", content: "summary" },
     ],
   }),
-  loader: ({ context }) => context.queryClient.ensureQueryData(jobsQueryOptions),
+   loader: async ({ context }) => {
+     await Promise.all([context.queryClient.ensureQueryData(jobsQueryOptions), context.queryClient.ensureQueryData(positionsQueryOptions)]);
+   },
   pendingMs: 100,
   pendingMinMs: 0,
   pendingComponent: () => <NavigationLoading active="empleos" />,
@@ -27,5 +30,6 @@ export const Route = createFileRoute("/")({
 
 function EmploymentPage() {
   const { data } = useSuspenseQuery(jobsQueryOptions);
-  return <JobListScreen jobs={data} />;
+  const { data: positions } = useSuspenseQuery(positionsQueryOptions);
+  return <JobListScreen jobs={data} positions={positions} />;
 }

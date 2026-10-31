@@ -9,6 +9,8 @@ import { HomeAdvertisement } from "@/components/home-advertisement";
 import { filterJobs, isUrgent, publishedAgo, publishedInLastDaysCount, searchSuggestions, type JobListItem, type JobListMode } from "@/lib/job-list";
 import { useEmployerLogo } from "@/hooks/use-employer-logo";
 import { cn } from "@/lib/utils";
+import { JobPositionCategories } from "@/components/job-position-categories";
+import type { JobPosition } from "@/lib/job-positions";
 
 function EmployerLogo({ job }: { job: JobListItem }) {
   const { src, ref, onError } = useEmployerLogo(job.fotoEmpresa || job.image);
@@ -17,9 +19,10 @@ function EmployerLogo({ job }: { job: JobListItem }) {
 
 const CARD_BATCH = 40;
 
-export function JobListScreen({ jobs, variant = "home" }: { jobs: JobListItem[]; variant?: "home" | "search" }) {
+export function JobListScreen({ jobs, variant = "home", positions = [], categoryTitle }: { jobs: JobListItem[]; variant?: "home" | "search" | "category"; positions?: JobPosition[]; categoryTitle?: string }) {
   const router = useRouter();
   const isSearch = variant === "search";
+  const isHome = variant === "home";
   const [search, setSearch] = useState("");
   const [mode, setMode] = useState<JobListMode>("all");
   const [filtersOpen, setFiltersOpen] = useState(false);
@@ -53,20 +56,21 @@ export function JobListScreen({ jobs, variant = "home" }: { jobs: JobListItem[];
     { id: "latest" as const, label: "Últimos", icon: Clock, count: Math.min(36, jobs.length) },
   ];
   return <main className={cn("employment-screen", isSearch && "search-screen")}>
-    <h1 className="sr-only">Empleos en Uruguay</h1>
-    {!isSearch && <HomeAdvertisement />}
+    <h1 className={categoryTitle ? "position-jobs-title" : "sr-only"}>{categoryTitle || "Empleos en Uruguay"}</h1>
+    {isHome && <HomeAdvertisement />}
     <header className="employment-header">
       <div className="employment-search-row">
-        {isSearch && <Button variant="ghost" size="icon" className="search-back" aria-label="Volver" onClick={() => (window.history.length > 1 ? router.history.back() : router.navigate({ to: "/" }))}><ArrowLeft /></Button>}
-        {isSearch
-          ? <div className="employment-search"><Search aria-hidden="true" /><Input autoFocus type="search" aria-label="Buscar un puesto de trabajo" placeholder="Busca un puesto de trabajo" value={search} onChange={event => setSearch(event.target.value)} />{search && <button type="button" className="search-clear" aria-label="Borrar búsqueda" onClick={() => setSearch("")}><X /></button>}</div>
+        {!isHome && <Button variant="ghost" size="icon" className="search-back" aria-label="Volver" onClick={() => (window.history.length > 1 ? router.history.back() : router.navigate({ to: isSearch ? "/" : "/puestos" }))}><ArrowLeft /></Button>}
+        {!isHome
+          ? <div className="employment-search"><Search aria-hidden="true" /><Input autoFocus={isSearch} type="search" aria-label="Buscar un puesto de trabajo" placeholder={categoryTitle ? "Buscar en este puesto" : "Busca un puesto de trabajo"} value={search} onChange={event => setSearch(event.target.value)} />{search && <Button variant="ghost" size="icon" className="search-clear" aria-label="Borrar búsqueda" onClick={() => setSearch("")}><X /></Button>}</div>
           : <Link to="/buscar" preload="intent" preloadDelay={0} className="employment-search employment-search-link" aria-label="Buscar un puesto de trabajo"><Search aria-hidden="true" /><span>Busca un puesto de trabajo</span></Link>}
         <Button variant="outline" size="icon" className={cn("employment-filter", (location || contract) && "filter-active")} aria-label="Filtrar empleos" title="Filtrar empleos" onClick={() => setFiltersOpen(true)}><SlidersHorizontal /></Button>
       </div>
-      {!isSearch && <div className="employment-tabs" role="tablist" aria-label="Tipo de empleos">
+      {isHome && <div className="employment-tabs" role="tablist" aria-label="Tipo de empleos">
         {tabs.map(({ id, label, icon: Icon, count }) => <Button key={id} role="tab" aria-selected={mode === id} variant="ghost" className={cn("employment-tab", mode === id && "selected")} onClick={() => setMode(id)}><Icon /><span>{label}</span>{count !== undefined && <span className="tab-count">{count}</span>}</Button>)}
       </div>}
     </header>
+    {isHome && <JobPositionCategories positions={positions} jobs={jobs} />}
     {idle && <div className="search-idle"><Search aria-hidden="true" /><p>Escribí un puesto, empresa o ciudad para ver ofertas.</p></div>}
     {suggestions.length > 0 && <ul className="search-suggestions" aria-label="Sugerencias de búsqueda">{suggestions.map(title => <li key={title}><button type="button" onClick={() => setSearch(title)}><Search aria-hidden="true" /><span>{title}</span></button></li>)}</ul>}
     <section className="employment-list" aria-label="Empleos disponibles">

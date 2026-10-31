@@ -19,10 +19,13 @@ import { Route as EstadisticasRouteImport } from './routes/estadisticas'
 import { Route as MisPostulacionesRouteImport } from './routes/mis-postulaciones'
 import { Route as OfertasGuardadasRouteImport } from './routes/ofertas-guardadas'
 import { Route as PerfilRouteImport } from './routes/perfil'
+import { Route as PuestosRouteImport } from './routes/puestos'
 import { Route as RadarRouteImport } from './routes/radar'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as SocialRouteImport } from './routes/social'
 import { Route as LlamadoJobIdRouteImport } from './routes/llamado/$jobId'
+import { Route as PuestosIndexRouteImport } from './routes/puestos.index'
+import { Route as PuestosPuestoIdRouteImport } from './routes/puestos.$puestoId'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -74,6 +77,11 @@ const PerfilRoute = PerfilRouteImport.update({
   path: '/perfil',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PuestosRoute = PuestosRouteImport.update({
+  id: '/puestos',
+  path: '/puestos',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const RadarRoute = RadarRouteImport.update({
   id: '/radar',
   path: '/radar',
@@ -94,6 +102,16 @@ const LlamadoJobIdRoute = LlamadoJobIdRouteImport.update({
   path: '/llamado/$jobId',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PuestosIndexRoute = PuestosIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => PuestosRoute,
+} as any)
+const PuestosPuestoIdRoute = PuestosPuestoIdRouteImport.update({
+  id: '/$puestoId',
+  path: '/$puestoId',
+  getParentRoute: () => PuestosRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -106,10 +124,13 @@ export interface FileRoutesByFullPath {
   '/mis-postulaciones': typeof MisPostulacionesRoute
   '/ofertas-guardadas': typeof OfertasGuardadasRoute
   '/perfil': typeof PerfilRoute
+  '/puestos': typeof PuestosRouteWithChildren
   '/radar': typeof RadarRoute
   '/reset-password': typeof ResetPasswordRoute
   '/social': typeof SocialRoute
   '/llamado/$jobId': typeof LlamadoJobIdRoute
+  '/puestos/$puestoId': typeof PuestosPuestoIdRoute
+  '/puestos/': typeof PuestosIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -126,6 +147,8 @@ export interface FileRoutesByTo {
   '/reset-password': typeof ResetPasswordRoute
   '/social': typeof SocialRoute
   '/llamado/$jobId': typeof LlamadoJobIdRoute
+  '/puestos/$puestoId': typeof PuestosPuestoIdRoute
+  '/puestos': typeof PuestosIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -139,10 +162,13 @@ export interface FileRoutesById {
   '/mis-postulaciones': typeof MisPostulacionesRoute
   '/ofertas-guardadas': typeof OfertasGuardadasRoute
   '/perfil': typeof PerfilRoute
+  '/puestos': typeof PuestosRouteWithChildren
   '/radar': typeof RadarRoute
   '/reset-password': typeof ResetPasswordRoute
   '/social': typeof SocialRoute
   '/llamado/$jobId': typeof LlamadoJobIdRoute
+  '/puestos/$puestoId': typeof PuestosPuestoIdRoute
+  '/puestos/': typeof PuestosIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -157,10 +183,13 @@ export interface FileRouteTypes {
     | '/mis-postulaciones'
     | '/ofertas-guardadas'
     | '/perfil'
+    | '/puestos'
     | '/radar'
     | '/reset-password'
     | '/social'
     | '/llamado/$jobId'
+    | '/puestos/$puestoId'
+    | '/puestos/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -177,6 +206,8 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/social'
     | '/llamado/$jobId'
+    | '/puestos/$puestoId'
+    | '/puestos'
   id:
     | '__root__'
     | '/'
@@ -189,10 +220,13 @@ export interface FileRouteTypes {
     | '/mis-postulaciones'
     | '/ofertas-guardadas'
     | '/perfil'
+    | '/puestos'
     | '/radar'
     | '/reset-password'
     | '/social'
     | '/llamado/$jobId'
+    | '/puestos/$puestoId'
+    | '/puestos/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -206,6 +240,7 @@ export interface RootRouteChildren {
   MisPostulacionesRoute: typeof MisPostulacionesRoute
   OfertasGuardadasRoute: typeof OfertasGuardadasRoute
   PerfilRoute: typeof PerfilRoute
+  PuestosRoute: typeof PuestosRouteWithChildren
   RadarRoute: typeof RadarRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
   SocialRoute: typeof SocialRoute
@@ -284,6 +319,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PerfilRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/puestos': {
+      id: '/puestos'
+      path: '/puestos'
+      fullPath: '/puestos'
+      preLoaderRoute: typeof PuestosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/radar': {
       id: '/radar'
       path: '/radar'
@@ -312,8 +354,35 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LlamadoJobIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/puestos/': {
+      id: '/puestos/'
+      path: '/'
+      fullPath: '/puestos/'
+      preLoaderRoute: typeof PuestosIndexRouteImport
+      parentRoute: typeof PuestosRoute
+    }
+    '/puestos/$puestoId': {
+      id: '/puestos/$puestoId'
+      path: '/$puestoId'
+      fullPath: '/puestos/$puestoId'
+      preLoaderRoute: typeof PuestosPuestoIdRouteImport
+      parentRoute: typeof PuestosRoute
+    }
   }
 }
+
+interface PuestosRouteChildren {
+  PuestosPuestoIdRoute: typeof PuestosPuestoIdRoute
+  PuestosIndexRoute: typeof PuestosIndexRoute
+}
+
+const PuestosRouteChildren: PuestosRouteChildren = {
+  PuestosPuestoIdRoute: PuestosPuestoIdRoute,
+  PuestosIndexRoute: PuestosIndexRoute,
+}
+
+const PuestosRouteWithChildren =
+  PuestosRoute._addFileChildren(PuestosRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
@@ -326,6 +395,7 @@ const rootRouteChildren: RootRouteChildren = {
   MisPostulacionesRoute: MisPostulacionesRoute,
   OfertasGuardadasRoute: OfertasGuardadasRoute,
   PerfilRoute: PerfilRoute,
+  PuestosRoute: PuestosRouteWithChildren,
   RadarRoute: RadarRoute,
   ResetPasswordRoute: ResetPasswordRoute,
   SocialRoute: SocialRoute,

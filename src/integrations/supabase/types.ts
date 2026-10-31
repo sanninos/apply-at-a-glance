@@ -710,16 +710,19 @@ export type Database = {
       Puesto: {
         Row: {
           created_at: string
+          icon: string | null
           id: string
           nombre: string
         }
         Insert: {
           created_at?: string
+          icon?: string | null
           id?: string
           nombre: string
         }
         Update: {
           created_at?: string
+          icon?: string | null
           id?: string
           nombre?: string
         }

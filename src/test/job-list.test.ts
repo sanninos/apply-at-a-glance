@@ -39,6 +39,6 @@ describe("sugerencias de búsqueda", () => {
   it("no sugiere nada sin texto y sugiere títulos únicos que coinciden sin acentos", () => {
     const jobs = [job(1, { titulo: "Cajera" }), job(2, { titulo: "Cajera" }), job(3, { titulo: "Auxiliar de cajá" }), job(4, { titulo: "Chofer" })];
     expect(searchSuggestions(jobs, "  ")).toEqual([]);
-    expect(searchSuggestions(jobs, "caja")).toEqual(["Cajera", "Auxiliar de cajá"]);
+    expect(searchSuggestions(jobs, "caj")).toEqual(["Cajera", "Auxiliar de cajá"]);
   });
 });

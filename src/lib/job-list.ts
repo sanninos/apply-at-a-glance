@@ -12,6 +12,7 @@ export type JobListItem = {
   isLlamado: boolean | null;
   estado_postulacion: string | null;
   tipoContrato: string | null;
+  puesto?: string | null;
 };
 
 export type JobListMode = "all" | "urgent" | "latest";

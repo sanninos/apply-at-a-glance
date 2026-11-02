@@ -15,6 +15,9 @@ dist-ssr
 .tanstack/**
 .nitro
 *.local
+*.jks
+*.keystore
+android/app/google-services.json
 
 # Wrangler / Cloudflare
 .wrangler/

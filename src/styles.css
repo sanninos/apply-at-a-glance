@@ -382,7 +382,7 @@ body:has(.social-screen) { background: var(--muted); }
 @keyframes social-hint-bob { 0%, 100% { transform: translateY(-2px); opacity: .5; } 50% { transform: translateY(3px); opacity: 1; } }
 @media (prefers-reduced-motion: reduce) { .social-scroll-hint { animation: none; } .social-scroll-hint svg { animation: none; } }
 @media all {
-  .employment-screen { padding: 12px 12px calc(108px + env(safe-area-inset-bottom, 0px)); }
+  .employment-screen { padding: calc(12px + env(safe-area-inset-top, 0px)) calc(12px + env(safe-area-inset-right, 0px)) calc(108px + env(safe-area-inset-bottom, 0px)) calc(12px + env(safe-area-inset-left, 0px)); }
   .employment-search-row { gap: 8px; }
   .employment-search { height: 44px; gap: 8px; padding: 0 12px; border-radius: 16px; border-width: 1px; }
   .employment-search > svg { width: 18px; height: 18px; }

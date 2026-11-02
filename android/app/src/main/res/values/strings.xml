@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">UruJobs</string>
+    <string name="title_activity_main">UruJobs</string>
+    <string name="package_name">uy.com.urujobs</string>
+    <string name="custom_url_scheme">uy.com.urujobs</string>
+</resources>

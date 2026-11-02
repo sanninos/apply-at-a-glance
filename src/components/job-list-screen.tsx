@@ -9,8 +9,6 @@ import { HomeAdvertisement } from "@/components/home-advertisement";
 import { filterJobs, isUrgent, publishedAgo, publishedInLastDaysCount, searchSuggestions, type JobListItem, type JobListMode } from "@/lib/job-list";
 import { useEmployerLogo } from "@/hooks/use-employer-logo";
 import { cn } from "@/lib/utils";
-import { JobPositionCategories } from "@/components/job-position-categories";
-import type { JobPosition } from "@/lib/job-positions";
 
 function EmployerLogo({ job }: { job: JobListItem }) {
   const { src, ref, onError } = useEmployerLogo(job.fotoEmpresa || job.image);
@@ -19,7 +17,7 @@ function EmployerLogo({ job }: { job: JobListItem }) {
 
 const CARD_BATCH = 40;
 
-export function JobListScreen({ jobs, variant = "home", positions = [], categoryTitle }: { jobs: JobListItem[]; variant?: "home" | "search" | "category"; positions?: JobPosition[]; categoryTitle?: string }) {
+export function JobListScreen({ jobs, variant = "home", categoryTitle }: { jobs: JobListItem[]; variant?: "home" | "search" | "category"; categoryTitle?: string }) {
   const router = useRouter();
   const isSearch = variant === "search";
   const isHome = variant === "home";
@@ -70,7 +68,6 @@ export function JobListScreen({ jobs, variant = "home", positions = [], category
         {tabs.map(({ id, label, icon: Icon, count }) => <Button key={id} role="tab" aria-selected={mode === id} variant="ghost" className={cn("employment-tab", mode === id && "selected")} onClick={() => setMode(id)}><Icon /><span>{label}</span>{count !== undefined && <span className="tab-count">{count}</span>}</Button>)}
       </div>}
     </header>
-    {isHome && <JobPositionCategories positions={positions} jobs={jobs} />}
     {idle && <div className="search-idle"><Search aria-hidden="true" /><p>Escribí un puesto, empresa o ciudad para ver ofertas.</p></div>}
     {suggestions.length > 0 && <ul className="search-suggestions" aria-label="Sugerencias de búsqueda">{suggestions.map(title => <li key={title}><button type="button" onClick={() => setSearch(title)}><Search aria-hidden="true" /><span>{title}</span></button></li>)}</ul>}
     <section className="employment-list" aria-label="Empleos disponibles">

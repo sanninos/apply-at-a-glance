@@ -21,12 +21,19 @@ describe("employment list filters", () => {
   it("shows elapsed hours for publications less than 1 day old", () => {
     const now = Date.parse("2026-11-02T22:43:00Z");
     const ago = (ms: number) => publishedAgo(new Date(now - ms).toISOString(), now);
-    expect(ago(3599999)).toBe("Hace menos de 1 hora");
+    expect(ago(3599999)).toBe("Hace 59 minutos");
     expect(ago(3600000)).toBe("Hace 1 hora");
     expect(ago(5 * 3600000)).toBe("Hace 5 horas");
     expect(ago(24 * 3600000 - 1)).toBe("Hace 23 horas");
     expect(ago(24 * 3600000)).toBe("Hace 1 día");
     expect(publishedAgo("invalid", now)).toBe("");
+  });
+  it("shows elapsed minutes below an hour, including 20 minutes", () => {
+    const now = Date.parse("2026-11-02T22:45:00Z");
+    const ago = (ms: number) => publishedAgo(new Date(now - ms).toISOString(), now);
+    expect(ago(20 * 60000)).toBe("Hace 20 minutos");
+    expect(ago(60000)).toBe("Hace 1 minuto");
+    expect(ago(59999)).toBe("Hace unos segundos");
   });
   it("counts only jobs published in the last 7 days for the Todas chip", () => {
     const now = Date.parse("2026-10-25T00:00:00Z");

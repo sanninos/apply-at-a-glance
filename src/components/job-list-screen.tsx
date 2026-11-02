@@ -9,6 +9,8 @@ import { HomeAdvertisement } from "@/components/home-advertisement";
 import { filterJobs, isUrgent, publishedAgo, publishedInLastDaysCount, searchSuggestions, type JobListItem, type JobListMode } from "@/lib/job-list";
 import { useEmployerLogo } from "@/hooks/use-employer-logo";
 import { cn } from "@/lib/utils";
+import { useNewJobOffers } from "@/hooks/use-new-job-offers";
+import { isNewUnseenOffer } from "@/lib/new-job-offers";
 
 function EmployerLogo({ job }: { job: JobListItem }) {
   const { src, ref, onError } = useEmployerLogo(job.fotoEmpresa || job.image);
@@ -19,6 +21,8 @@ const CARD_BATCH = 40;
 
 export function JobListScreen({ jobs, variant = "home", categoryTitle }: { jobs: JobListItem[]; variant?: "home" | "search" | "category"; categoryTitle?: string }) {
   const router = useRouter();
+  const newOffers = useNewJobOffers();
+  const isNew = (job: JobListItem) => newOffers ? isNewUnseenOffer(job, newOffers.seen, newOffers.now) : false;
   const isSearch = variant === "search";
   const isHome = variant === "home";
   const [search, setSearch] = useState("");
@@ -74,7 +78,7 @@ export function JobListScreen({ jobs, variant = "home", categoryTitle }: { jobs:
       {shown.map(job => <Link className={cn("employment-card", job.isFeatured && "featured", isUrgent(job) && "urgent")} key={job.id} to="/llamado/$jobId" params={{ jobId: String(job.id) }} preload="intent" preloadDelay={0}>
         <div className="employment-card-main"><EmployerLogo job={job} /><div className="employment-copy"><p className="employment-company">{job.Empresa || "Empresa"}</p><h2>{job.titulo || "Oferta de empleo"}</h2><p className="employment-description">{job.descripcion}</p></div><span className="employment-arrow"><ChevronRight aria-hidden="true" /></span></div>
         <div className="employment-meta"><span className="location-chip"><span className="location-pin" aria-hidden="true">📍</span><span>{job.ubicacion || job.ciudad || "Uruguay"}</span></span><span className="date-chip"><Clock aria-hidden="true" />{publishedAgo(job.created_at)}</span></div>
-        {(job.isLlamado || job.isFeatured || isUrgent(job)) && <div className="employment-badges">{job.isLlamado && <span className="llamado-badge">Llamado público</span>}{job.isFeatured && <span>Destacada</span>}{isUrgent(job) && <span>Urgente</span>}</div>}
+        {(job.isLlamado || job.isFeatured || isUrgent(job) || isNew(job)) && <div className="employment-badges">{isNew(job) && <span className="new-offer-badge">Nuevo</span>}{job.isLlamado && <span className="llamado-badge">Llamado público</span>}{job.isFeatured && <span>Destacada</span>}{isUrgent(job) && <span>Urgente</span>}</div>}
       </Link>)}
       {!idle && !visible.length && <div className="employment-empty"><Search /><h2>No se encontraron empleos</h2><Button variant="outline" onClick={() => { setSearch(""); setLocation(""); setContract(""); setMode("all"); }}>Ver todos</Button></div>}
       {!idle && shown.length < visible.length && <div ref={sentinelRef} className="employment-list-sentinel" aria-hidden="true" />}

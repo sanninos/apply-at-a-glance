@@ -80,6 +80,8 @@
   --employment-yellow: oklch(0.84 0.16 85);
   --employment-orange: oklch(0.72 0.17 55);
   --employment-red: oklch(0.58 0.21 25);
+  --employment-new: oklch(0.46 0.13 155);
+  --employment-new-foreground: oklch(0.99 0.005 155);
   --employment-shadow: 0 6px 20px color-mix(in oklab, var(--primary) 5%, transparent);
   --radius: 0.625rem;
   --background: oklch(1 0 0);
@@ -117,6 +119,8 @@
 }
 
 .dark {
+  --employment-new: oklch(0.76 0.15 155);
+  --employment-new-foreground: oklch(0.2 0.04 155);
   --employment-surface: oklch(0.19 0.02 245);
   --employment-blue: oklch(0.7 0.1 260);
   --employment-nav: oklch(0.28 0.08 261);
@@ -346,7 +350,7 @@ body:has(.alerts-screen) { background: var(--muted); }
 .date-chip { white-space: nowrap; flex-shrink: 0; }
 .employment-badges { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
 .employment-badges span { border-radius: 13px; background: var(--accent); color: var(--accent-foreground); padding: 7px 14px; font-size: 17px; font-weight: 700; }
-.employment-badges .new-offer-badge { background: var(--secondary); color: var(--employment-blue); border: 1px solid var(--employment-card-border); }
+.employment-badges .new-offer-badge { background: var(--employment-new); color: var(--employment-new-foreground); border: 1px solid var(--employment-new); }
 .employment-badges .llamado-badge { background: var(--employment-blue); color: #fff; }
 .employment-nav { position: fixed; z-index: 20; bottom: 10px; left: 50%; transform: translateX(-50%); width: calc(100% - 28px); max-width: calc(28rem - 18px); height: 112px; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); align-items: center; padding: 10px 10px; background: var(--employment-nav); border-radius: 48px; box-shadow: var(--employment-shadow); }
 nav .employment-nav-item, .employment-nav .employment-nav-item { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 5px; height: 90px; min-width: 0; padding: 0; margin: 0; text-align: center; font-size: 15px; font-weight: 600; color: color-mix(in oklab, var(--primary-foreground) 75%, transparent); }

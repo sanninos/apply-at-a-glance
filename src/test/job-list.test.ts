@@ -18,6 +18,16 @@ describe("employment list filters", () => {
   it("computes publication age from the real date", () => {
     expect(publishedAgo("2026-10-18T00:00:00Z", Date.parse("2026-10-22T00:00:00Z"))).toBe("Hace 4 días");
   });
+  it("shows elapsed hours for publications less than 1 day old", () => {
+    const now = Date.parse("2026-11-02T22:43:00Z");
+    const ago = (ms: number) => publishedAgo(new Date(now - ms).toISOString(), now);
+    expect(ago(3599999)).toBe("Hace menos de 1 hora");
+    expect(ago(3600000)).toBe("Hace 1 hora");
+    expect(ago(5 * 3600000)).toBe("Hace 5 horas");
+    expect(ago(24 * 3600000 - 1)).toBe("Hace 23 horas");
+    expect(ago(24 * 3600000)).toBe("Hace 1 día");
+    expect(publishedAgo("invalid", now)).toBe("");
+  });
   it("counts only jobs published in the last 7 days for the Todas chip", () => {
     const now = Date.parse("2026-10-25T00:00:00Z");
     const recent = job(1, { created_at: "2026-10-24T00:00:00Z" });

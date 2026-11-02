@@ -51,7 +51,10 @@ export function publishedAgo(date: string, now = Date.now()) {
   const elapsed = Math.max(0, now - Date.parse(date));
   if (!Number.isFinite(elapsed)) return "";
   const hours = Math.floor(elapsed / 3600000);
-  if (hours === 0) return "Hace menos de 1 hora";
+  if (hours === 0) {
+    const minutes = Math.floor(elapsed / 60000);
+    return minutes === 0 ? "Hace unos segundos" : minutes === 1 ? "Hace 1 minuto" : `Hace ${minutes} minutos`;
+  }
   if (hours < 24) return hours === 1 ? "Hace 1 hora" : `Hace ${hours} horas`;
   const days = Math.floor(hours / 24);
   return days === 1 ? "Hace 1 día" : `Hace ${days} días`;

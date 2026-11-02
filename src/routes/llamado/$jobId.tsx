@@ -2,7 +2,7 @@ import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useAccess } from "@/components/access-provider";
 import { useAccessDialog } from "@/components/access-dialog";
 import { useSuspenseQuery, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   ArrowLeft,
   Bookmark,
@@ -22,6 +22,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useEmployerLogo } from "@/hooks/use-employer-logo";
 import { useSavedOffer } from '@/hooks/use-saved-offer';
 import { Button } from '@/components/ui/button';
+import { markJobViewed } from '@/lib/new-job-offers';
 
 export const Route = createFileRoute("/llamado/$jobId")({
   loader: ({ params, context }) =>
@@ -83,6 +84,9 @@ function JobDetail() {
   const { open: openAccess } = useAccessDialog();
   const { jobId } = Route.useParams();
   const { data: job } = useSuspenseQuery(jobQueryOptions(Number(jobId)));
+  useEffect(() => {
+    if (ready) markJobViewed(Number(jobId), user?.id || null);
+  }, [jobId, ready, user?.id]);
   const queryClient = useQueryClient();
   const savedOffer = useSavedOffer(Number(jobId));
   const saveLabel = savedOffer.saved ? 'Quitar de guardadas' : 'Guardar';

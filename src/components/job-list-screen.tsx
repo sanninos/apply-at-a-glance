@@ -21,7 +21,7 @@ const CARD_BATCH = 40;
 
 export function JobListScreen({ jobs, variant = "home", categoryTitle }: { jobs: JobListItem[]; variant?: "home" | "search" | "category"; categoryTitle?: string }) {
   const router = useRouter();
-  const newOffers = useNewJobOffers();
+  const newOffers = useNewJobOffers(jobs);
   const isNew = (job: JobListItem) => newOffers ? isNewUnseenOffer(job, newOffers.seen, newOffers.now) : false;
   const isSearch = variant === "search";
   const isHome = variant === "home";

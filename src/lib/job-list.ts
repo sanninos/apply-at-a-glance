@@ -48,9 +48,13 @@ export function isUrgent(job: JobListItem) {
 }
 
 export function publishedAgo(date: string, now = Date.now()) {
-  const days = Math.max(0, Math.floor((now - Date.parse(date)) / 86400000));
-  if (!Number.isFinite(days)) return "";
-  return days === 0 ? "Hoy" : days === 1 ? "Hace 1 día" : `Hace ${days} días`;
+  const elapsed = Math.max(0, now - Date.parse(date));
+  if (!Number.isFinite(elapsed)) return "";
+  const hours = Math.floor(elapsed / 3600000);
+  if (hours === 0) return "Hace menos de 1 hora";
+  if (hours < 24) return hours === 1 ? "Hace 1 hora" : `Hace ${hours} horas`;
+  const days = Math.floor(hours / 24);
+  return days === 1 ? "Hace 1 día" : `Hace ${days} días`;
 }
 
 export function publishedInLastDaysCount(jobs: JobListItem[], days = 7, now = Date.now()) {

@@ -9,7 +9,18 @@ export type EducationDraft = { id: string; titulo: string; institucion: string; 
 
 export type CurriculumDraft = {
   fullName: string;
+  firstName: string;
+  lastName: string;
+  documentType: string;
+  documentNumber: string;
+  birthDate: string;
+  gender: string;
   phone: string;
+  phoneCountryCode: string;
+  extraPhone: string;
+  country: string;
+  city: string;
+  nationality: string;
   summary: string;
   experiences: ExperienceDraft[];
   education: EducationDraft[];
@@ -18,7 +29,18 @@ export type CurriculumDraft = {
 
 export type CurriculumRow = {
   full_name: string | null;
+  first_name: string | null;
+  last_name: string | null;
+  document_type: string | null;
+  document_number: string | null;
+  birth_date: string | null;
+  gender: string | null;
   phone: string | null;
+  phone_country_code: string | null;
+  extra_phone: string | null;
+  country: string | null;
+  city: string | null;
+  nationality: string | null;
   summary: string | null;
   experiences: unknown;
   education: unknown;
@@ -27,7 +49,18 @@ export type CurriculumRow = {
 
 export type CurriculumPayload = {
   full_name: string;
+  first_name: string | null;
+  last_name: string | null;
+  document_type: string | null;
+  document_number: string | null;
+  birth_date: string | null;
+  gender: string | null;
   phone: string | null;
+  phone_country_code: string | null;
+  extra_phone: string | null;
+  country: string | null;
+  city: string | null;
+  nationality: string | null;
   summary: string | null;
   experiences: { puesto: string; empresa: string; desde: string; hasta: string; descripcion: string }[];
   education: { titulo: string; institucion: string; desde: string; hasta: string }[];

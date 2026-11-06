@@ -133,21 +133,12 @@ function AccountCurriculumScreen() {
     {signedIn && initialized && !curriculum.isError && <form className="curriculum-form" onBlur={() => { if (lastAttempt.current !== version.current) void save(); }} onSubmit={(event) => { event.preventDefault(); void save(); }}>
       <fieldset className="curriculum-fields">
       <section className="curriculum-block">
-        <div className="curriculum-section-head"><h2 className="curriculum-block-title">SOBRE TI</h2><Button type="button" variant="ghost" size="icon" title="Editar datos personales" aria-label="Editar datos personales" onClick={() => setEditingAbout(!editingAbout)}><Pencil /></Button></div>
-        {!editingAbout && <div className="curriculum-about">
-          <p><Smartphone aria-hidden="true" /><span>{draft.phone || "Sin teléfono"}</span></p>
+        <div className="curriculum-section-head"><h2 className="curriculum-block-title">SOBRE TI</h2><Button type="button" variant="ghost" size="icon" title="Editar datos personales" aria-label="Editar datos personales" onClick={() => setEditingAbout(true)}><Pencil /></Button></div>
+        <div className="curriculum-about">
+          <p><Smartphone aria-hidden="true" /><span>{draft.phone ? `${draft.phoneCountryCode.replace(/^[A-Z]{2} \(/, "(+").replace(")", ")")} ${draft.phone}` : "Sin teléfono"}</span></p>
           <p><Mail aria-hidden="true" /><span>{user?.email || "Sin correo electrónico"}</span></p>
-        </div>}
-        {editingAbout && <div>
-        <div className="curriculum-field">
-          <label htmlFor="cv-name">Nombre completo</label>
-          <input id="cv-name" value={draft.fullName} onChange={(event) => edit({ fullName: event.target.value })} placeholder="Ej: María Pérez" autoComplete="name" />
+          {(draft.city || draft.country) && <p><span aria-hidden="true">📍</span><span>{[draft.city, draft.country].filter(Boolean).join(", ")}</span></p>}
         </div>
-        <div className="curriculum-field">
-          <label htmlFor="cv-phone">Teléfono</label>
-          <input id="cv-phone" value={draft.phone} onChange={(event) => edit({ phone: event.target.value })} placeholder="Ej: 099 123 456" type="tel" autoComplete="tel" />
-        </div>
-        <Button type="button" variant="ghost" className="curriculum-done" onClick={() => setEditingAbout(false)}><Check />Listo</Button></div>}
       </section>
 
       <section className="curriculum-summary">

@@ -122,9 +122,24 @@ export function toCurriculumDraft(row: CurriculumRow): CurriculumDraft {
       })
     : [];
   const skills = Array.isArray(row.skills) ? row.skills.map(str).filter(Boolean).join(", ") : "";
+  const firstName = str(row.first_name);
+  const lastName = str(row.last_name);
+  // Rows saved before the name was split keep only full_name; prefill the
+  // first field with it so nothing appears lost.
   return {
     fullName: str(row.full_name),
+    firstName: firstName || (!lastName ? str(row.full_name) : ""),
+    lastName,
+    documentType: str(row.document_type) || "Cédula de identidad",
+    documentNumber: str(row.document_number),
+    birthDate: str(row.birth_date),
+    gender: str(row.gender),
     phone: str(row.phone),
+    phoneCountryCode: str(row.phone_country_code) || "UY (+598)",
+    extraPhone: str(row.extra_phone),
+    country: str(row.country) || "Uruguay",
+    city: str(row.city),
+    nationality: str(row.nationality) || "Uruguaya",
     summary: str(row.summary),
     experiences: experiences.length > 0 ? [...experiences, emptyExperience()] : emptyCurriculum().experiences,
     education: education.length > 0 ? [...education, emptyEducation()] : emptyCurriculum().education,

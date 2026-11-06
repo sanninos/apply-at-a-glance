@@ -30,6 +30,7 @@ function AccountCurriculumScreen() {
   const [error, setError] = useState("");
   const [saved, setSaved] = useState(false);
   const [editingAbout, setEditingAbout] = useState(false);
+  const [showExtraPhone, setShowExtraPhone] = useState(false);
   const [editingSummary, setEditingSummary] = useState(false);
   const [editingExperience, setEditingExperience] = useState<string | null>(null);
   const [editingEducation, setEditingEducation] = useState<string | null>(null);
@@ -66,7 +67,11 @@ function AccountCurriculumScreen() {
   useEffect(() => {
     if (!signedIn || !curriculum.isSuccess || draftLoaded.current) return;
     draftLoaded.current = true;
-    if (seededRow) setDraft(toCurriculumDraft(seededRow));
+    if (seededRow) {
+      const seeded = toCurriculumDraft(seededRow);
+      setDraft(seeded);
+      if (seeded.extraPhone) setShowExtraPhone(true);
+    }
     else setDraft({ ...emptyCurriculum(), fullName: typeof user?.user_metadata?.['full_name'] === "string" ? user.user_metadata['full_name'] : "" });
     setInitialized(true);
   }, [signedIn, seededRow, curriculum.isSuccess, user]);

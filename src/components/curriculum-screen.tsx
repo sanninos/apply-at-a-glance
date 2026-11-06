@@ -215,6 +215,107 @@ function AccountCurriculumScreen() {
       <p className="curriculum-privacy">Tu curriculum se guarda en tu cuenta y solo vos lo ves.</p>
     </form>}
 
+    {signedIn && editingAbout && <div className="about-sheet-backdrop" onClick={() => { setEditingAbout(false); void save(); }}>
+      <section className="about-sheet" role="dialog" aria-modal="true" aria-labelledby="about-sheet-title" onClick={(event) => event.stopPropagation()}>
+        <span className="about-sheet-handle" aria-hidden="true" />
+        <button type="button" className="about-sheet-close" aria-label="Cerrar" onClick={() => { setEditingAbout(false); void save(); }}><X aria-hidden="true" /></button>
+        <h2 id="about-sheet-title">Sobre ti</h2>
+        <p className="about-sheet-subtitle">Datos personales y de contacto</p>
+
+        <div className="about-sheet-body">
+          <div className="curriculum-field">
+            <label>Nombre y apellidos</label>
+            <div className="about-sheet-row">
+              <input value={draft.firstName} onChange={(event) => edit({ firstName: event.target.value })} placeholder="Nombre" autoComplete="given-name" aria-label="Nombre" />
+              <input value={draft.lastName} onChange={(event) => edit({ lastName: event.target.value })} placeholder="Apellidos" autoComplete="family-name" aria-label="Apellidos" />
+            </div>
+          </div>
+
+          <div className="curriculum-field">
+            <label>Identificación</label>
+            <div className="about-sheet-row">
+              <select value={draft.documentType} onChange={(event) => edit({ documentType: event.target.value })} aria-label="Tipo de documento">
+                <option value="Cédula de identidad">Cédula de identidad</option>
+                <option value="Pasaporte">Pasaporte</option>
+                <option value="Documento extranjero">Documento extranjero</option>
+              </select>
+              <input value={draft.documentNumber} onChange={(event) => edit({ documentNumber: event.target.value })} placeholder="Número" inputMode="numeric" aria-label="Número de documento" />
+            </div>
+          </div>
+
+          <div className="curriculum-field">
+            <label htmlFor="cv-birthdate">Fecha de nacimiento</label>
+            <input id="cv-birthdate" type="date" value={draft.birthDate} onChange={(event) => edit({ birthDate: event.target.value })} />
+          </div>
+
+          <div className="curriculum-field">
+            <label>Género</label>
+            <div className="about-gender" role="group" aria-label="Género">
+              {(["Mujer", "Hombre", "Otro"] as const).map((option) => (
+                <button key={option} type="button" className={draft.gender === option ? "about-gender-option is-selected" : "about-gender-option"} aria-pressed={draft.gender === option} onClick={() => edit({ gender: draft.gender === option ? "" : option })}>
+                  <span className="about-gender-symbol" aria-hidden="true">{option === "Mujer" ? "♀" : option === "Hombre" ? "♂" : "○"}</span>
+                  {option}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className="curriculum-field">
+            <label>Teléfono</label>
+            <div className="about-sheet-row">
+              <select value={draft.phoneCountryCode} onChange={(event) => edit({ phoneCountryCode: event.target.value })} aria-label="Código de país">
+                <option value="UY (+598)">UY (+598)</option>
+                <option value="AR (+54)">AR (+54)</option>
+                <option value="BR (+55)">BR (+55)</option>
+                <option value="PY (+595)">PY (+595)</option>
+                <option value="CL (+56)">CL (+56)</option>
+              </select>
+              <input value={draft.phone} onChange={(event) => edit({ phone: event.target.value })} placeholder="99 123 456" type="tel" autoComplete="tel-national" aria-label="Número de teléfono" />
+            </div>
+          </div>
+
+          <div className="curriculum-field">
+            <div className="about-toggle-row">
+              <label htmlFor="cv-extra-phone-toggle">Teléfono adicional</label>
+              <button id="cv-extra-phone-toggle" type="button" role="switch" aria-checked={showExtraPhone} className={showExtraPhone ? "about-toggle is-on" : "about-toggle"} onClick={() => setShowExtraPhone(!showExtraPhone)}>
+                <span aria-hidden="true" />
+              </button>
+            </div>
+            {showExtraPhone && <input value={draft.extraPhone} onChange={(event) => edit({ extraPhone: event.target.value })} placeholder="Otro teléfono de contacto" type="tel" aria-label="Teléfono adicional" />}
+          </div>
+
+          <div className="curriculum-field">
+            <label>País y ciudad</label>
+            <div className="about-sheet-row">
+              <select value={draft.country} onChange={(event) => edit({ country: event.target.value })} aria-label="País">
+                <option value="Uruguay">Uruguay</option>
+                <option value="Argentina">Argentina</option>
+                <option value="Brasil">Brasil</option>
+                <option value="Paraguay">Paraguay</option>
+                <option value="Chile">Chile</option>
+                <option value="Otro">Otro</option>
+              </select>
+              <input value={draft.city} onChange={(event) => edit({ city: event.target.value })} placeholder="Seleccioná tu ciudad" aria-label="Ciudad" />
+            </div>
+          </div>
+
+          <div className="curriculum-field">
+            <label htmlFor="cv-nationality">Nacionalidad</label>
+            <select id="cv-nationality" value={draft.nationality} onChange={(event) => edit({ nationality: event.target.value })}>
+              <option value="Uruguaya">Uruguaya</option>
+              <option value="Argentina">Argentina</option>
+              <option value="Brasileña">Brasileña</option>
+              <option value="Paraguaya">Paraguaya</option>
+              <option value="Chilena">Chilena</option>
+              <option value="Otra">Otra</option>
+            </select>
+          </div>
+        </div>
+
+        <Button type="button" className="about-sheet-save" disabled={busy} onClick={() => { setEditingAbout(false); void save(); }}>{busy ? "Guardando…" : "Guardar"}</Button>
+      </section>
+    </div>}
+
     <AppBottomNav active="perfil" />
   </main>;
 }

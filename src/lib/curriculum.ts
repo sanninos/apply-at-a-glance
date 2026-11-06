@@ -29,18 +29,19 @@ export type CurriculumDraft = {
 
 export type CurriculumRow = {
   full_name: string | null;
-  first_name: string | null;
-  last_name: string | null;
-  document_type: string | null;
-  document_number: string | null;
-  birth_date: string | null;
-  gender: string | null;
+  // Personal fields were added later; rows saved before them omit the keys.
+  first_name?: string | null;
+  last_name?: string | null;
+  document_type?: string | null;
+  document_number?: string | null;
+  birth_date?: string | null;
+  gender?: string | null;
   phone: string | null;
-  phone_country_code: string | null;
-  extra_phone: string | null;
-  country: string | null;
-  city: string | null;
-  nationality: string | null;
+  phone_country_code?: string | null;
+  extra_phone?: string | null;
+  country?: string | null;
+  city?: string | null;
+  nationality?: string | null;
   summary: string | null;
   experiences: unknown;
   education: unknown;

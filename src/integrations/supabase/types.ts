@@ -761,6 +761,21 @@ export type Database = {
         }
         Relationships: []
       }
+      push_counter: {
+        Row: {
+          id: number
+          pending: number
+        }
+        Insert: {
+          id?: number
+          pending?: number
+        }
+        Update: {
+          id?: number
+          pending?: number
+        }
+        Relationships: []
+      }
       push_tokens: {
         Row: {
           created_at: string

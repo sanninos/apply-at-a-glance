@@ -82,7 +82,25 @@ export function emptyEducation(): EducationDraft {
 }
 
 export function emptyCurriculum(): CurriculumDraft {
-  return { fullName: "", phone: "", summary: "", experiences: [emptyExperience()], education: [emptyEducation()], skills: "" };
+  return {
+    fullName: "",
+    firstName: "",
+    lastName: "",
+    documentType: "Cédula de identidad",
+    documentNumber: "",
+    birthDate: "",
+    gender: "",
+    phone: "",
+    phoneCountryCode: "UY (+598)",
+    extraPhone: "",
+    country: "Uruguay",
+    city: "",
+    nationality: "Uruguaya",
+    summary: "",
+    experiences: [emptyExperience()],
+    education: [emptyEducation()],
+    skills: "",
+  };
 }
 
 function str(value: unknown): string {

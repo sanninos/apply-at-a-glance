@@ -202,36 +202,69 @@ export type Database = {
       }
       curriculums: {
         Row: {
+          birth_date: string | null
+          city: string | null
+          country: string | null
           created_at: string
+          document_number: string | null
+          document_type: string | null
           education: Json
           experiences: Json
+          extra_phone: string | null
+          first_name: string | null
           full_name: string | null
+          gender: string | null
           id: string
+          last_name: string | null
+          nationality: string | null
           phone: string | null
+          phone_country_code: string | null
           skills: Json
           summary: string | null
           updated_at: string
           user_id: string
         }
         Insert: {
+          birth_date?: string | null
+          city?: string | null
+          country?: string | null
           created_at?: string
+          document_number?: string | null
+          document_type?: string | null
           education?: Json
           experiences?: Json
+          extra_phone?: string | null
+          first_name?: string | null
           full_name?: string | null
+          gender?: string | null
           id?: string
+          last_name?: string | null
+          nationality?: string | null
           phone?: string | null
+          phone_country_code?: string | null
           skills?: Json
           summary?: string | null
           updated_at?: string
           user_id: string
         }
         Update: {
+          birth_date?: string | null
+          city?: string | null
+          country?: string | null
           created_at?: string
+          document_number?: string | null
+          document_type?: string | null
           education?: Json
           experiences?: Json
+          extra_phone?: string | null
+          first_name?: string | null
           full_name?: string | null
+          gender?: string | null
           id?: string
+          last_name?: string | null
+          nationality?: string | null
           phone?: string | null
+          phone_country_code?: string | null
           skills?: Json
           summary?: string | null
           updated_at?: string

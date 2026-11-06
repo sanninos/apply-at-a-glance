@@ -9,7 +9,18 @@ export type EducationDraft = { id: string; titulo: string; institucion: string; 
 
 export type CurriculumDraft = {
   fullName: string;
+  firstName: string;
+  lastName: string;
+  documentType: string;
+  documentNumber: string;
+  birthDate: string;
+  gender: string;
   phone: string;
+  phoneCountryCode: string;
+  extraPhone: string;
+  country: string;
+  city: string;
+  nationality: string;
   summary: string;
   experiences: ExperienceDraft[];
   education: EducationDraft[];
@@ -18,7 +29,19 @@ export type CurriculumDraft = {
 
 export type CurriculumRow = {
   full_name: string | null;
+  // Personal fields were added later; rows saved before them omit the keys.
+  first_name?: string | null;
+  last_name?: string | null;
+  document_type?: string | null;
+  document_number?: string | null;
+  birth_date?: string | null;
+  gender?: string | null;
   phone: string | null;
+  phone_country_code?: string | null;
+  extra_phone?: string | null;
+  country?: string | null;
+  city?: string | null;
+  nationality?: string | null;
   summary: string | null;
   experiences: unknown;
   education: unknown;
@@ -27,7 +50,18 @@ export type CurriculumRow = {
 
 export type CurriculumPayload = {
   full_name: string;
+  first_name: string | null;
+  last_name: string | null;
+  document_type: string | null;
+  document_number: string | null;
+  birth_date: string | null;
+  gender: string | null;
   phone: string | null;
+  phone_country_code: string | null;
+  extra_phone: string | null;
+  country: string | null;
+  city: string | null;
+  nationality: string | null;
   summary: string | null;
   experiences: { puesto: string; empresa: string; desde: string; hasta: string; descripcion: string }[];
   education: { titulo: string; institucion: string; desde: string; hasta: string }[];
@@ -49,7 +83,25 @@ export function emptyEducation(): EducationDraft {
 }
 
 export function emptyCurriculum(): CurriculumDraft {
-  return { fullName: "", phone: "", summary: "", experiences: [emptyExperience()], education: [emptyEducation()], skills: "" };
+  return {
+    fullName: "",
+    firstName: "",
+    lastName: "",
+    documentType: "Cédula de identidad",
+    documentNumber: "",
+    birthDate: "",
+    gender: "",
+    phone: "",
+    phoneCountryCode: "UY (+598)",
+    extraPhone: "",
+    country: "Uruguay",
+    city: "",
+    nationality: "Uruguaya",
+    summary: "",
+    experiences: [emptyExperience()],
+    education: [emptyEducation()],
+    skills: "",
+  };
 }
 
 function str(value: unknown): string {
@@ -71,9 +123,24 @@ export function toCurriculumDraft(row: CurriculumRow): CurriculumDraft {
       })
     : [];
   const skills = Array.isArray(row.skills) ? row.skills.map(str).filter(Boolean).join(", ") : "";
+  const firstName = str(row.first_name);
+  const lastName = str(row.last_name);
+  // Rows saved before the name was split keep only full_name; prefill the
+  // first field with it so nothing appears lost.
   return {
     fullName: str(row.full_name),
+    firstName: firstName || (!lastName ? str(row.full_name) : ""),
+    lastName,
+    documentType: str(row.document_type) || "Cédula de identidad",
+    documentNumber: str(row.document_number),
+    birthDate: str(row.birth_date),
+    gender: str(row.gender),
     phone: str(row.phone),
+    phoneCountryCode: str(row.phone_country_code) || "UY (+598)",
+    extraPhone: str(row.extra_phone),
+    country: str(row.country) || "Uruguay",
+    city: str(row.city),
+    nationality: str(row.nationality) || "Uruguaya",
     summary: str(row.summary),
     experiences: experiences.length > 0 ? [...experiences, emptyExperience()] : emptyCurriculum().experiences,
     education: education.length > 0 ? [...education, emptyEducation()] : emptyCurriculum().education,
@@ -87,8 +154,12 @@ function isBlank(...values: string[]): boolean {
 
 /** Builds the upsert payload, dropping blank rows; requires a name. */
 export function curriculumPayload(draft: CurriculumDraft): { ok: true; payload: CurriculumPayload } | { ok: false; error: string } {
-  const fullName = draft.fullName.trim();
+  const firstName = draft.firstName.trim();
+  const lastName = draft.lastName.trim();
+  const fullName = [firstName, lastName].filter(Boolean).join(" ") || draft.fullName.trim();
   if (fullName.length < 2) return { ok: false, error: "Escribí tu nombre completo para guardar el curriculum." };
+  const birthDate = draft.birthDate.trim();
+  if (birthDate && !/^\d{4}-\d{2}-\d{2}$/.test(birthDate)) return { ok: false, error: "Revisá la fecha de nacimiento." };
   const skills = draft.skills
     .split(",")
     .map((skill) => skill.trim())
@@ -103,7 +174,18 @@ export function curriculumPayload(draft: CurriculumDraft): { ok: true; payload: 
     ok: true,
     payload: {
       full_name: fullName,
+      first_name: firstName || null,
+      last_name: lastName || null,
+      document_type: draft.documentType.trim() || null,
+      document_number: draft.documentNumber.trim() || null,
+      birth_date: birthDate || null,
+      gender: draft.gender.trim() || null,
       phone: draft.phone.trim() || null,
+      phone_country_code: draft.phoneCountryCode.trim() || null,
+      extra_phone: draft.extraPhone.trim() || null,
+      country: draft.country.trim() || null,
+      city: draft.city.trim() || null,
+      nationality: draft.nationality.trim() || null,
       summary: draft.summary.trim() || null,
       experiences,
       education,

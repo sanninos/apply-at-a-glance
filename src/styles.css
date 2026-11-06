@@ -677,3 +677,31 @@ nav .employment-nav-item, .employment-nav .employment-nav-item { position: relat
 .position-category-grid .position-category { min-height: 116px; }
 .position-empty { padding: 28px 12px; color: var(--muted-foreground); text-align: center; }
 .search-clear { width: 24px; height: 24px; }
+
+/* «Sobre ti» bottom sheet (editar curriculum) */
+.about-sheet-backdrop { position: fixed; inset: 0; z-index: 60; display: flex; align-items: flex-end; justify-content: center; background: color-mix(in oklab, var(--primary) 45%, transparent); animation: about-sheet-fade 0.2s ease; }
+.about-sheet { position: relative; width: 100%; max-width: 28rem; max-height: 88dvh; display: flex; flex-direction: column; padding: 10px 20px calc(18px + env(safe-area-inset-bottom, 0px)); border-radius: 28px 28px 0 0; background: var(--card); box-shadow: 0 -12px 40px color-mix(in oklab, var(--primary) 25%, transparent); animation: about-sheet-rise 0.25s ease; }
+@keyframes about-sheet-fade { from { opacity: 0; } }
+@keyframes about-sheet-rise { from { transform: translateY(40px); opacity: 0.6; } }
+.about-sheet-handle { align-self: center; width: 44px; height: 5px; border-radius: 999px; background: var(--border); }
+.about-sheet-close { position: absolute; top: 18px; right: 16px; display: grid; place-items: center; width: 34px; height: 34px; border: none; border-radius: 50%; background: transparent; color: var(--muted-foreground); cursor: pointer; }
+.about-sheet-close:hover { background: var(--employment-surface); }
+.about-sheet-close svg { width: 20px; height: 20px; }
+.about-sheet h2 { margin-top: 14px; text-align: center; font-size: 20px; font-weight: 600; color: var(--primary); }
+.about-sheet-subtitle { margin-top: 2px; text-align: center; font-size: 13px; color: var(--muted-foreground); }
+.about-sheet-body { overflow-y: auto; margin-top: 14px; padding-bottom: 6px; }
+.about-sheet .curriculum-field label { font-size: 13px; font-weight: 700; color: var(--primary); }
+.about-sheet-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.about-sheet-row select, .about-sheet-row input, .about-sheet .curriculum-field > select, .about-sheet .curriculum-field > input { width: 100%; min-width: 0; padding: 12px 14px; border: 1px solid var(--border); border-radius: 16px; background: var(--card); font-size: 14px; line-height: 1.4; color: var(--primary); font-family: inherit; }
+.about-sheet-row select:focus, .about-sheet-row input:focus, .about-sheet .curriculum-field > select:focus, .about-sheet .curriculum-field > input:focus { outline: 2px solid var(--employment-yellow); outline-offset: 1px; border-color: var(--employment-blue); }
+.about-gender { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.about-gender-option { display: grid; place-items: center; gap: 6px; padding: 12px 6px; border: 1px solid var(--border); border-radius: 18px; background: var(--card); color: var(--primary); font-size: 14px; font-family: inherit; cursor: pointer; }
+.about-gender-option.is-selected { border-color: var(--employment-blue); background: color-mix(in oklab, var(--employment-blue) 10%, var(--card)); font-weight: 600; }
+.about-gender-symbol { font-size: 22px; line-height: 1; }
+.about-toggle-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.about-toggle { position: relative; flex-shrink: 0; width: 46px; height: 26px; border: none; border-radius: 999px; background: var(--border); cursor: pointer; transition: background 0.15s ease; }
+.about-toggle span { position: absolute; top: 3px; left: 3px; width: 20px; height: 20px; border-radius: 50%; background: var(--card); box-shadow: 0 1px 3px color-mix(in oklab, var(--primary) 30%, transparent); transition: transform 0.15s ease; }
+.about-toggle.is-on { background: var(--employment-blue); }
+.about-toggle.is-on span { transform: translateX(20px); }
+.about-sheet-save { margin-top: 12px; height: 52px; border-radius: 999px; background: var(--employment-blue); color: var(--primary-foreground); font-size: 15px; font-weight: 700; }
+.about-sheet-save:hover { background: color-mix(in oklab, var(--employment-blue) 88%, var(--primary)); }

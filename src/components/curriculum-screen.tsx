@@ -135,7 +135,7 @@ function AccountCurriculumScreen() {
       <section className="curriculum-block">
         <div className="curriculum-section-head"><h2 className="curriculum-block-title">SOBRE TI</h2><Button type="button" variant="ghost" size="icon" title="Editar datos personales" aria-label="Editar datos personales" onClick={() => setEditingAbout(true)}><Pencil /></Button></div>
         <div className="curriculum-about">
-          <p><Smartphone aria-hidden="true" /><span>{draft.phone ? `${draft.phoneCountryCode.replace(/^[A-Z]{2} \(/, "(+").replace(")", ")")} ${draft.phone}` : "Sin teléfono"}</span></p>
+          <p><Smartphone aria-hidden="true" /><span>{draft.phone ? `${draft.phoneCountryCode.match(/\+\d+/)?.[0] ?? ""} ${draft.phone}`.trim() : "Sin teléfono"}</span></p>
           <p><Mail aria-hidden="true" /><span>{user?.email || "Sin correo electrónico"}</span></p>
           {(draft.city || draft.country) && <p><span aria-hidden="true">📍</span><span>{[draft.city, draft.country].filter(Boolean).join(", ")}</span></p>}
         </div>

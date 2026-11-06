@@ -18,9 +18,10 @@ describe('curriculum section editing', () => {
     const client = new QueryClient({ defaultOptions: { queries: { retry: false } } });
     render(<QueryClientProvider client={client}><CurriculumScreen /></QueryClientProvider>);
     fireEvent.click(await screen.findByRole('button', { name: 'Editar datos personales' }));
-    fireEvent.change(screen.getByLabelText('Nombre completo'), { target: { value: 'Ana Pérez' } });
-    fireEvent.change(screen.getByLabelText('Teléfono'), { target: { value: '099123456' } });
-    fireEvent.click(screen.getByRole('button', { name: 'Listo' }));
+    fireEvent.change(screen.getByLabelText('Nombre'), { target: { value: 'Ana' } });
+    fireEvent.change(screen.getByLabelText('Apellidos'), { target: { value: 'Pérez' } });
+    fireEvent.change(screen.getByLabelText('Número de teléfono'), { target: { value: '099123456' } });
+    fireEvent.click(screen.getByRole('button', { name: 'Guardar' }));
     const addExperience = screen.getAllByRole('button', { name: 'Añadir experiencia' }).find((button) => button.getAttribute('aria-label') === 'Añadir experiencia');
     if (!addExperience) throw new Error('Missing experience action');
     fireEvent.click(addExperience);
@@ -29,7 +30,7 @@ describe('curriculum section editing', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Listo' }));
     fireEvent.blur(screen.getByLabelText('Separá tus habilidades con comas'));
     await waitFor(() => expect(mocks.upsert).toHaveBeenCalledWith(expect.objectContaining({
-      user_id: 'test-account', full_name: 'Ana Pérez', phone: '099123456',
+      user_id: 'test-account', full_name: 'Ana Pérez', first_name: 'Ana', last_name: 'Pérez', phone: '099123456',
       experiences: [{ puesto: 'Analista', empresa: 'Empresa de prueba', desde: '', hasta: '', descripcion: '' }],
     }), { onConflict: 'user_id' }));
     client.clear();
@@ -42,7 +43,7 @@ describe('curriculum section editing', () => {
     expect(screen.queryByRole('button', { name: 'Editar datos personales' })).toBeNull();
     finish({ data: [{ full_name: 'Nombre guardado', phone: '123', summary: '', experiences: [], education: [], skills: [] }], error: null });
     fireEvent.click(await screen.findByRole('button', { name: 'Editar datos personales' }));
-    expect(screen.getByLabelText('Nombre completo')).toHaveValue('Nombre guardado');
+    expect(screen.getByLabelText('Nombre')).toHaveValue('Nombre guardado');
     view.unmount(); client.clear();
   });
   it('loads a fresh draft when switching accounts instead of retaining private edits', async () => {
@@ -50,11 +51,11 @@ describe('curriculum section editing', () => {
     const client = new QueryClient();
     const view = render(<QueryClientProvider client={client}><CurriculumScreen /></QueryClientProvider>);
     fireEvent.click(await screen.findByRole('button', { name: 'Editar datos personales' }));
-    fireEvent.change(screen.getByLabelText('Nombre completo'), { target: { value: 'Private account A' } });
+    fireEvent.change(screen.getByLabelText('Nombre'), { target: { value: 'Private account A' } });
     mocks.userId = 'account-b';
     view.rerender(<QueryClientProvider client={client}><CurriculumScreen /></QueryClientProvider>);
     fireEvent.click(await screen.findByRole('button', { name: 'Editar datos personales' }));
-    expect(screen.getByLabelText('Nombre completo')).toHaveValue('');
+    expect(screen.getByLabelText('Nombre')).toHaveValue('');
     view.unmount(); client.clear();
   });
   it('allows retrying after an unexpected network failure without losing the draft', async () => {
@@ -63,10 +64,9 @@ describe('curriculum section editing', () => {
     const client = new QueryClient();
     const view = render(<QueryClientProvider client={client}><CurriculumScreen /></QueryClientProvider>);
     fireEvent.click(await screen.findByRole('button', { name: 'Editar datos personales' }));
-    fireEvent.change(screen.getByLabelText('Nombre completo'), { target: { value: 'Ana Pérez' } });
-    fireEvent.blur(screen.getByLabelText('Nombre completo'));
+    fireEvent.change(screen.getByLabelText('Nombre'), { target: { value: 'Ana Pérez' } });
     await screen.findByRole('alert');
-    expect(screen.getByLabelText('Nombre completo')).toHaveValue('Ana Pérez');
+    expect(screen.getByLabelText('Nombre')).toHaveValue('Ana Pérez');
     fireEvent.click(screen.getByRole('button', { name: 'Reintentar guardado' }));
     await waitFor(() => expect(mocks.upsert).toHaveBeenCalledTimes(2));
     view.unmount(); client.clear();
@@ -77,7 +77,7 @@ describe('curriculum section editing', () => {
     const client = new QueryClient();
     const view = render(<QueryClientProvider client={client}><CurriculumScreen /></QueryClientProvider>);
     fireEvent.click(await screen.findByRole('button', { name: 'Editar datos personales' }));
-    fireEvent.change(screen.getByLabelText('Nombre completo'), { target: { value: 'Ana Pérez' } });
+    fireEvent.change(screen.getByLabelText('Nombre'), { target: { value: 'Ana Pérez' } });
     await waitFor(() => expect(mocks.upsert).toHaveBeenCalledWith(expect.objectContaining({ full_name: 'Ana Pérez' }), { onConflict: 'user_id' }), { timeout: 1500 });
     view.unmount(); client.clear();
   });
@@ -88,10 +88,9 @@ describe('curriculum section editing', () => {
     const client = new QueryClient();
     const view = render(<QueryClientProvider client={client}><CurriculumScreen /></QueryClientProvider>);
     fireEvent.click(await screen.findByRole('button', { name: 'Editar datos personales' }));
-    fireEvent.change(screen.getByLabelText('Nombre completo'), { target: { value: 'Ana Pérez' } });
-    fireEvent.blur(screen.getByLabelText('Nombre completo'));
-    fireEvent.change(screen.getByLabelText('Teléfono'), { target: { value: '099123456' } });
-    expect(mocks.upsert).toHaveBeenCalledTimes(1);
+    fireEvent.change(screen.getByLabelText('Nombre'), { target: { value: 'Ana Pérez' } });
+    await waitFor(() => expect(mocks.upsert).toHaveBeenCalledTimes(1), { timeout: 1500 });
+    fireEvent.change(screen.getByLabelText('Número de teléfono'), { target: { value: '099123456' } });
     finish({ error: null });
     await waitFor(() => expect(mocks.upsert).toHaveBeenLastCalledWith(expect.objectContaining({ phone: '099123456' }), { onConflict: 'user_id' }), { timeout: 1500 });
     expect(mocks.upsert).toHaveBeenCalledTimes(2);

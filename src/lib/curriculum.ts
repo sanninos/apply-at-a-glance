@@ -153,8 +153,12 @@ function isBlank(...values: string[]): boolean {
 
 /** Builds the upsert payload, dropping blank rows; requires a name. */
 export function curriculumPayload(draft: CurriculumDraft): { ok: true; payload: CurriculumPayload } | { ok: false; error: string } {
-  const fullName = draft.fullName.trim();
+  const firstName = draft.firstName.trim();
+  const lastName = draft.lastName.trim();
+  const fullName = [firstName, lastName].filter(Boolean).join(" ") || draft.fullName.trim();
   if (fullName.length < 2) return { ok: false, error: "Escribí tu nombre completo para guardar el curriculum." };
+  const birthDate = draft.birthDate.trim();
+  if (birthDate && !/^\d{4}-\d{2}-\d{2}$/.test(birthDate)) return { ok: false, error: "Revisá la fecha de nacimiento." };
   const skills = draft.skills
     .split(",")
     .map((skill) => skill.trim())

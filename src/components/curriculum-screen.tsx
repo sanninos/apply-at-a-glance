@@ -1,6 +1,6 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useRef, useState } from "react";
-import { BriefcaseBusiness, Cake, Camera, Check, GraduationCap, Lightbulb, LogIn, Mail, Pencil, Plus, RefreshCw, Smartphone, Trash2, User, X } from "lucide-react";
+import { BriefcaseBusiness, Cake, Camera, Check, ChevronLeft, GraduationCap, Lightbulb, LogIn, Mail, Pencil, Plus, RefreshCw, Smartphone, Star, Trash2, User, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { AppBottomNav } from "@/components/app-bottom-nav";
 import { useAccessDialog } from "@/components/access-dialog";
@@ -33,6 +33,7 @@ function AccountCurriculumScreen() {
   const [showExtraPhone, setShowExtraPhone] = useState(false);
   const [editingSummary, setEditingSummary] = useState(false);
   const [editingExperience, setEditingExperience] = useState<string | null>(null);
+  const [experienceIsNew, setExperienceIsNew] = useState(false);
   const [editingEducation, setEditingEducation] = useState<string | null>(null);
   const [initialized, setInitialized] = useState(false);
   const dirty = useRef(false);

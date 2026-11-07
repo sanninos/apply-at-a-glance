@@ -161,27 +161,13 @@ function AccountCurriculumScreen() {
       </section>
 
       <section className="curriculum-block">
-        <div className="curriculum-section-head"><h2 className="curriculum-block-title">EXPERIENCIA PROFESIONAL</h2><Button type="button" variant="ghost" size="icon" title="Añadir experiencia" aria-label="Añadir experiencia" onClick={() => { const entry = emptyExperience(); edit({ experiences: [...draft.experiences, entry] }); setEditingExperience(entry.id); }}><Plus /></Button></div>
+        <div className="curriculum-section-head"><h2 className="curriculum-block-title">EXPERIENCIA PROFESIONAL</h2><Button type="button" variant="ghost" size="icon" title="Añadir experiencia" aria-label="Añadir experiencia" onClick={() => openExperience()}><Plus /></Button></div>
         {draft.experiences.map((entry, index) => (
-          (entry.puesto || entry.empresa || entry.desde || entry.hasta || entry.descripcion || editingExperience === entry.id) && <div className="curriculum-entry" key={entry.id}>
-            {editingExperience !== entry.id && <div className="curriculum-item-summary"><span className="curriculum-timeline-dot" /><div><h3>{entry.puesto || "Experiencia"}{entry.empresa && ` en ${entry.empresa}`}</h3><p>{[entry.desde, entry.hasta].filter(Boolean).join(" - ")}</p></div><Button type="button" variant="ghost" size="icon" title="Editar experiencia" aria-label={`Editar experiencia ${index + 1}`} onClick={() => setEditingExperience(entry.id)}><Pencil /></Button></div>}
-            {editingExperience === entry.id && <div className="curriculum-editor"><div className="curriculum-entry-head">
-              <span className="curriculum-entry-label"><BriefcaseBusiness aria-hidden="true" />Experiencia {index + 1}</span>
-              <Button variant="ghost" size="icon" type="button" className="curriculum-remove" aria-label={`Quitar experiencia ${index + 1}`} onClick={() => edit({ experiences: draft.experiences.filter((row) => row.id !== entry.id) })}>
-                <Trash2 aria-hidden="true" />
-              </Button>
-            </div>
-            <div className="curriculum-grid-2">
-              <div className="curriculum-field"><label htmlFor={`cv-exp-puesto-${index}`}>Puesto</label><input id={`cv-exp-puesto-${index}`} value={entry.puesto} onChange={(event) => edit({ experiences: draft.experiences.map((row) => row.id === entry.id ? { ...row, puesto: event.target.value } : row) })} /></div>
-              <div className="curriculum-field"><label htmlFor={`cv-exp-empresa-${index}`}>Empresa</label><input id={`cv-exp-empresa-${index}`} value={entry.empresa} onChange={(event) => edit({ experiences: draft.experiences.map((row) => row.id === entry.id ? { ...row, empresa: event.target.value } : row) })} /></div>
-              <div className="curriculum-field"><label htmlFor={`cv-exp-desde-${index}`}>Desde</label><input id={`cv-exp-desde-${index}`} value={entry.desde} onChange={(event) => edit({ experiences: draft.experiences.map((row) => row.id === entry.id ? { ...row, desde: event.target.value } : row) })} placeholder="Ej: 2022" /></div>
-              <div className="curriculum-field"><label htmlFor={`cv-exp-hasta-${index}`}>Hasta</label><input id={`cv-exp-hasta-${index}`} value={entry.hasta} onChange={(event) => edit({ experiences: draft.experiences.map((row) => row.id === entry.id ? { ...row, hasta: event.target.value } : row) })} placeholder="Ej: Actualidad" /></div>
-            </div>
-            <div className="curriculum-field"><label htmlFor={`cv-exp-desc-${index}`}>Descripción</label><textarea id={`cv-exp-desc-${index}`} value={entry.descripcion} onChange={(event) => edit({ experiences: draft.experiences.map((row) => row.id === entry.id ? { ...row, descripcion: event.target.value } : row) })} rows={2} /></div>
-            <Button type="button" variant="ghost" className="curriculum-done" onClick={() => setEditingExperience(null)}><Check />Listo</Button></div>}
+          (entry.puesto || entry.empresa || entry.desde || entry.hasta || entry.descripcion) && <div className="curriculum-entry" key={entry.id}>
+            <div className="curriculum-item-summary"><span className="curriculum-timeline-dot" /><div><h3>{entry.puesto || "Experiencia"}{entry.empresa && ` en ${entry.empresa}`}</h3><p>{[entry.desde, entry.actualmente ? "Actualidad" : entry.hasta].filter(Boolean).join(" - ")}</p></div><Button type="button" variant="ghost" size="icon" title="Editar experiencia" aria-label={`Editar experiencia ${index + 1}`} onClick={() => openExperience(entry.id)}><Pencil /></Button></div>
           </div>
         ))}
-        <Button type="button" variant="ghost" className="curriculum-add" onClick={() => { const entry = emptyExperience(); edit({ experiences: [...draft.experiences, entry] }); setEditingExperience(entry.id); }}>Añadir experiencia</Button>
+        <Button type="button" variant="ghost" className="curriculum-add" onClick={() => openExperience()}>Añadir experiencia</Button>
       </section>
 
       <section className="curriculum-block">

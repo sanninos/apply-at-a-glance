@@ -25,13 +25,15 @@ describe('curriculum section editing', () => {
     const addExperience = screen.getAllByRole('button', { name: 'Añadir experiencia' }).find((button) => button.getAttribute('aria-label') === 'Añadir experiencia');
     if (!addExperience) throw new Error('Missing experience action');
     fireEvent.click(addExperience);
-    fireEvent.change(screen.getByLabelText('Puesto'), { target: { value: 'Analista' } });
+    fireEvent.change(screen.getByLabelText('Cargo'), { target: { value: 'Analista' } });
     fireEvent.change(screen.getByLabelText('Empresa'), { target: { value: 'Empresa de prueba' } });
-    fireEvent.click(screen.getByRole('button', { name: 'Listo' }));
+    fireEvent.change(screen.getByLabelText('Lugar'), { target: { value: 'Montevideo' } });
+    fireEvent.click(screen.getByRole('button', { name: 'Evaluación general de la empresa: 4 de 5' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Añadir' }));
     fireEvent.blur(screen.getByLabelText('Separá tus habilidades con comas'));
     await waitFor(() => expect(mocks.upsert).toHaveBeenCalledWith(expect.objectContaining({
       user_id: 'test-account', full_name: 'Ana Pérez', first_name: 'Ana', last_name: 'Pérez', phone: '099123456',
-      experiences: [{ puesto: 'Analista', empresa: 'Empresa de prueba', desde: '', hasta: '', descripcion: '' }],
+      experiences: [expect.objectContaining({ puesto: 'Analista', empresa: 'Empresa de prueba', lugar: 'Montevideo', ratingGeneral: 4 })],
     }), { onConflict: 'user_id' }));
     client.clear();
   });

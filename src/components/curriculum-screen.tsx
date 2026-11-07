@@ -1,6 +1,6 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useRef, useState } from "react";
-import { BriefcaseBusiness, Cake, Camera, Check, ChevronLeft, GraduationCap, Lightbulb, LogIn, Mail, Pencil, Plus, RefreshCw, Smartphone, Star, Trash2, User, X } from "lucide-react";
+import { Cake, Camera, Check, ChevronLeft, GraduationCap, Lightbulb, LogIn, Mail, Pencil, Plus, RefreshCw, Smartphone, Star, Trash2, User, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { AppBottomNav } from "@/components/app-bottom-nav";
 import { useAccessDialog } from "@/components/access-dialog";
@@ -59,6 +59,29 @@ function AccountCurriculumScreen() {
     setDraft((prev) => ({ ...prev, ...patch }));
     setSaved(false);
   }
+
+  function openExperience(id?: string) {
+    if (id) {
+      setExperienceIsNew(false);
+      setEditingExperience(id);
+      return;
+    }
+    const entry = emptyExperience();
+    edit({ experiences: [...draft.experiences, entry] });
+    setExperienceIsNew(true);
+    setEditingExperience(entry.id);
+  }
+
+  function updateExperience(id: string, patch: Partial<ExperienceDraft>) {
+    edit({ experiences: draft.experiences.map((row) => (row.id === id ? { ...row, ...patch } : row)) });
+  }
+
+  function closeExperience() {
+    setEditingExperience(null);
+    void save();
+  }
+
+  const editingExperienceEntry = editingExperience ? draft.experiences.find((entry) => entry.id === editingExperience) ?? null : null;
 
   const signedIn = ready && Boolean(user);
   // Seed the draft once from the stored curriculum; a stored row with entries

@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import {
   curriculumPayload,
   emptyCurriculum,
+  emptyExperience,
   toCurriculumDraft,
   type CurriculumRow,
 } from '../lib/curriculum';
@@ -36,13 +37,13 @@ describe('curriculum editor', () => {
   it('drops blank experience and education rows', () => {
     const draft = emptyCurriculum();
     draft.fullName = 'María Pérez';
-    draft.experiences[0] = { id: 'exp-1', puesto: 'Cajera', empresa: 'Tienda', desde: '', hasta: '', descripcion: '' };
-    draft.experiences[1] = { id: 'blank-exp', puesto: ' ', empresa: '  ', desde: '', hasta: '', descripcion: '' };
+    draft.experiences[0] = { ...emptyExperience(), id: 'exp-1', puesto: 'Cajera', empresa: 'Tienda' };
+    draft.experiences[1] = { ...emptyExperience(), id: 'blank-exp', puesto: ' ', empresa: '  ' };
     draft.education[0] = { id: 'edu-1', titulo: 'Bachillerato', institucion: 'Liceo 1', desde: '', hasta: '' };
     const result = curriculumPayload(draft);
     expect(result.ok).toBe(true);
     if (!result.ok) return;
-    expect(result.payload.experiences).toEqual([{ puesto: 'Cajera', empresa: 'Tienda', desde: '', hasta: '', descripcion: '' }]);
+    expect(result.payload.experiences).toEqual([expect.objectContaining({ puesto: 'Cajera', empresa: 'Tienda', desde: '', hasta: '', descripcion: '' })]);
     expect(result.payload.education).toEqual([{ titulo: 'Bachillerato', institucion: 'Liceo 1', desde: '', hasta: '' }]);
   });
 

@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { useAccess } from "@/components/access-provider";
-import { linkPushToken, registerPushToken } from "@/lib/push-tokens.functions";
+import { ensureUsuario, linkPushToken, registerPushToken } from "@/lib/push-tokens.functions";
 
 const STORAGE_KEY = "uru-fcm-token";
 const EVENT = "urujobs:fcm-token";
@@ -37,14 +37,21 @@ export function PushTokenRegistrar() {
   const { user } = useAccess();
   const register = useServerFn(registerPushToken);
   const link = useServerFn(linkPushToken);
+  const ensure = useServerFn(ensureUsuario);
   const tokenRef = useRef<string | null>(null);
   const linkedRef = useRef<string | null>(null);
+  const userIdRef = useRef<string | null>(user?.id ?? null);
+  userIdRef.current = user?.id ?? null;
 
   const linkIfSignedIn = (token: string, platform: Platform) => {
-    const key = `${user?.id}:${token}`;
-    if (!user || linkedRef.current === key) return;
+    const userId = userIdRef.current;
+    const key = `${userId}:${token}`;
+    if (!userId || linkedRef.current === key) return;
     linkedRef.current = key;
-    link({ data: { token, platform } }).catch(() => (linkedRef.current = null));
+    link({ data: { token, platform } }).catch((error) => {
+      linkedRef.current = null;
+      console.error("[FCM] Could not link token:", error);
+    });
   };
 
   useEffect(() => {
@@ -71,6 +78,12 @@ export function PushTokenRegistrar() {
 
   useEffect(() => {
     if (tokenRef.current) linkIfSignedIn(tokenRef.current, "android");
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user?.id]);
+
+  useEffect(() => {
+    if (!user) return;
+    ensure({}).catch(() => undefined);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user?.id]);
 

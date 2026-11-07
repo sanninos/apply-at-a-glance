@@ -14,6 +14,7 @@ import {
   toCurriculumDraft,
   type CurriculumDraft,
   type CurriculumRow,
+  type ExperienceDraft,
 } from "@/lib/curriculum";
 
 export function CurriculumScreen() {
@@ -332,6 +333,76 @@ function AccountCurriculumScreen() {
 
         <Button type="button" className="about-sheet-save" disabled={busy} onClick={() => { setEditingAbout(false); void save(); }}>{busy ? "Guardando…" : "Guardar"}</Button>
       </section>
+    </div>}
+
+    {signedIn && editingExperienceEntry && <div className="experience-screen" role="dialog" aria-modal="true" aria-labelledby="experience-screen-title">
+      <header className="experience-screen-head">
+        <button type="button" className="experience-screen-back" aria-label="Volver" onClick={closeExperience}><ChevronLeft aria-hidden="true" /></button>
+        <h2 id="experience-screen-title">Experiencias</h2>
+      </header>
+      <div className="experience-screen-body">
+        <div className="curriculum-field">
+          <label htmlFor="exp-cargo">Cargo</label>
+          <input id="exp-cargo" value={editingExperienceEntry.puesto} onChange={(event) => updateExperience(editingExperienceEntry.id, { puesto: event.target.value })} />
+        </div>
+        <div className="curriculum-field">
+          <label htmlFor="exp-empresa">Empresa</label>
+          <input id="exp-empresa" value={editingExperienceEntry.empresa} onChange={(event) => updateExperience(editingExperienceEntry.id, { empresa: event.target.value })} />
+        </div>
+        <div className="curriculum-field">
+          <label htmlFor="exp-funciones">Funciones y logros del cargo</label>
+          <textarea id="exp-funciones" value={editingExperienceEntry.descripcion} maxLength={500} rows={5} onChange={(event) => updateExperience(editingExperienceEntry.id, { descripcion: event.target.value })} />
+          <span className="experience-counter">{editingExperienceEntry.descripcion.length}/500 · máximo 500 caracteres</span>
+        </div>
+        <div className="curriculum-field">
+          <label htmlFor="exp-lugar">Lugar</label>
+          <input id="exp-lugar" value={editingExperienceEntry.lugar} onChange={(event) => updateExperience(editingExperienceEntry.id, { lugar: event.target.value })} placeholder="Ej: Montevideo" />
+        </div>
+        <div className="about-toggle-row">
+          <label htmlFor="exp-actualmente">Actualmente trabajo aquí</label>
+          <button id="exp-actualmente" type="button" role="switch" aria-checked={editingExperienceEntry.actualmente} className={editingExperienceEntry.actualmente ? "about-toggle is-on" : "about-toggle"} onClick={() => updateExperience(editingExperienceEntry.id, { actualmente: !editingExperienceEntry.actualmente, hasta: !editingExperienceEntry.actualmente ? "Actualidad" : "" })}>
+            <span aria-hidden="true" />
+          </button>
+        </div>
+        <div className="experience-dates">
+          <div className="curriculum-field">
+            <label htmlFor="exp-inicio">Inicio</label>
+            <input id="exp-inicio" value={editingExperienceEntry.desde} onChange={(event) => updateExperience(editingExperienceEntry.id, { desde: event.target.value })} placeholder="Ej: 2022" />
+          </div>
+          <div className="curriculum-field">
+            <label htmlFor="exp-fin">Fin</label>
+            <input id="exp-fin" value={editingExperienceEntry.actualmente ? "Actualidad" : editingExperienceEntry.hasta} disabled={editingExperienceEntry.actualmente} onChange={(event) => updateExperience(editingExperienceEntry.id, { hasta: event.target.value })} placeholder="Ej: 2024" />
+          </div>
+        </div>
+        <div className="about-toggle-row">
+          <label htmlFor="exp-recomienda">Recomienda trabajar aquí</label>
+          <button id="exp-recomienda" type="button" role="switch" aria-checked={editingExperienceEntry.recomienda} className={editingExperienceEntry.recomienda ? "about-toggle is-on" : "about-toggle"} onClick={() => updateExperience(editingExperienceEntry.id, { recomienda: !editingExperienceEntry.recomienda })}>
+            <span aria-hidden="true" />
+          </button>
+        </div>
+        {([
+          ["Evaluación general de la empresa", "ratingGeneral"],
+          ["Ambiente de trabajo", "ratingAmbiente"],
+          ["Director general", "ratingDirector"],
+          ["Salario y prestaciones", "ratingSalario"],
+          ["Oportunidades de carrera", "ratingOportunidades"],
+        ] as const).map(([label, key]) => (
+          <div className="experience-rating" key={key}>
+            <span className="experience-rating-label">{label}</span>
+            <div className="experience-stars" role="group" aria-label={label}>
+              {[1, 2, 3, 4, 5].map((value) => (
+                <button key={value} type="button" className={editingExperienceEntry[key] >= value ? "experience-star is-active" : "experience-star"} aria-label={`${label}: ${value} de 5`} aria-pressed={editingExperienceEntry[key] >= value} onClick={() => updateExperience(editingExperienceEntry.id, { [key]: editingExperienceEntry[key] === value ? 0 : value })}>
+                  <Star aria-hidden="true" fill="currentColor" />
+                </button>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+      <footer className="experience-screen-foot">
+        {!experienceIsNew && <Button type="button" variant="ghost" className="experience-screen-delete" onClick={() => { edit({ experiences: draft.experiences.filter((row) => row.id !== editingExperienceEntry.id) }); closeExperience(); }}><Trash2 aria-hidden="true" />Quitar</Button>}
+        <Button type="button" className="experience-screen-save" disabled={busy} onClick={closeExperience}>{busy ? "Guardando…" : experienceIsNew ? "Añadir" : "Guardar"}</Button>
+      </footer>
     </div>}
 
     <AppBottomNav active="perfil" />

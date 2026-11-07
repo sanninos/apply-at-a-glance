@@ -29,7 +29,7 @@ describe('curriculum section editing', () => {
     fireEvent.change(screen.getByLabelText('Empresa'), { target: { value: 'Empresa de prueba' } });
     fireEvent.change(screen.getByLabelText('Lugar'), { target: { value: 'Montevideo' } });
     fireEvent.click(screen.getByRole('button', { name: 'Evaluación general de la empresa: 4 de 5' }));
-    fireEvent.click(screen.getByRole('button', { name: 'Añadir' }));
+    fireEvent.click(await screen.findByRole('button', { name: 'Añadir' }));
     fireEvent.blur(screen.getByLabelText('Separá tus habilidades con comas'));
     await waitFor(() => expect(mocks.upsert).toHaveBeenCalledWith(expect.objectContaining({
       user_id: 'test-account', full_name: 'Ana Pérez', first_name: 'Ana', last_name: 'Pérez', phone: '099123456',

@@ -705,3 +705,5 @@ nav .employment-nav-item, .employment-nav .employment-nav-item { position: relat
 .about-toggle.is-on span { transform: translateX(20px); }
 .about-sheet-save { margin-top: 12px; height: 52px; border-radius: 999px; background: var(--employment-blue); color: var(--primary-foreground); font-size: 15px; font-weight: 700; }
 .about-sheet-save:hover { background: color-mix(in oklab, var(--employment-blue) 88%, var(--primary)); }
+.curriculum-about .curriculum-missing { color: var(--muted-foreground); font-style: italic; }
+.curriculum-missing-hint { align-self: center; margin-right: auto; margin-left: 8px; padding: 3px 10px; border-radius: 999px; background: color-mix(in oklch, var(--employment-yellow) 22%, transparent); color: var(--employment-blue); font-size: 11px; font-weight: 600; white-space: nowrap; }

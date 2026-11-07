@@ -1,6 +1,6 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useRef, useState } from "react";
-import { BriefcaseBusiness, Camera, Check, GraduationCap, Lightbulb, LogIn, Mail, Pencil, Plus, RefreshCw, Smartphone, Trash2, User, X } from "lucide-react";
+import { BriefcaseBusiness, Cake, Camera, Check, GraduationCap, Lightbulb, LogIn, Mail, Pencil, Plus, RefreshCw, Smartphone, Trash2, User, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { AppBottomNav } from "@/components/app-bottom-nav";
 import { useAccessDialog } from "@/components/access-dialog";
@@ -138,11 +138,14 @@ function AccountCurriculumScreen() {
     {signedIn && initialized && !curriculum.isError && <form className="curriculum-form" onBlur={() => { if (lastAttempt.current !== version.current) void save(); }} onSubmit={(event) => { event.preventDefault(); void save(); }}>
       <fieldset className="curriculum-fields">
       <section className="curriculum-block">
-        <div className="curriculum-section-head"><h2 className="curriculum-block-title">SOBRE TI</h2><Button type="button" variant="ghost" size="icon" title="Editar datos personales" aria-label="Editar datos personales" onClick={() => setEditingAbout(true)}><Pencil /></Button></div>
+        <div className="curriculum-section-head"><h2 className="curriculum-block-title">SOBRE TI</h2>
+          {(!draft.phone || !draft.birthDate || !(draft.city || draft.country)) && <span className="curriculum-missing-hint">Faltan datos por configurar</span>}
+          <Button type="button" variant="ghost" size="icon" title="Editar datos personales" aria-label="Editar datos personales" onClick={() => setEditingAbout(true)}><Pencil /></Button></div>
         <div className="curriculum-about">
-          <p><Smartphone aria-hidden="true" /><span>{draft.phone ? `${draft.phoneCountryCode.match(/\+\d+/)?.[0] ?? ""} ${draft.phone}`.trim() : "Sin teléfono"}</span></p>
-          <p><Mail aria-hidden="true" /><span>{user?.email || "Sin correo electrónico"}</span></p>
-          {(draft.city || draft.country) && <p><span aria-hidden="true">📍</span><span>{[draft.city, draft.country].filter(Boolean).join(", ")}</span></p>}
+          <p><Smartphone aria-hidden="true" /><span className={draft.phone ? undefined : "curriculum-missing"}>{draft.phone ? `${draft.phoneCountryCode.match(/\+\d+/)?.[0] ?? ""} ${draft.phone}`.trim() : "Teléfono sin configurar"}</span></p>
+          <p><Mail aria-hidden="true" /><span className={user?.email ? undefined : "curriculum-missing"}>{user?.email || "Correo sin configurar"}</span></p>
+          <p><Cake aria-hidden="true" /><span className={draft.birthDate ? undefined : "curriculum-missing"}>{draft.birthDate ? new Date(`${draft.birthDate}T00:00:00`).toLocaleDateString("es-UY", { day: "numeric", month: "long", year: "numeric" }) : "Cumpleaños sin configurar"}</span></p>
+          <p><span aria-hidden="true">📍</span><span className={(draft.city || draft.country) ? undefined : "curriculum-missing"}>{[draft.city, draft.country].filter(Boolean).join(", ") || "Ubicación sin configurar"}</span></p>
         </div>
       </section>
 

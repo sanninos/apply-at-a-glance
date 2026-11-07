@@ -1,6 +1,6 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useRef, useState } from "react";
-import { BriefcaseBusiness, Cake, Camera, Check, GraduationCap, Lightbulb, LogIn, Mail, Pencil, Plus, RefreshCw, Smartphone, Trash2, User, X } from "lucide-react";
+import { Cake, Camera, Check, ChevronLeft, GraduationCap, Lightbulb, LogIn, Mail, Pencil, Plus, RefreshCw, Smartphone, Star, Trash2, User, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { AppBottomNav } from "@/components/app-bottom-nav";
 import { useAccessDialog } from "@/components/access-dialog";
@@ -14,6 +14,7 @@ import {
   toCurriculumDraft,
   type CurriculumDraft,
   type CurriculumRow,
+  type ExperienceDraft,
 } from "@/lib/curriculum";
 
 export function CurriculumScreen() {
@@ -33,6 +34,7 @@ function AccountCurriculumScreen() {
   const [showExtraPhone, setShowExtraPhone] = useState(false);
   const [editingSummary, setEditingSummary] = useState(false);
   const [editingExperience, setEditingExperience] = useState<string | null>(null);
+  const [experienceIsNew, setExperienceIsNew] = useState(false);
   const [editingEducation, setEditingEducation] = useState<string | null>(null);
   const [initialized, setInitialized] = useState(false);
   const dirty = useRef(false);
@@ -58,6 +60,29 @@ function AccountCurriculumScreen() {
     setDraft((prev) => ({ ...prev, ...patch }));
     setSaved(false);
   }
+
+  function openExperience(id?: string) {
+    if (id) {
+      setExperienceIsNew(false);
+      setEditingExperience(id);
+      return;
+    }
+    const entry = emptyExperience();
+    edit({ experiences: [...draft.experiences, entry] });
+    setExperienceIsNew(true);
+    setEditingExperience(entry.id);
+  }
+
+  function updateExperience(id: string, patch: Partial<ExperienceDraft>) {
+    edit({ experiences: draft.experiences.map((row) => (row.id === id ? { ...row, ...patch } : row)) });
+  }
+
+  function closeExperience() {
+    setEditingExperience(null);
+    void save();
+  }
+
+  const editingExperienceEntry = editingExperience ? draft.experiences.find((entry) => entry.id === editingExperience) ?? null : null;
 
   const signedIn = ready && Boolean(user);
   // Seed the draft once from the stored curriculum; a stored row with entries
@@ -160,27 +185,13 @@ function AccountCurriculumScreen() {
       </section>
 
       <section className="curriculum-block">
-        <div className="curriculum-section-head"><h2 className="curriculum-block-title">EXPERIENCIA PROFESIONAL</h2><Button type="button" variant="ghost" size="icon" title="Añadir experiencia" aria-label="Añadir experiencia" onClick={() => { const entry = emptyExperience(); edit({ experiences: [...draft.experiences, entry] }); setEditingExperience(entry.id); }}><Plus /></Button></div>
+        <div className="curriculum-section-head"><h2 className="curriculum-block-title">EXPERIENCIA PROFESIONAL</h2><Button type="button" variant="ghost" size="icon" title="Añadir experiencia" aria-label="Añadir experiencia" onClick={() => openExperience()}><Plus /></Button></div>
         {draft.experiences.map((entry, index) => (
-          (entry.puesto || entry.empresa || entry.desde || entry.hasta || entry.descripcion || editingExperience === entry.id) && <div className="curriculum-entry" key={entry.id}>
-            {editingExperience !== entry.id && <div className="curriculum-item-summary"><span className="curriculum-timeline-dot" /><div><h3>{entry.puesto || "Experiencia"}{entry.empresa && ` en ${entry.empresa}`}</h3><p>{[entry.desde, entry.hasta].filter(Boolean).join(" - ")}</p></div><Button type="button" variant="ghost" size="icon" title="Editar experiencia" aria-label={`Editar experiencia ${index + 1}`} onClick={() => setEditingExperience(entry.id)}><Pencil /></Button></div>}
-            {editingExperience === entry.id && <div className="curriculum-editor"><div className="curriculum-entry-head">
-              <span className="curriculum-entry-label"><BriefcaseBusiness aria-hidden="true" />Experiencia {index + 1}</span>
-              <Button variant="ghost" size="icon" type="button" className="curriculum-remove" aria-label={`Quitar experiencia ${index + 1}`} onClick={() => edit({ experiences: draft.experiences.filter((row) => row.id !== entry.id) })}>
-                <Trash2 aria-hidden="true" />
-              </Button>
-            </div>
-            <div className="curriculum-grid-2">
-              <div className="curriculum-field"><label htmlFor={`cv-exp-puesto-${index}`}>Puesto</label><input id={`cv-exp-puesto-${index}`} value={entry.puesto} onChange={(event) => edit({ experiences: draft.experiences.map((row) => row.id === entry.id ? { ...row, puesto: event.target.value } : row) })} /></div>
-              <div className="curriculum-field"><label htmlFor={`cv-exp-empresa-${index}`}>Empresa</label><input id={`cv-exp-empresa-${index}`} value={entry.empresa} onChange={(event) => edit({ experiences: draft.experiences.map((row) => row.id === entry.id ? { ...row, empresa: event.target.value } : row) })} /></div>
-              <div className="curriculum-field"><label htmlFor={`cv-exp-desde-${index}`}>Desde</label><input id={`cv-exp-desde-${index}`} value={entry.desde} onChange={(event) => edit({ experiences: draft.experiences.map((row) => row.id === entry.id ? { ...row, desde: event.target.value } : row) })} placeholder="Ej: 2022" /></div>
-              <div className="curriculum-field"><label htmlFor={`cv-exp-hasta-${index}`}>Hasta</label><input id={`cv-exp-hasta-${index}`} value={entry.hasta} onChange={(event) => edit({ experiences: draft.experiences.map((row) => row.id === entry.id ? { ...row, hasta: event.target.value } : row) })} placeholder="Ej: Actualidad" /></div>
-            </div>
-            <div className="curriculum-field"><label htmlFor={`cv-exp-desc-${index}`}>Descripción</label><textarea id={`cv-exp-desc-${index}`} value={entry.descripcion} onChange={(event) => edit({ experiences: draft.experiences.map((row) => row.id === entry.id ? { ...row, descripcion: event.target.value } : row) })} rows={2} /></div>
-            <Button type="button" variant="ghost" className="curriculum-done" onClick={() => setEditingExperience(null)}><Check />Listo</Button></div>}
+          (entry.puesto || entry.empresa || entry.desde || entry.hasta || entry.descripcion) && <div className="curriculum-entry" key={entry.id}>
+            <div className="curriculum-item-summary"><span className="curriculum-timeline-dot" /><div><h3>{entry.puesto || "Experiencia"}{entry.empresa && ` en ${entry.empresa}`}</h3><p>{[entry.desde, entry.actualmente ? "Actualidad" : entry.hasta].filter(Boolean).join(" - ")}</p></div><Button type="button" variant="ghost" size="icon" title="Editar experiencia" aria-label={`Editar experiencia ${index + 1}`} onClick={() => openExperience(entry.id)}><Pencil /></Button></div>
           </div>
         ))}
-        <Button type="button" variant="ghost" className="curriculum-add" onClick={() => { const entry = emptyExperience(); edit({ experiences: [...draft.experiences, entry] }); setEditingExperience(entry.id); }}>Añadir experiencia</Button>
+        <Button type="button" variant="ghost" className="curriculum-add" onClick={() => openExperience()}>Añadir experiencia</Button>
       </section>
 
       <section className="curriculum-block">
@@ -322,6 +333,76 @@ function AccountCurriculumScreen() {
 
         <Button type="button" className="about-sheet-save" disabled={busy} onClick={() => { setEditingAbout(false); void save(); }}>{busy ? "Guardando…" : "Guardar"}</Button>
       </section>
+    </div>}
+
+    {signedIn && editingExperienceEntry && <div className="experience-screen" role="dialog" aria-modal="true" aria-labelledby="experience-screen-title">
+      <header className="experience-screen-head">
+        <button type="button" className="experience-screen-back" aria-label="Volver" onClick={closeExperience}><ChevronLeft aria-hidden="true" /></button>
+        <h2 id="experience-screen-title">Experiencias</h2>
+      </header>
+      <div className="experience-screen-body">
+        <div className="curriculum-field">
+          <label htmlFor="exp-cargo">Cargo</label>
+          <input id="exp-cargo" value={editingExperienceEntry.puesto} onChange={(event) => updateExperience(editingExperienceEntry.id, { puesto: event.target.value })} />
+        </div>
+        <div className="curriculum-field">
+          <label htmlFor="exp-empresa">Empresa</label>
+          <input id="exp-empresa" value={editingExperienceEntry.empresa} onChange={(event) => updateExperience(editingExperienceEntry.id, { empresa: event.target.value })} />
+        </div>
+        <div className="curriculum-field">
+          <label htmlFor="exp-funciones">Funciones y logros del cargo</label>
+          <textarea id="exp-funciones" value={editingExperienceEntry.descripcion} maxLength={500} rows={5} onChange={(event) => updateExperience(editingExperienceEntry.id, { descripcion: event.target.value })} />
+          <span className="experience-counter">{editingExperienceEntry.descripcion.length}/500 · máximo 500 caracteres</span>
+        </div>
+        <div className="curriculum-field">
+          <label htmlFor="exp-lugar">Lugar</label>
+          <input id="exp-lugar" value={editingExperienceEntry.lugar} onChange={(event) => updateExperience(editingExperienceEntry.id, { lugar: event.target.value })} placeholder="Ej: Montevideo" />
+        </div>
+        <div className="about-toggle-row">
+          <label htmlFor="exp-actualmente">Actualmente trabajo aquí</label>
+          <button id="exp-actualmente" type="button" role="switch" aria-checked={editingExperienceEntry.actualmente} className={editingExperienceEntry.actualmente ? "about-toggle is-on" : "about-toggle"} onClick={() => updateExperience(editingExperienceEntry.id, { actualmente: !editingExperienceEntry.actualmente, hasta: !editingExperienceEntry.actualmente ? "Actualidad" : "" })}>
+            <span aria-hidden="true" />
+          </button>
+        </div>
+        <div className="experience-dates">
+          <div className="curriculum-field">
+            <label htmlFor="exp-inicio">Inicio</label>
+            <input id="exp-inicio" value={editingExperienceEntry.desde} onChange={(event) => updateExperience(editingExperienceEntry.id, { desde: event.target.value })} placeholder="Ej: 2022" />
+          </div>
+          <div className="curriculum-field">
+            <label htmlFor="exp-fin">Fin</label>
+            <input id="exp-fin" value={editingExperienceEntry.actualmente ? "Actualidad" : editingExperienceEntry.hasta} disabled={editingExperienceEntry.actualmente} onChange={(event) => updateExperience(editingExperienceEntry.id, { hasta: event.target.value })} placeholder="Ej: 2024" />
+          </div>
+        </div>
+        <div className="about-toggle-row">
+          <label htmlFor="exp-recomienda">Recomienda trabajar aquí</label>
+          <button id="exp-recomienda" type="button" role="switch" aria-checked={editingExperienceEntry.recomienda} className={editingExperienceEntry.recomienda ? "about-toggle is-on" : "about-toggle"} onClick={() => updateExperience(editingExperienceEntry.id, { recomienda: !editingExperienceEntry.recomienda })}>
+            <span aria-hidden="true" />
+          </button>
+        </div>
+        {([
+          ["Evaluación general de la empresa", "ratingGeneral"],
+          ["Ambiente de trabajo", "ratingAmbiente"],
+          ["Director general", "ratingDirector"],
+          ["Salario y prestaciones", "ratingSalario"],
+          ["Oportunidades de carrera", "ratingOportunidades"],
+        ] as const).map(([label, key]) => (
+          <div className="experience-rating" key={key}>
+            <span className="experience-rating-label">{label}</span>
+            <div className="experience-stars" role="group" aria-label={label}>
+              {[1, 2, 3, 4, 5].map((value) => (
+                <button key={value} type="button" className={editingExperienceEntry[key] >= value ? "experience-star is-active" : "experience-star"} aria-label={`${label}: ${value} de 5`} aria-pressed={editingExperienceEntry[key] >= value} onClick={() => updateExperience(editingExperienceEntry.id, { [key]: editingExperienceEntry[key] === value ? 0 : value })}>
+                  <Star aria-hidden="true" fill="currentColor" />
+                </button>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+      <footer className="experience-screen-foot">
+        {!experienceIsNew && <Button type="button" variant="ghost" className="experience-screen-delete" onClick={() => { edit({ experiences: draft.experiences.filter((row) => row.id !== editingExperienceEntry.id) }); closeExperience(); }}><Trash2 aria-hidden="true" />Quitar</Button>}
+        <Button type="button" className="experience-screen-save" disabled={busy} onClick={closeExperience}>{busy ? "Guardando…" : experienceIsNew ? "Añadir" : "Guardar"}</Button>
+      </footer>
     </div>}
 
     <AppBottomNav active="perfil" />

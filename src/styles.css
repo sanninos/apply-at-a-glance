@@ -707,3 +707,21 @@ nav .employment-nav-item, .employment-nav .employment-nav-item { position: relat
 .about-sheet-save:hover { background: color-mix(in oklab, var(--employment-blue) 88%, var(--primary)); }
 .curriculum-about .curriculum-missing { color: var(--muted-foreground); font-style: italic; }
 .curriculum-missing-hint { align-self: center; margin-right: auto; margin-left: 8px; padding: 3px 10px; border-radius: 999px; background: color-mix(in oklch, var(--employment-yellow) 22%, transparent); color: var(--employment-blue); font-size: 11px; font-weight: 600; white-space: nowrap; }
+.experience-screen { position: fixed; inset: 0; z-index: 60; display: flex; flex-direction: column; background: var(--background); }
+.experience-screen-head { position: relative; display: flex; align-items: center; justify-content: center; padding: 14px 16px; border-bottom: 1px solid var(--border); }
+.experience-screen-head h2 { font-size: 17px; font-weight: 600; }
+.experience-screen-back { position: absolute; left: 8px; top: 50%; transform: translateY(-50%); display: grid; place-items: center; width: 40px; height: 40px; border: 0; background: none; color: var(--foreground); cursor: pointer; }
+.experience-screen-back svg { width: 24px; height: 24px; }
+.experience-screen-body { flex: 1; overflow-y: auto; display: grid; gap: 22px; align-content: start; padding: 22px 20px 28px; }
+.experience-counter { justify-self: end; font-size: 12px; color: var(--muted-foreground); }
+.experience-dates { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.experience-rating { display: grid; gap: 10px; }
+.experience-rating-label { font-size: 14px; font-weight: 500; }
+.experience-stars { display: flex; gap: 14px; }
+.experience-star { display: grid; place-items: center; width: 36px; height: 36px; border: 0; background: none; color: var(--muted); cursor: pointer; }
+.experience-star svg { width: 30px; height: 30px; }
+.experience-star.is-active { color: var(--employment-yellow); }
+.experience-screen-foot { display: flex; gap: 10px; padding: 12px 20px calc(16px + env(safe-area-inset-bottom)); border-top: 1px solid var(--border); background: var(--background); }
+.experience-screen-save { flex: 1; height: 48px; border-radius: 999px; background: var(--employment-blue); color: var(--primary-foreground); font-size: 15px; font-weight: 600; }
+.experience-screen-save:hover { background: var(--employment-blue); opacity: 0.92; }
+.experience-screen-delete { color: var(--destructive); }

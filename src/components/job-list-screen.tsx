@@ -6,6 +6,9 @@ import { Input } from "@/components/ui/input";
 import { JobFilterPanel } from "@/components/job-filter-panel";
 import { AppBottomNav } from "@/components/app-bottom-nav";
 import { HomeAdvertisement } from "@/components/home-advertisement";
+import { JobPositionCategories } from "@/components/job-position-categories";
+import { positionsQueryOptions } from "@/lib/job-positions-query";
+import { useQuery } from "@tanstack/react-query";
 import { filterJobs, isUrgent, publishedAgo, publishedInLastDaysCount, searchSuggestions, type JobListItem, type JobListMode } from "@/lib/job-list";
 import { useEmployerLogo } from "@/hooks/use-employer-logo";
 import { cn } from "@/lib/utils";
@@ -25,6 +28,7 @@ export function JobListScreen({ jobs, variant = "home", categoryTitle }: { jobs:
   const isNew = (job: JobListItem) => newOffers ? isNewUnseenOffer(job, newOffers.seen, newOffers.now) : false;
   const isSearch = variant === "search";
   const isHome = variant === "home";
+  const positions = useQuery({ ...positionsQueryOptions, enabled: isHome });
   const [search, setSearch] = useState("");
   const [mode, setMode] = useState<JobListMode>("all");
   const [filtersOpen, setFiltersOpen] = useState(false);
@@ -72,6 +76,7 @@ export function JobListScreen({ jobs, variant = "home", categoryTitle }: { jobs:
         {tabs.map(({ id, label, icon: Icon, count }) => <Button key={id} role="tab" aria-selected={mode === id} variant="ghost" className={cn("employment-tab", mode === id && "selected")} onClick={() => setMode(id)}><Icon /><span>{label}</span>{count !== undefined && <span className="tab-count">{count}</span>}</Button>)}
       </div>}
     </header>
+    {isHome && positions.data && <JobPositionCategories positions={positions.data} jobs={jobs} />}
     {idle && <div className="search-idle"><Search aria-hidden="true" /><p>Escribí un puesto, empresa o ciudad para ver ofertas.</p></div>}
     {suggestions.length > 0 && <ul className="search-suggestions" aria-label="Sugerencias de búsqueda">{suggestions.map(title => <li key={title}><button type="button" onClick={() => setSearch(title)}><Search aria-hidden="true" /><span>{title}</span></button></li>)}</ul>}
     <section className="employment-list" aria-label="Empleos disponibles">

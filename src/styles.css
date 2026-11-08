@@ -377,6 +377,20 @@ body:has(.social-screen) { background: var(--muted); }
 .social-post { position: relative; scroll-snap-align: start; scroll-snap-stop: always; display: flex; flex-direction: column; flex: 0 0 calc(100% - 72px); overflow: hidden; border-radius: 22px; background: var(--primary); }
 .social-post:last-child { flex-basis: 100%; border-radius: 22px 22px 0 0; }
 .social-post:focus-visible { outline: 2px solid var(--employment-blue); outline-offset: -4px; }
+.social-post-tabs { position: relative; z-index: 3; display: grid; grid-template-columns: 1fr 1fr; flex-shrink: 0; gap: 4px; padding: 6px; background: var(--card); }
+.social-post-tabs button { height: 36px; border-radius: 18px; font-size: 12px; color: var(--muted-foreground); }
+.social-post-tabs button[aria-selected="true"] { background: var(--employment-blue); color: var(--primary-foreground); }
+.social-post-panel { position: relative; flex: 1; min-height: 0; overflow: hidden; }
+.social-poster-link { display: flex; position: relative; width: 100%; height: 100%; }
+.social-post-information { height: 100%; overflow-y: auto; scrollbar-width: none; padding: 20px 18px 130px; background: var(--card); color: var(--foreground); font-size: 13px; line-height: 1.65; overscroll-behavior: contain; }
+.social-post-information::-webkit-scrollbar { display: none; }
+.social-post-information h2 { font-size: 20px; line-height: 1.35; font-weight: 700; overflow-wrap: anywhere; margin-block: 8px; }
+.social-info-company { font-size: 11px; font-weight: 700; text-transform: uppercase; color: var(--employment-blue); }
+.social-info-time { color: var(--muted-foreground); font-size: 11px; margin-bottom: 18px; }
+.social-post-information section { margin-top: 18px; }
+.social-post-information h3 { font-size: 14px; font-weight: 700; margin-bottom: 6px; color: var(--employment-blue); }
+.social-post-information section p { white-space: pre-line; overflow-wrap: anywhere; }
+.social-post-information ul { padding-left: 18px; list-style: disc; }
 .social-poster-blur { position: absolute; inset: 0; z-index: 0; width: 100%; height: 100%; object-fit: cover; filter: blur(28px) saturate(135%) brightness(0.92); transform: scale(1.16); }
 .social-poster { position: relative; z-index: 1; flex: 1; min-height: 0; width: 100%; object-fit: contain; background: transparent; }
 .social-summary { position: absolute; left: 12px; right: 12px; bottom: 12px; z-index: 2; display: flex; align-items: center; gap: 10px; padding: 10px 12px; background: var(--card); border-radius: 22px; box-shadow: 0 10px 28px color-mix(in oklab, var(--primary) 38%, transparent), 0 2px 6px color-mix(in oklab, var(--primary) 22%, transparent); }

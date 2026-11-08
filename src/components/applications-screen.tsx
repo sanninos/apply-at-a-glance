@@ -7,7 +7,7 @@ import { AppBottomNav } from "@/components/app-bottom-nav";
 import { useAccessDialog } from "@/components/access-dialog";
 import { useAccess } from "@/components/access-provider";
 import { supabase } from "@/integrations/supabase/client";
-import { applicationCountLabel, applicationStatus, applicationTimeline, listApplications, type ApplicationItem, type ApplicationRow } from "@/lib/applications";
+import { applicationCountLabel, applicationStatus, applicationHistory, applicationTimeline, listApplications, type ApplicationItem, type ApplicationRow } from "@/lib/applications";
 import { publishedAgo } from "@/lib/job-list";
 import { useEmployerLogo } from "@/hooks/use-employer-logo";
 import { cn } from "@/lib/utils";
@@ -26,7 +26,7 @@ export function ApplicationsScreen() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("postulaciones")
-        .select("id, estado, created_at, job_id, JobsDetails(id, titulo, Empresa, ubicacion, ciudad, fotoEmpresa, image, tipoContrato, estado_postulacion, isLlamado)")
+        .select("id, estado, created_at, job_id, JobsDetails(id, titulo, Empresa, ubicacion, ciudad, fotoEmpresa, image, tipoContrato, estado_postulacion, isLlamado), postulaciones_historial(estado, changed_at)")
         .order("created_at", { ascending: false });
       if (error) throw new Error(error.message);
       return listApplications((data ?? []) as unknown as ApplicationRow[]);
@@ -103,6 +103,10 @@ export function ApplicationsScreen() {
             </li>
           ))}
         </ol>
+        {applicationHistory(selected).length > 0 && <div className="application-history">
+          <h3>Historial de cambios</h3>
+          <ul>{applicationHistory(selected).map((h, i) => <li key={i}><span>{h.label}</span><time dateTime={h.changedAt}>{new Date(h.changedAt).toLocaleString("es-UY", { day: "numeric", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit" })}</time></li>)}</ul>
+        </div>}
         <Button asChild className="application-timeline-link"><Link to="/llamado/$jobId" params={{ jobId: String(selected.jobId) }} onClick={() => setSelected(null)}>Ver la oferta</Link></Button>
       </section>
     </div>}

@@ -782,6 +782,18 @@ nav .employment-nav-item, .employment-nav .employment-nav-item { position: relat
 .similar-job-card:first-child { margin-left: 1.25rem; }
 .similar-job-card:last-child { margin-right: 1.25rem; }
 
+/* Loading placeholders: same shape as the cards they replace, with a soft glow */
+.skeleton { display: block; position: relative; overflow: hidden; border-radius: 999px; background: color-mix(in oklab, var(--employment-blue) 8%, var(--card)); }
+.skeleton::after { content: ""; position: absolute; inset: 0; transform: translateX(-100%); background: linear-gradient(90deg, transparent, color-mix(in oklab, var(--employment-blue) 22%, transparent), transparent); animation: skeleton-shine 1.5s ease-in-out infinite; }
+@keyframes skeleton-shine { 100% { transform: translateX(100%); } }
+@media (prefers-reduced-motion: reduce) { .skeleton::after { animation: none; } }
+.skeleton-fill { width: 100%; height: 100%; border-radius: inherit; }
+.job-card-skeleton { pointer-events: none; }
+.job-card-skeleton .employment-company, .job-card-skeleton .employment-description { margin: 0; }
+.job-card-skeleton h2 { margin: 6px 0; }
+.job-card-skeleton .employment-copy { display: grid; gap: 6px; align-content: center; }
+.job-card-skeleton .location-chip, .job-card-skeleton .date-chip { justify-content: flex-start; }
+
 .recent-searches { margin: 4px 0 16px; }
 .recent-searches > header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
 .recent-searches h2 { font-size: 14px; font-weight: 700; color: var(--foreground); }

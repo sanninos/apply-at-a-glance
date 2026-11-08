@@ -2,6 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { publishedAgo } from "@/lib/job-list";
+import { SimilarJobsSkeleton } from "@/components/job-card-skeleton";
 
 type SimilarJob = { id: number; titulo: string | null; Empresa: string | null; ubicacion: string | null; ciudad: string | null; created_at: string };
 
@@ -24,6 +25,7 @@ export function SimilarJobs({ jobId, puesto }: { jobId: number; puesto: string |
       return (data ?? []) as SimilarJob[];
     },
   });
+  if (name && similar.isPending) return <SimilarJobsSkeleton count={4} />;
   if (!similar.data?.length) return null;
   return <section className="mt-6" aria-labelledby="similar-jobs-title">
     <h2 id="similar-jobs-title" className="font-bold text-foreground mb-3 mx-5">Empleos similares</h2>

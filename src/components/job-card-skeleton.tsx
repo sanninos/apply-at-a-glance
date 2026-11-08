@@ -18,8 +18,8 @@ export function JobCardSkeleton() {
       <span className="employment-arrow" />
     </div>
     <div className="employment-meta">
-      <span className="location-chip"><Line width="58px" height={10} /></span>
-      <span className="date-chip"><Line width="62px" height={10} /></span>
+      <span className="location-chip skeleton" style={{ width: "46%", height: 26 }} />
+      <span className="date-chip skeleton" style={{ width: 92, height: 26 }} />
     </div>
   </div>;
 }

@@ -792,7 +792,7 @@ nav .employment-nav-item, .employment-nav .employment-nav-item { position: relat
 .job-card-skeleton .employment-company, .job-card-skeleton .employment-description { margin: 0; }
 .job-card-skeleton h2 { margin: 6px 0; }
 .job-card-skeleton .employment-copy { display: grid; gap: 6px; align-content: center; }
-.job-card-skeleton .location-chip, .job-card-skeleton .date-chip { justify-content: flex-start; }
+.job-card-skeleton .location-chip, .job-card-skeleton .date-chip { padding: 0; max-width: none; }
 
 .recent-searches { margin: 4px 0 16px; }
 .recent-searches > header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }

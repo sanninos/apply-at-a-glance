@@ -9,6 +9,7 @@ import { AppBottomNav } from "@/components/app-bottom-nav";
 import { useEmployerLogo } from "@/hooks/use-employer-logo";
 import { publishedAgo } from "@/lib/job-list";
 import { markPosterSeen, recordSocialPosterIds } from "@/lib/social-badge";
+import { SocialQuickActions } from "@/components/social-quick-actions";
 import type { SocialPost } from "@/lib/social-posts";
 
 export function SocialScreen({ posts }: { posts: SocialPost[] }) {
@@ -118,6 +119,7 @@ function SocialPostCard({
           {Boolean(detail.data?.requisitos?.length) && <section><h3>Requisitos</h3><ul>{detail.data?.requisitos?.map((item, index) => <li key={index}>{item}</li>)}</ul></section>}
           {Boolean(detail.data?.empleabilidad?.length) && <section><h3>Beneficios</h3><ul>{detail.data?.empleabilidad?.map((item, index) => <li key={index}>{item}</li>)}</ul></section>}
         </>}
+        <SocialQuickActions jobId={post.id} />
       </div>}
       <Link to="/llamado/$jobId" params={{ jobId: String(post.id) }} preload="intent" preloadDelay={0} className="social-summary">
         <div className="job-logo">

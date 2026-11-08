@@ -51,3 +51,5 @@
 - [x] Corregir el desborde horizontal que apareció al mover la sección de puestos dentro de la lista (tarjetas cortadas a la derecha); scrollWidth vuelve a 420 en teléfono.
 - [x] Home «Explorá por puesto» y /puestos: chip con la cantidad de empleos por categoría («12 empleos», «1 empleo»); sin ofertas queda atenuada con «Sin ofertas»; 5 pruebas pasan y verificado en el navegador.
 - [x] Home: quitar el encabezado de la sección de puestos (título «Explorá por puesto» + enlace «Ver todos»).
+- [ ] Connect Android Google account picker to Supabase and test nonce exchange/cancellation without browser navigation.
+- [ ] Verify native Google sign-in on a device; requires rebuilt Android app, Google signing-certificate setup and a real Google account.

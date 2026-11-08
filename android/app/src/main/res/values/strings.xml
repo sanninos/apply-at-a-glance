@@ -4,4 +4,5 @@
     <string name="title_activity_main">UruJobs</string>
     <string name="package_name">uy.com.urujobs</string>
     <string name="custom_url_scheme">uy.com.urujobs</string>
+    <string name="google_web_client_id" translatable="false">813244036156-3ekdfa8up7oi9orcvl60gl4pkmthdbtk.apps.googleusercontent.com</string>
 </resources>

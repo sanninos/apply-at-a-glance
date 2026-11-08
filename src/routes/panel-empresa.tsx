@@ -68,6 +68,6 @@ function CompanyPanel() {
         </select>
       </div>)}
     </section>)}
-    <AppBottomNav />
+    <AppBottomNav active="perfil" />
   </main>;
 }

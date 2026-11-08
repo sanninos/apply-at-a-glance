@@ -775,3 +775,12 @@ nav .employment-nav-item, .employment-nav .employment-nav-item { position: relat
 .profile-account-type button span { font-size: 0.75rem; color: var(--muted-foreground); }
 .profile-account-type button.is-active { border-color: var(--employment-blue); background: var(--employment-surface); box-shadow: inset 0 0 0 1px var(--employment-blue); }
 .profile-account-type button:disabled { opacity: 0.7; }
+
+.similar-jobs-track { display: flex; gap: 0.75rem; overflow-x: auto; padding: 0 1.25rem 0.25rem; scroll-snap-type: x mandatory; scrollbar-width: none; }
+.similar-jobs-track::-webkit-scrollbar { display: none; }
+.similar-job-card { flex: 0 0 78%; scroll-snap-align: start; display: flex; flex-direction: column; gap: 0.25rem; padding: 0.9rem 1rem; border-radius: 1rem; border: 1px solid var(--employment-card-border); background: var(--card); color: var(--foreground); }
+.similar-job-card h3 { font-weight: 700; font-size: 0.95rem; line-height: 1.25; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.similar-job-company { font-size: 0.8rem; color: var(--employment-blue); font-weight: 600; }
+.similar-job-meta, .similar-job-time { font-size: 0.75rem; color: var(--muted-foreground); }
+.similar-job-card:first-child { margin-left: 1.25rem; }
+.similar-job-card:last-child { margin-right: 1.25rem; }

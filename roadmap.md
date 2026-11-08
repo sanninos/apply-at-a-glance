@@ -44,3 +44,5 @@
 - [ ] Editar curriculum: botón para importar PDF/DOC y rellenar los campos automáticamente con extracción por IA.
 - [x] Educación: pantalla completa de edición como la de Experiencias; 15 pruebas pasan.
 - [ ] Detalle de oferta: sección para ver la portada del trabajo cuando existe.
+- [x] Editar curriculum: botón importar PDF/Word con extracción por IA; gateway verificado en vivo con PDF real, fusión con 2 pruebas nuevas (17 en total).
+- [ ] Mis postulaciones: drawer con línea de tiempo del proceso de la oferta postulada.

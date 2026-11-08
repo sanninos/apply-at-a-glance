@@ -24,6 +24,9 @@ import { useSavedOffer } from '@/hooks/use-saved-offer';
 import { Button } from '@/components/ui/button';
 import { SimilarJobs } from '@/components/similar-jobs';
 import { markJobViewed } from '@/lib/new-job-offers';
+import { APPLICATION_MESSAGE_MAX, jobShareText, whatsappShareUrl } from '@/lib/share-job';
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Textarea } from '@/components/ui/textarea';
 
 export const Route = createFileRoute("/llamado/$jobId")({
   loader: ({ params, context }) =>
@@ -109,17 +112,43 @@ function JobDetail() {
     },
   });
   const status = existing.data ? applicationStatus(existing.data.estado) : null;
-  async function apply() {
+  const [confirmOpen, setConfirmOpen] = useState(false);
+  const [mensaje, setMensaje] = useState("");
+  const cv = useQuery({
+    queryKey: ["curriculum-snapshot", user?.id],
+    enabled: confirmOpen && Boolean(user),
+    queryFn: async () => {
+      const { data, error } = await supabase.from("curriculums").select("*").eq("user_id", user!.id).maybeSingle();
+      if (error) throw error;
+      return data;
+    },
+  });
+  function apply() {
     if (!user) {
       openAccess();
       return;
     }
+    setApplyError("");
+    setConfirmOpen(true);
+  }
+  async function confirmApply() {
+    if (!user) return;
     setBusy(true);
     setApplyError("");
-    const { error } = await supabase
-      .from("postulaciones")
-      .upsert({ user_id: user.id, job_id: Number(jobId) }, { onConflict: "user_id,job_id", ignoreDuplicates: true });
+    let snapshot = cv.data ?? null;
+    if (!cv.isSuccess) {
+      const res = await supabase.from("curriculums").select("*").eq("user_id", user.id).maybeSingle();
+      snapshot = res.data ?? null;
+    }
+    if (snapshot) {
+      const { id: _id, user_id: _u, created_at: _c, ...rest } = snapshot as Record<string, unknown>;
+      snapshot = rest as typeof snapshot;
+    }
+    const text = mensaje.trim().slice(0, APPLICATION_MESSAGE_MAX);
+    const { error } = await (supabase.from("postulaciones") as any)
+      .upsert({ user_id: user.id, job_id: Number(jobId), mensaje: text || null, cv_snapshot: snapshot }, { onConflict: "user_id,job_id", ignoreDuplicates: true });
     setBusy(false);
+    setConfirmOpen(false);
     if (error) {
       setApplyError("No pudimos registrar tu postulación. Intentá nuevamente.");
       return;
@@ -140,14 +169,10 @@ function JobDetail() {
 
   async function shareJob() {
     const url = window.location.href;
-    const title = job.titulo || "Llamado laboral";
+    const text = jobShareText({ titulo: job.titulo, empresa: job.empresa, lugar: job.ubicacion || job.ciudad }, url);
     try {
-      if (typeof navigator.share === "function") {
-        await navigator.share({ title, url });
-        return;
-      }
-      await navigator.clipboard.writeText(url);
-      flash("Enlace copiado");
+      window.open(whatsappShareUrl(text), "_blank", "noopener");
+      flash("Abriendo WhatsApp…");
     } catch (error) {
       if (error instanceof DOMException && error.name === "AbortError") return;
       flash("No pudimos copiar el enlace");
@@ -335,6 +360,25 @@ function JobDetail() {
             </button>
           </div>
           {applyError && <p className="text-sm text-destructive" role="alert">{applyError}</p>}
+          <Dialog open={confirmOpen} onOpenChange={(o) => !busy && setConfirmOpen(o)}>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Confirmar postulación</DialogTitle>
+                <DialogDescription>
+                  {cv.isPending ? "Revisando tu currículum…" : cv.data ? "Se adjuntará tu currículum actual de URUJOBS." : "Todavía no cargaste tu currículum: la empresa solo verá tu nombre."}
+                </DialogDescription>
+              </DialogHeader>
+              {!cv.isPending && !cv.data && <Link to="/editar-curriculum" className="text-sm text-primary underline">Completar mi currículum</Link>}
+              <label className="grid gap-1 text-sm">Mensaje para la empresa (opcional)
+                <Textarea value={mensaje} maxLength={APPLICATION_MESSAGE_MAX} rows={4} placeholder="Contá en pocas palabras por qué sos ideal para este puesto." onChange={(e) => setMensaje(e.target.value)} />
+                <span className="text-xs text-muted-foreground text-right">{mensaje.length}/{APPLICATION_MESSAGE_MAX}</span>
+              </label>
+              <DialogFooter>
+                <Button variant="outline" disabled={busy} onClick={() => setConfirmOpen(false)}>Cancelar</Button>
+                <Button disabled={busy || cv.isPending} onClick={() => void confirmApply()}>{busy ? "Enviando…" : "Enviar postulación"}</Button>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
           {savedOffer.error && <p className="text-sm text-destructive" role="alert">{savedOffer.error}</p>}
         </footer>
       </div>

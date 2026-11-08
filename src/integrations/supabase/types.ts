@@ -692,6 +692,41 @@ export type Database = {
           },
         ]
       }
+      postulaciones_historial: {
+        Row: {
+          changed_at: string
+          estado: string
+          id: string
+          job_id: number
+          postulacion_id: string
+          user_id: string
+        }
+        Insert: {
+          changed_at?: string
+          estado: string
+          id?: string
+          job_id: number
+          postulacion_id: string
+          user_id: string
+        }
+        Update: {
+          changed_at?: string
+          estado?: string
+          id?: string
+          job_id?: number
+          postulacion_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "postulaciones_historial_postulacion_id_fkey"
+            columns: ["postulacion_id"]
+            isOneToOne: false
+            referencedRelation: "postulaciones"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           created_at: string

@@ -784,3 +784,24 @@ nav .employment-nav-item, .employment-nav .employment-nav-item { position: relat
 .similar-job-meta, .similar-job-time { font-size: 0.75rem; color: var(--muted-foreground); }
 .similar-job-card:first-child { margin-left: 1.25rem; }
 .similar-job-card:last-child { margin-right: 1.25rem; }
+
+.recent-searches { margin: 4px 0 16px; }
+.recent-searches > header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+.recent-searches h2 { font-size: 14px; font-weight: 700; color: var(--foreground); }
+.recent-searches > header button { font-size: 12px; color: var(--employment-blue); font-weight: 600; }
+.recent-searches ul { display: flex; flex-wrap: wrap; gap: 8px; }
+.recent-chip { display: inline-flex; align-items: center; border-radius: 999px; border: 1px solid var(--employment-card-border); background: var(--card); color: var(--foreground); font-size: 13px; }
+.recent-chip button:first-child { padding: 6px 4px 6px 12px; }
+.recent-chip button:last-child { display: grid; place-items: center; padding: 6px 10px 6px 4px; color: var(--muted-foreground); }
+.recent-chip svg { width: 14px; height: 14px; }
+
+/* Home position rail: colored top band with a round icon badge, like the reference cards */
+.position-category-rail { grid-auto-columns: 112px; gap: 10px; padding: 26px 2px 8px; }
+.position-category-rail .position-category { position: relative; padding: 0 0 12px; gap: 0; border-radius: 18px; overflow: visible; box-shadow: var(--employment-shadow); }
+.position-category-rail .position-category::before { content: ""; display: block; width: 100%; height: 52px; border-radius: 17px 17px 0 0; background: var(--band, color-mix(in oklab, var(--employment-blue) 35%, var(--card))); }
+.position-category-rail .position-category:nth-child(4n+2) { --band: color-mix(in oklab, var(--employment-yellow) 55%, var(--card)); }
+.position-category-rail .position-category:nth-child(4n+3) { --band: color-mix(in oklab, var(--employment-orange) 45%, var(--card)); }
+.position-category-rail .position-category:nth-child(4n+4) { --band: color-mix(in oklab, var(--employment-blue) 18%, var(--card)); }
+.position-category-rail .position-icon { position: absolute; top: -22px; left: 50%; transform: translateX(-50%); width: 56px; height: 56px; border-radius: 999px; background: var(--card); display: grid; place-items: center; box-shadow: var(--employment-shadow); }
+.position-category-rail .position-icon img, .position-category-rail .position-icon svg { width: 34px; height: 34px; object-fit: contain; color: var(--employment-blue); }
+.position-category-rail .position-category > span:last-child { padding: 10px 8px 0; font-size: 13px; font-weight: 700; text-align: center; line-height: 1.2; }

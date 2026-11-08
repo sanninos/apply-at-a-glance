@@ -7,6 +7,7 @@ import { JobFilterPanel } from "@/components/job-filter-panel";
 import { AppBottomNav } from "@/components/app-bottom-nav";
 import { HomeAdvertisement } from "@/components/home-advertisement";
 import { JobPositionCategories } from "@/components/job-position-categories";
+import { addRecent, loadRecent, storeRecent } from "@/lib/recent-searches";
 import { positionsQueryOptions } from "@/lib/job-positions-query";
 import { useQuery } from "@tanstack/react-query";
 import { filterJobs, isUrgent, publishedAgo, publishedInLastDaysCount, searchSuggestions, type JobListItem, type JobListMode } from "@/lib/job-list";
@@ -30,6 +31,10 @@ export function JobListScreen({ jobs, variant = "home", categoryTitle }: { jobs:
   const isHome = variant === "home";
   const positions = useQuery({ ...positionsQueryOptions, enabled: isHome });
   const [search, setSearch] = useState("");
+  const [recent, setRecent] = useState<string[]>([]);
+  useEffect(() => { if (isSearch) setRecent(loadRecent()); }, [isSearch]);
+  const updateRecent = (next: string[]) => { setRecent(next); storeRecent(next); };
+  const remember = (term: string) => { if (isSearch) updateRecent(addRecent(loadRecent(), term)); };
   const [mode, setMode] = useState<JobListMode>("all");
   const [filtersOpen, setFiltersOpen] = useState(false);
   const [location, setLocation] = useState("");
@@ -68,7 +73,7 @@ export function JobListScreen({ jobs, variant = "home", categoryTitle }: { jobs:
       <div className="employment-search-row">
         {!isHome && <Button variant="ghost" size="icon" className="search-back" aria-label="Volver" onClick={() => (window.history.length > 1 ? router.history.back() : router.navigate({ to: isSearch ? "/" : "/puestos" }))}><ArrowLeft /></Button>}
         {!isHome
-          ? <div className="employment-search"><Search aria-hidden="true" /><Input autoFocus={isSearch} type="search" aria-label="Buscar un puesto de trabajo" placeholder={categoryTitle ? "Buscar en este puesto" : "Busca un puesto de trabajo"} value={search} onChange={event => setSearch(event.target.value)} />{search && <Button variant="ghost" size="icon" className="search-clear" aria-label="Borrar búsqueda" onClick={() => setSearch("")}><X /></Button>}</div>
+          ? <div className="employment-search"><Search aria-hidden="true" /><Input autoFocus={isSearch} type="search" aria-label="Buscar un puesto de trabajo" placeholder={categoryTitle ? "Buscar en este puesto" : "Busca un puesto de trabajo"} value={search} onChange={event => setSearch(event.target.value)} onKeyDown={event => { if (event.key === "Enter") remember(search); }} />{search && <Button variant="ghost" size="icon" className="search-clear" aria-label="Borrar búsqueda" onClick={() => setSearch("")}><X /></Button>}</div>
           : <Link to="/buscar" preload="intent" preloadDelay={0} className="employment-search employment-search-link" aria-label="Buscar un puesto de trabajo"><Search aria-hidden="true" /><span>Busca un puesto de trabajo</span></Link>}
         <Button variant="outline" size="icon" className={cn("employment-filter", (location || contract) && "filter-active")} aria-label="Filtrar empleos" title="Filtrar empleos" onClick={() => setFiltersOpen(true)}><SlidersHorizontal /></Button>
       </div>
@@ -77,10 +82,14 @@ export function JobListScreen({ jobs, variant = "home", categoryTitle }: { jobs:
       </div>}
     </header>
     {isHome && positions.data && <JobPositionCategories positions={positions.data} jobs={jobs} />}
+    {idle && recent.length > 0 && <section className="recent-searches" aria-labelledby="recent-searches-title">
+      <header><h2 id="recent-searches-title">Búsquedas recientes</h2><button type="button" onClick={() => updateRecent([])}>Borrar todo</button></header>
+      <ul>{recent.map(term => <li key={term} className="recent-chip"><button type="button" onClick={() => { setSearch(term); remember(term); }}>{term}</button><button type="button" aria-label={`Borrar ${term}`} onClick={() => updateRecent(recent.filter(x => x !== term))}><X aria-hidden="true" /></button></li>)}</ul>
+    </section>}
     {idle && <div className="search-idle"><Search aria-hidden="true" /><p>Escribí un puesto, empresa o ciudad para ver ofertas.</p></div>}
-    {suggestions.length > 0 && <ul className="search-suggestions" aria-label="Sugerencias de búsqueda">{suggestions.map(title => <li key={title}><button type="button" onClick={() => setSearch(title)}><Search aria-hidden="true" /><span>{title}</span></button></li>)}</ul>}
+    {suggestions.length > 0 && <ul className="search-suggestions" aria-label="Sugerencias de búsqueda">{suggestions.map(title => <li key={title}><button type="button" onClick={() => { setSearch(title); remember(title); }}><Search aria-hidden="true" /><span>{title}</span></button></li>)}</ul>}
     <section className="employment-list" aria-label="Empleos disponibles">
-      {shown.map(job => <Link className={cn("employment-card", job.isFeatured && "featured", isUrgent(job) && "urgent")} key={job.id} to="/llamado/$jobId" params={{ jobId: String(job.id) }} preload="intent" preloadDelay={0}>
+      {shown.map(job => <Link className={cn("employment-card", job.isFeatured && "featured", isUrgent(job) && "urgent")} key={job.id} to="/llamado/$jobId" params={{ jobId: String(job.id) }} preload="intent" preloadDelay={0} onClick={() => remember(search)}>
         <div className="employment-card-main"><EmployerLogo job={job} /><div className="employment-copy"><p className="employment-company">{job.Empresa || "Empresa"}</p><h2>{job.titulo || "Oferta de empleo"}</h2><p className="employment-description">{job.descripcion}</p></div><span className="employment-arrow"><ChevronRight aria-hidden="true" /></span></div>
         <div className="employment-meta"><span className="location-chip"><span className="location-pin" aria-hidden="true">📍</span><span>{job.ubicacion || job.ciudad || "Uruguay"}</span></span><span className="date-chip"><Clock aria-hidden="true" />{publishedAgo(job.created_at)}</span></div>
         {(job.isLlamado || job.isFeatured || isUrgent(job) || isNew(job)) && <div className="employment-badges">{isNew(job) && <span className="new-offer-badge">Nuevo</span>}{job.isLlamado && <span className="llamado-badge">Llamado público</span>}{job.isFeatured && <span>Destacada</span>}{isUrgent(job) && <span>Urgente</span>}</div>}

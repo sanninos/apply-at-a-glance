@@ -131,7 +131,7 @@ function base64ToBytes(base64: string): Uint8Array {
 /** Best-effort text scan for legacy .doc binaries: keeps printable runs. */
 function extractLegacyDocText(bytes: Uint8Array): string {
   let text = "";
-  for (let i = 0; i < bytes.length; i += 1) text += String.fromCharCode(bytes[i]);
+  for (let i = 0; i < bytes.length; i += 1) text += String.fromCharCode(bytes[i] ?? 0);
   const runs = text.match(/[\x20-\x7EáéíóúÁÉÍÓÚñÑüÜ¿¡°]{4,}/g) ?? [];
   return runs.join("\n").slice(0, 30000);
 }

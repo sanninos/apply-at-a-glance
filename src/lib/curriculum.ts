@@ -320,8 +320,25 @@ export type ImportedCurriculumData = {
   nationality?: string | null;
   summary?: string | null;
   skills?: string | null;
-  experiences?: Partial<ExperienceDraft>[] | null;
-  education?: Partial<EducationDraft>[] | null;
+  experiences?: ({
+    puesto?: string | null;
+    empresa?: string | null;
+    desde?: string | null;
+    hasta?: string | null;
+    descripcion?: string | null;
+    lugar?: string | null;
+    actualmente?: boolean | null;
+  } | null)[] | null;
+  education?: ({
+    nivel?: string | null;
+    titulo?: string | null;
+    institucion?: string | null;
+    desde?: string | null;
+    hasta?: string | null;
+    descripcion?: string | null;
+    lugar?: string | null;
+    actualmente?: boolean | null;
+  } | null)[] | null;
 };
 
 function pick(imported: string | null | undefined, current: string): string {

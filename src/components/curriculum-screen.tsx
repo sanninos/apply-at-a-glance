@@ -1,12 +1,14 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useRef, useState } from "react";
-import { Cake, Camera, Check, ChevronLeft, GraduationCap, Lightbulb, LogIn, Mail, Pencil, Plus, RefreshCw, Smartphone, Star, Trash2, User, X } from "lucide-react";
+import { Cake, Camera, Check, ChevronLeft, FileUp, Lightbulb, LogIn, Mail, Pencil, Plus, RefreshCw, Smartphone, Star, Trash2, User, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { AppBottomNav } from "@/components/app-bottom-nav";
 import { useAccessDialog } from "@/components/access-dialog";
 import { useAccess } from "@/components/access-provider";
 import { supabase } from "@/integrations/supabase/client";
+import { importCurriculumFile } from "@/lib/curriculum-import.functions";
 import {
+  applyImportedCurriculum,
   curriculumPayload,
   emptyCurriculum,
   emptyEducation,
@@ -14,6 +16,7 @@ import {
   toCurriculumDraft,
   type CurriculumDraft,
   type CurriculumRow,
+  type EducationDraft,
   type ExperienceDraft,
 } from "@/lib/curriculum";
 
@@ -36,6 +39,10 @@ function AccountCurriculumScreen() {
   const [editingExperience, setEditingExperience] = useState<string | null>(null);
   const [experienceIsNew, setExperienceIsNew] = useState(false);
   const [editingEducation, setEditingEducation] = useState<string | null>(null);
+  const [educationIsNew, setEducationIsNew] = useState(false);
+  const [importing, setImporting] = useState(false);
+  const [importMessage, setImportMessage] = useState("");
+  const importInput = useRef<HTMLInputElement | null>(null);
   const [initialized, setInitialized] = useState(false);
   const dirty = useRef(false);
   const saving = useRef(false);
@@ -82,7 +89,29 @@ function AccountCurriculumScreen() {
     void save();
   }
 
+  function openEducation(id?: string) {
+    if (id) {
+      setEducationIsNew(false);
+      setEditingEducation(id);
+      return;
+    }
+    const entry = emptyEducation();
+    edit({ education: [...draft.education, entry] });
+    setEducationIsNew(true);
+    setEditingEducation(entry.id);
+  }
+
+  function updateEducation(id: string, patch: Partial<EducationDraft>) {
+    edit({ education: draft.education.map((row) => (row.id === id ? { ...row, ...patch } : row)) });
+  }
+
+  function closeEducation() {
+    setEditingEducation(null);
+    void save();
+  }
+
   const editingExperienceEntry = editingExperience ? draft.experiences.find((entry) => entry.id === editingExperience) ?? null : null;
+  const editingEducationEntry = editingEducation ? draft.education.find((entry) => entry.id === editingEducation) ?? null : null;
 
   const signedIn = ready && Boolean(user);
   // Seed the draft once from the stored curriculum; a stored row with entries
@@ -126,6 +155,26 @@ function AccountCurriculumScreen() {
     }
   }
 
+  async function handleImportFile(file: File) {
+    setImporting(true);
+    setImportMessage("");
+    try {
+      const buffer = await file.arrayBuffer();
+      let binary = "";
+      const bytes = new Uint8Array(buffer);
+      const chunk = 0x8000;
+      for (let i = 0; i < bytes.length; i += chunk) binary += String.fromCharCode(...bytes.subarray(i, i + chunk));
+      const imported = await importCurriculumFile({ data: { fileName: file.name, mimeType: file.type, base64: btoa(binary) } });
+      edit(applyImportedCurriculum(draft, imported));
+      setImportMessage("Listo: completamos los campos con los datos de tu currículum. Revisalos antes de seguir.");
+    } catch (cause) {
+      setImportMessage(cause instanceof Error ? cause.message : "No pudimos importar el archivo.");
+    } finally {
+      setImporting(false);
+      if (importInput.current) importInput.current.value = "";
+    }
+  }
+
   flush.current = () => { void save(); };
   useEffect(() => {
     if (!initialized || busy || !dirty.current || lastAttempt.current === version.current) return;
@@ -161,6 +210,14 @@ function AccountCurriculumScreen() {
     </section>}
 
     {signedIn && initialized && !curriculum.isError && <form className="curriculum-form" onBlur={() => { if (lastAttempt.current !== version.current) void save(); }} onSubmit={(event) => { event.preventDefault(); void save(); }}>
+      <input ref={importInput} type="file" accept=".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document" className="curriculum-import-input" aria-hidden="true" tabIndex={-1} onChange={(event) => { const file = event.target.files?.[0]; if (file) void handleImportFile(file); }} />
+      <section className="curriculum-import">
+        <Button type="button" variant="outline" className="curriculum-import-button" disabled={importing} onClick={() => importInput.current?.click()}>
+          <FileUp aria-hidden="true" />{importing ? "Analizando tu currículum…" : "Importar currículum (PDF o Word)"}
+        </Button>
+        <p className="curriculum-import-hint">Completamos los campos automáticamente con los datos del archivo.</p>
+        {importMessage && <p className="curriculum-import-message" role="status">{importMessage}</p>}
+      </section>
       <fieldset className="curriculum-fields">
       <section className="curriculum-block">
         <div className="curriculum-section-head"><h2 className="curriculum-block-title">SOBRE TI</h2>
@@ -195,26 +252,13 @@ function AccountCurriculumScreen() {
       </section>
 
       <section className="curriculum-block">
-        <div className="curriculum-section-head"><h2 className="curriculum-block-title">EDUCACIÓN</h2><GraduationCap aria-hidden="true" /></div>
+        <div className="curriculum-section-head"><h2 className="curriculum-block-title">EDUCACIÓN</h2><Button type="button" variant="ghost" size="icon" title="Añadir educación" aria-label="Añadir educación" onClick={() => openEducation()}><Plus /></Button></div>
         {draft.education.map((entry, index) => (
-          (entry.titulo || entry.institucion || entry.desde || entry.hasta || editingEducation === entry.id) && <div className="curriculum-entry" key={entry.id}>
-            {editingEducation !== entry.id && <div className="curriculum-item-summary"><span className="curriculum-timeline-dot" /><div><h3>{entry.titulo || "Educación"}{entry.institucion && ` · ${entry.institucion}`}</h3><p>{[entry.desde, entry.hasta].filter(Boolean).join(" - ")}</p></div><Button type="button" variant="ghost" size="icon" title="Editar educación" aria-label={`Editar educación ${index + 1}`} onClick={() => setEditingEducation(entry.id)}><Pencil /></Button></div>}
-            {editingEducation === entry.id && <div className="curriculum-editor"><div className="curriculum-entry-head">
-              <span className="curriculum-entry-label"><GraduationCap aria-hidden="true" />Educación {index + 1}</span>
-              <Button variant="ghost" size="icon" type="button" className="curriculum-remove" aria-label={`Quitar educación ${index + 1}`} onClick={() => edit({ education: draft.education.filter((row) => row.id !== entry.id) })}>
-                <Trash2 aria-hidden="true" />
-              </Button>
-            </div>
-            <div className="curriculum-grid-2">
-              <div className="curriculum-field"><label htmlFor={`cv-edu-titulo-${index}`}>Título</label><input id={`cv-edu-titulo-${index}`} value={entry.titulo} onChange={(event) => edit({ education: draft.education.map((row) => row.id === entry.id ? { ...row, titulo: event.target.value } : row) })} /></div>
-              <div className="curriculum-field"><label htmlFor={`cv-edu-institucion-${index}`}>Institución</label><input id={`cv-edu-institucion-${index}`} value={entry.institucion} onChange={(event) => edit({ education: draft.education.map((row) => row.id === entry.id ? { ...row, institucion: event.target.value } : row) })} /></div>
-              <div className="curriculum-field"><label htmlFor={`cv-edu-desde-${index}`}>Desde</label><input id={`cv-edu-desde-${index}`} value={entry.desde} onChange={(event) => edit({ education: draft.education.map((row) => row.id === entry.id ? { ...row, desde: event.target.value } : row) })} placeholder="Ej: 2018" /></div>
-              <div className="curriculum-field"><label htmlFor={`cv-edu-hasta-${index}`}>Hasta</label><input id={`cv-edu-hasta-${index}`} value={entry.hasta} onChange={(event) => edit({ education: draft.education.map((row) => row.id === entry.id ? { ...row, hasta: event.target.value } : row) })} placeholder="Ej: 2021" /></div>
-            </div>
-            <Button type="button" variant="ghost" className="curriculum-done" onClick={() => setEditingEducation(null)}><Check />Listo</Button></div>}
+          (entry.nivel || entry.titulo || entry.institucion || entry.desde || entry.hasta || entry.descripcion || entry.lugar) && <div className="curriculum-entry" key={entry.id}>
+            <div className="curriculum-item-summary"><span className="curriculum-timeline-dot" /><div><h3>{entry.titulo || entry.nivel || "Educación"}{entry.institucion && ` · ${entry.institucion}`}</h3><p>{[entry.desde, entry.actualmente ? "Actualidad" : entry.hasta].filter(Boolean).join(" - ")}</p></div><Button type="button" variant="ghost" size="icon" title="Editar educación" aria-label={`Editar educación ${index + 1}`} onClick={() => openEducation(entry.id)}><Pencil /></Button></div>
           </div>
         ))}
-        <Button type="button" variant="ghost" className="curriculum-add" onClick={() => { const entry = emptyEducation(); edit({ education: [...draft.education, entry] }); setEditingEducation(entry.id); }}>Añadir educación</Button>
+        <Button type="button" variant="ghost" className="curriculum-add" onClick={() => openEducation()}>Añadir educación</Button>
       </section>
 
       <section className="curriculum-block">
@@ -402,6 +446,64 @@ function AccountCurriculumScreen() {
       <footer className="experience-screen-foot">
         {!experienceIsNew && <Button type="button" variant="ghost" className="experience-screen-delete" onClick={() => { edit({ experiences: draft.experiences.filter((row) => row.id !== editingExperienceEntry.id) }); closeExperience(); }}><Trash2 aria-hidden="true" />Quitar</Button>}
         <Button type="button" className="experience-screen-save" disabled={busy} onClick={closeExperience}>{busy ? "Guardando…" : experienceIsNew ? "Añadir" : "Guardar"}</Button>
+      </footer>
+    </div>}
+
+    {signedIn && editingEducationEntry && <div className="experience-screen" role="dialog" aria-modal="true" aria-labelledby="education-screen-title">
+      <header className="experience-screen-head">
+        <button type="button" className="experience-screen-back" aria-label="Volver" onClick={closeEducation}><ChevronLeft aria-hidden="true" /></button>
+        <h2 id="education-screen-title">Educación</h2>
+      </header>
+      <div className="experience-screen-body">
+        <div className="curriculum-field">
+          <label htmlFor="edu-nivel">Nivel de estudios</label>
+          <select id="edu-nivel" value={editingEducationEntry.nivel} onChange={(event) => updateEducation(editingEducationEntry.id, { nivel: event.target.value })}>
+            <option value="">Seleccioná el nivel</option>
+            <option value="Primaria">Primaria</option>
+            <option value="Secundaria">Secundaria</option>
+            <option value="UTU">UTU</option>
+            <option value="Terciario / Universitario">Terciario / Universitario</option>
+            <option value="Posgrado">Posgrado</option>
+            <option value="Curso o taller">Curso o taller</option>
+          </select>
+        </div>
+        <div className="curriculum-field">
+          <label htmlFor="edu-titulo">Título</label>
+          <input id="edu-titulo" value={editingEducationEntry.titulo} onChange={(event) => updateEducation(editingEducationEntry.id, { titulo: event.target.value })} placeholder="Ej: Bachillerato, Licenciatura en…" />
+        </div>
+        <div className="curriculum-field">
+          <label htmlFor="edu-institucion">Institución</label>
+          <input id="edu-institucion" value={editingEducationEntry.institucion} onChange={(event) => updateEducation(editingEducationEntry.id, { institucion: event.target.value })} />
+        </div>
+        <div className="curriculum-field">
+          <label htmlFor="edu-descripcion">Descripción y logros</label>
+          <textarea id="edu-descripcion" value={editingEducationEntry.descripcion} maxLength={500} rows={5} onChange={(event) => updateEducation(editingEducationEntry.id, { descripcion: event.target.value })} />
+          <span className="experience-counter">{editingEducationEntry.descripcion.length}/500 · máximo 500 caracteres</span>
+        </div>
+        <div className="curriculum-field">
+          <label htmlFor="edu-lugar">Lugar</label>
+          <input id="edu-lugar" value={editingEducationEntry.lugar} onChange={(event) => updateEducation(editingEducationEntry.id, { lugar: event.target.value })} placeholder="Ej: Montevideo" />
+        </div>
+        <div className="about-toggle-row">
+          <label htmlFor="edu-actualmente">Actualmente estudio aquí</label>
+          <button id="edu-actualmente" type="button" role="switch" aria-checked={editingEducationEntry.actualmente} className={editingEducationEntry.actualmente ? "about-toggle is-on" : "about-toggle"} onClick={() => updateEducation(editingEducationEntry.id, { actualmente: !editingEducationEntry.actualmente, hasta: !editingEducationEntry.actualmente ? "Actualidad" : "" })}>
+            <span aria-hidden="true" />
+          </button>
+        </div>
+        <div className="experience-dates">
+          <div className="curriculum-field">
+            <label htmlFor="edu-inicio">Inicio</label>
+            <input id="edu-inicio" value={editingEducationEntry.desde} onChange={(event) => updateEducation(editingEducationEntry.id, { desde: event.target.value })} placeholder="Ej: 2018" />
+          </div>
+          <div className="curriculum-field">
+            <label htmlFor="edu-fin">Fin</label>
+            <input id="edu-fin" value={editingEducationEntry.actualmente ? "Actualidad" : editingEducationEntry.hasta} disabled={editingEducationEntry.actualmente} onChange={(event) => updateEducation(editingEducationEntry.id, { hasta: event.target.value })} placeholder="Ej: 2021" />
+          </div>
+        </div>
+      </div>
+      <footer className="experience-screen-foot">
+        {!educationIsNew && <Button type="button" variant="ghost" className="experience-screen-delete" onClick={() => { edit({ education: draft.education.filter((row) => row.id !== editingEducationEntry.id) }); closeEducation(); }}><Trash2 aria-hidden="true" />Quitar</Button>}
+        <Button type="button" className="experience-screen-save" disabled={busy} onClick={closeEducation}>{busy ? "Guardando…" : educationIsNew ? "Añadir" : "Guardar"}</Button>
       </footer>
     </div>}
 

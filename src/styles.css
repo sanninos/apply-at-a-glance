@@ -725,3 +725,32 @@ nav .employment-nav-item, .employment-nav .employment-nav-item { position: relat
 .experience-screen-save { flex: 1; height: 48px; border-radius: 999px; background: var(--employment-blue); color: var(--primary-foreground); font-size: 15px; font-weight: 600; }
 .experience-screen-save:hover { background: var(--employment-blue); opacity: 0.92; }
 .experience-screen-delete { color: var(--destructive); }
+
+/* Curriculum import */
+.curriculum-import-input { display: none; }
+.curriculum-import { display: grid; gap: 6px; }
+.curriculum-import-button { height: 46px; border-radius: 16px; border: 1.5px dashed var(--primary); color: var(--primary); font-size: 13px; font-weight: 650; gap: 8px; background: transparent; }
+.curriculum-import-button:disabled { opacity: 0.6; }
+.curriculum-import-hint { margin: 0; font-size: 11.5px; color: var(--muted-foreground); text-align: center; }
+.curriculum-import-message { margin: 0; font-size: 12px; font-weight: 600; color: var(--primary); text-align: center; }
+
+/* Application process timeline drawer */
+.applications-card { width: 100%; text-align: left; font: inherit; cursor: pointer; }
+.application-timeline-backdrop { position: fixed; inset: 0; z-index: 60; background: color-mix(in oklch, black 45%, transparent); display: flex; align-items: flex-end; justify-content: center; }
+.application-timeline-sheet { position: relative; width: 100%; max-width: 28rem; background: var(--card); border-radius: 24px 24px 0 0; padding: 14px 20px calc(20px + env(safe-area-inset-bottom)); display: grid; gap: 6px; max-height: 85dvh; overflow-y: auto; }
+.application-timeline-sheet h2 { margin: 4px 0 0; font-size: 18px; font-weight: 750; color: var(--foreground); }
+.application-timeline-job { margin: 0 0 10px; font-size: 13px; color: var(--muted-foreground); }
+.application-timeline { list-style: none; margin: 0; padding: 0; display: grid; }
+.application-timeline-step { position: relative; display: grid; grid-template-columns: 28px 1fr; gap: 12px; padding: 10px 0; }
+.application-timeline-step:not(:last-child)::before { content: ""; position: absolute; left: 13px; top: 34px; bottom: -8px; width: 2px; background: var(--border); }
+.application-timeline-step.is-done:not(:last-child)::before { background: var(--primary); }
+.application-timeline-dot { position: relative; z-index: 1; width: 28px; height: 28px; border-radius: 999px; display: grid; place-items: center; background: var(--muted); color: var(--muted-foreground); border: 2px solid var(--border); }
+.application-timeline-dot svg { width: 14px; height: 14px; }
+.application-timeline-step.is-done .application-timeline-dot { background: var(--primary); border-color: var(--primary); color: var(--primary-foreground); }
+.application-timeline-step.is-current .application-timeline-dot { background: var(--card); border-color: var(--primary); box-shadow: 0 0 0 4px color-mix(in oklch, var(--primary) 18%, transparent); }
+.application-timeline-step.is-rejected .application-timeline-dot { background: var(--destructive); border-color: var(--destructive); color: var(--destructive-foreground); }
+.application-timeline-copy p { margin: 2px 0 0; font-size: 14px; font-weight: 650; color: var(--foreground); }
+.application-timeline-step.is-upcoming .application-timeline-copy p { color: var(--muted-foreground); font-weight: 550; }
+.application-timeline-copy span { font-size: 12px; color: var(--muted-foreground); }
+.application-timeline-step.is-current .application-timeline-copy span { color: var(--primary); font-weight: 650; }
+.application-timeline-link { margin-top: 12px; height: 46px; border-radius: 16px; font-size: 13px; font-weight: 650; }

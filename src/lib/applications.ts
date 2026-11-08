@@ -65,3 +65,59 @@ export function applicationStatus(estado: string): { label: string; tone: Applic
 export function applicationCountLabel(total: number): string {
   return total === 1 ? "1 postulación" : `${total} postulaciones`;
 }
+
+export type TimelineStepState = "done" | "current" | "upcoming" | "rejected";
+
+export type TimelineStep = {
+  key: string;
+  label: string;
+  state: TimelineStepState;
+  date: string | null;
+};
+
+/**
+ * Process timeline for one application. The order is fixed
+ * (Enviada → En revisión → Entrevista → Resultado); the stored estado marks
+ * how far the process got. Only the application date is real — later steps
+ * have no recorded date yet, so they show none instead of inventing one.
+ */
+export function applicationTimeline(item: ApplicationItem): TimelineStep[] {
+  const applied = item.appliedAt;
+  switch (item.estado) {
+    case "En revision":
+      return [
+        { key: "sent", label: "Postulación enviada", state: "done", date: applied },
+        { key: "review", label: "En revisión", state: "current", date: null },
+        { key: "interview", label: "Entrevista", state: "upcoming", date: null },
+        { key: "result", label: "Resultado", state: "upcoming", date: null },
+      ];
+    case "Entrevista":
+      return [
+        { key: "sent", label: "Postulación enviada", state: "done", date: applied },
+        { key: "review", label: "En revisión", state: "done", date: null },
+        { key: "interview", label: "Entrevista", state: "current", date: null },
+        { key: "result", label: "Resultado", state: "upcoming", date: null },
+      ];
+    case "No seleccionada":
+      return [
+        { key: "sent", label: "Postulación enviada", state: "done", date: applied },
+        { key: "review", label: "En revisión", state: "done", date: null },
+        { key: "interview", label: "Entrevista", state: "done", date: null },
+        { key: "result", label: "No seleccionada", state: "rejected", date: null },
+      ];
+    case "Seleccionada":
+      return [
+        { key: "sent", label: "Postulación enviada", state: "done", date: applied },
+        { key: "review", label: "En revisión", state: "done", date: null },
+        { key: "interview", label: "Entrevista", state: "done", date: null },
+        { key: "result", label: "Seleccionada", state: "done", date: null },
+      ];
+    default:
+      return [
+        { key: "sent", label: "Postulación enviada", state: "current", date: applied },
+        { key: "review", label: "En revisión", state: "upcoming", date: null },
+        { key: "interview", label: "Entrevista", state: "upcoming", date: null },
+        { key: "result", label: "Resultado", state: "upcoming", date: null },
+      ];
+  }
+}

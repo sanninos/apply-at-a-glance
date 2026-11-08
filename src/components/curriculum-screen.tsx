@@ -416,6 +416,64 @@ function AccountCurriculumScreen() {
       </footer>
     </div>}
 
+    {signedIn && editingEducationEntry && <div className="experience-screen" role="dialog" aria-modal="true" aria-labelledby="education-screen-title">
+      <header className="experience-screen-head">
+        <button type="button" className="experience-screen-back" aria-label="Volver" onClick={closeEducation}><ChevronLeft aria-hidden="true" /></button>
+        <h2 id="education-screen-title">Educación</h2>
+      </header>
+      <div className="experience-screen-body">
+        <div className="curriculum-field">
+          <label htmlFor="edu-nivel">Nivel de estudios</label>
+          <select id="edu-nivel" value={editingEducationEntry.nivel} onChange={(event) => updateEducation(editingEducationEntry.id, { nivel: event.target.value })}>
+            <option value="">Seleccioná el nivel</option>
+            <option value="Primaria">Primaria</option>
+            <option value="Secundaria">Secundaria</option>
+            <option value="UTU">UTU</option>
+            <option value="Terciario / Universitario">Terciario / Universitario</option>
+            <option value="Posgrado">Posgrado</option>
+            <option value="Curso o taller">Curso o taller</option>
+          </select>
+        </div>
+        <div className="curriculum-field">
+          <label htmlFor="edu-titulo">Título</label>
+          <input id="edu-titulo" value={editingEducationEntry.titulo} onChange={(event) => updateEducation(editingEducationEntry.id, { titulo: event.target.value })} placeholder="Ej: Bachillerato, Licenciatura en…" />
+        </div>
+        <div className="curriculum-field">
+          <label htmlFor="edu-institucion">Institución</label>
+          <input id="edu-institucion" value={editingEducationEntry.institucion} onChange={(event) => updateEducation(editingEducationEntry.id, { institucion: event.target.value })} />
+        </div>
+        <div className="curriculum-field">
+          <label htmlFor="edu-descripcion">Descripción y logros</label>
+          <textarea id="edu-descripcion" value={editingEducationEntry.descripcion} maxLength={500} rows={5} onChange={(event) => updateEducation(editingEducationEntry.id, { descripcion: event.target.value })} />
+          <span className="experience-counter">{editingEducationEntry.descripcion.length}/500 · máximo 500 caracteres</span>
+        </div>
+        <div className="curriculum-field">
+          <label htmlFor="edu-lugar">Lugar</label>
+          <input id="edu-lugar" value={editingEducationEntry.lugar} onChange={(event) => updateEducation(editingEducationEntry.id, { lugar: event.target.value })} placeholder="Ej: Montevideo" />
+        </div>
+        <div className="about-toggle-row">
+          <label htmlFor="edu-actualmente">Actualmente estudio aquí</label>
+          <button id="edu-actualmente" type="button" role="switch" aria-checked={editingEducationEntry.actualmente} className={editingEducationEntry.actualmente ? "about-toggle is-on" : "about-toggle"} onClick={() => updateEducation(editingEducationEntry.id, { actualmente: !editingEducationEntry.actualmente, hasta: !editingEducationEntry.actualmente ? "Actualidad" : "" })}>
+            <span aria-hidden="true" />
+          </button>
+        </div>
+        <div className="experience-dates">
+          <div className="curriculum-field">
+            <label htmlFor="edu-inicio">Inicio</label>
+            <input id="edu-inicio" value={editingEducationEntry.desde} onChange={(event) => updateEducation(editingEducationEntry.id, { desde: event.target.value })} placeholder="Ej: 2018" />
+          </div>
+          <div className="curriculum-field">
+            <label htmlFor="edu-fin">Fin</label>
+            <input id="edu-fin" value={editingEducationEntry.actualmente ? "Actualidad" : editingEducationEntry.hasta} disabled={editingEducationEntry.actualmente} onChange={(event) => updateEducation(editingEducationEntry.id, { hasta: event.target.value })} placeholder="Ej: 2021" />
+          </div>
+        </div>
+      </div>
+      <footer className="experience-screen-foot">
+        {!educationIsNew && <Button type="button" variant="ghost" className="experience-screen-delete" onClick={() => { edit({ education: draft.education.filter((row) => row.id !== editingEducationEntry.id) }); closeEducation(); }}><Trash2 aria-hidden="true" />Quitar</Button>}
+        <Button type="button" className="experience-screen-save" disabled={busy} onClick={closeEducation}>{busy ? "Guardando…" : educationIsNew ? "Añadir" : "Guardar"}</Button>
+      </footer>
+    </div>}
+
     <AppBottomNav active="perfil" />
   </main>;
 }

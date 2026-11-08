@@ -40,3 +40,5 @@
 - [x] Enable authenticated account-deletion submission with own-row storage, account-email validation, duplicate protection and persistent receipt; 11 tests pass and signed-out login verified.
 - [ ] Verify deletion submission and receipt reload through a real signed-in account; blocked by external unmanaged Supabase authenticated testing.
 - [x] Reemplazar el ícono de ubicación por el emoji 📍 en home, detalle, Social, Radar y filtros; verificado en el navegador (sin íconos de ubicación restantes).
+- [ ] Educación: pantalla completa de edición como la de Experiencias (en curso).
+- [ ] Editar curriculum: botón para importar PDF/DOC y rellenar los campos automáticamente con extracción por IA.

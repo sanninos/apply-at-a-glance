@@ -27,7 +27,7 @@ export function SimilarJobs({ jobId, puesto }: { jobId: number; puesto: string |
   if (!similar.data?.length) return null;
   return <section className="mt-6" aria-labelledby="similar-jobs-title">
     <h2 id="similar-jobs-title" className="font-bold text-foreground mb-3 mx-5">Empleos similares</h2>
-    <div className="similar-jobs-track">
+    <div className="similar-jobs-track px-5 scroll-px-5">
       {similar.data.map((job) => <Link key={job.id} to="/llamado/$jobId" params={{ jobId: String(job.id) }} preload="intent" className="similar-job-card">
         <h3>{job.titulo || "Oferta de empleo"}</h3>
         <p className="similar-job-company">{job.Empresa || "Empresa"}</p>

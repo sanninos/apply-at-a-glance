@@ -20,7 +20,17 @@ export type ExperienceDraft = {
   ratingSalario: number;
   ratingOportunidades: number;
 };
-export type EducationDraft = { id: string; titulo: string; institucion: string; desde: string; hasta: string };
+export type EducationDraft = {
+  id: string;
+  nivel: string;
+  titulo: string;
+  institucion: string;
+  desde: string;
+  hasta: string;
+  descripcion: string;
+  lugar: string;
+  actualmente: boolean;
+};
 
 export type CurriculumDraft = {
   fullName: string;
@@ -93,7 +103,16 @@ export type CurriculumPayload = {
     ratingSalario: number;
     ratingOportunidades: number;
   }[];
-  education: { titulo: string; institucion: string; desde: string; hasta: string }[];
+  education: {
+    nivel: string;
+    titulo: string;
+    institucion: string;
+    desde: string;
+    hasta: string;
+    descripcion: string;
+    lugar: string;
+    actualmente: boolean;
+  }[];
   skills: string[];
 };
 
@@ -108,7 +127,7 @@ export function emptyExperience(): ExperienceDraft {
 }
 
 export function emptyEducation(): EducationDraft {
-  return { id: newDraftId(), titulo: "", institucion: "", desde: "", hasta: "" };
+  return { id: newDraftId(), nivel: "", titulo: "", institucion: "", desde: "", hasta: "", descripcion: "", lugar: "", actualmente: false };
 }
 
 export function emptyCurriculum(): CurriculumDraft {
@@ -173,7 +192,17 @@ export function toCurriculumDraft(row: CurriculumRow): CurriculumDraft {
   const education = Array.isArray(row.education)
     ? row.education.map((entry) => {
         const record = (entry ?? {}) as Partial<EducationDraft>;
-        return { id: newDraftId(), titulo: str(record.titulo), institucion: str(record.institucion), desde: str(record.desde), hasta: str(record.hasta) };
+        return {
+          id: newDraftId(),
+          nivel: str(record.nivel),
+          titulo: str(record.titulo),
+          institucion: str(record.institucion),
+          desde: str(record.desde),
+          hasta: str(record.hasta),
+          descripcion: str(record.descripcion),
+          lugar: str(record.lugar),
+          actualmente: bool(record.actualmente),
+        };
       })
     : [];
   const skills = Array.isArray(row.skills) ? row.skills.map(str).filter(Boolean).join(", ") : "";
@@ -236,8 +265,17 @@ export function curriculumPayload(draft: CurriculumDraft): { ok: true; payload: 
       ratingOportunidades: rating(entry.ratingOportunidades),
     }));
   const education = draft.education
-    .filter((entry) => !isBlank(entry.titulo, entry.institucion, entry.desde, entry.hasta))
-    .map((entry) => ({ titulo: entry.titulo.trim(), institucion: entry.institucion.trim(), desde: entry.desde.trim(), hasta: entry.hasta.trim() }));
+    .filter((entry) => !isBlank(entry.nivel, entry.titulo, entry.institucion, entry.desde, entry.hasta, entry.descripcion, entry.lugar) || entry.actualmente)
+    .map((entry) => ({
+      nivel: entry.nivel.trim(),
+      titulo: entry.titulo.trim(),
+      institucion: entry.institucion.trim(),
+      desde: entry.desde.trim(),
+      hasta: entry.actualmente ? "Actualidad" : entry.hasta.trim(),
+      descripcion: entry.descripcion.trim(),
+      lugar: entry.lugar.trim(),
+      actualmente: entry.actualmente,
+    }));
   return {
     ok: true,
     payload: {

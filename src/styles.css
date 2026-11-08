@@ -322,6 +322,7 @@ body:has(.alerts-screen) { background: var(--muted); }
 .tab-count { font-size: 14px; padding: 2px 11px; border-radius: 20px; background: var(--employment-surface); color: var(--employment-blue); }
 .selected .tab-count { background: color-mix(in oklab, var(--primary-foreground) 24%, transparent); color: inherit; }
 .employment-list { display: grid; gap: 22px; }
+.employment-list > * { min-width: 0; }
 .employment-card { --employment-card-radius: 30px; position: relative; overflow: hidden; display: block; background: var(--card); border: 1px solid var(--employment-card-border); border-radius: var(--employment-card-radius); padding: 30px; box-shadow: var(--employment-shadow); transition: border-color 150ms; }
 .employment-card:hover { border-color: var(--employment-blue); }
 .employment-card:focus-visible { outline: 2px solid var(--employment-blue); outline-offset: 3px; }
@@ -653,7 +654,7 @@ nav .employment-nav-item, .employment-nav .employment-nav-item { position: relat
 .search-suggestions span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
 /* Job-position browsing */
-.home-positions { margin: 0; }
+.home-positions { margin: 0; min-width: 0; }
 .home-positions > header { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 10px; }
 .home-positions h2 { font-size: 14px; font-weight: 700; color: var(--foreground); }
 .home-positions > header a { display: inline-flex; align-items: center; gap: 4px; font-size: 12px; color: var(--employment-blue); }

@@ -47,3 +47,5 @@
 - [x] Detalle de oferta: sección «Portada del trabajo» con la imagen del póster cuando existe; build OK.
 - [x] Mis postulaciones: drawer con línea de tiempo del proceso (Enviada → En revisión → Entrevista → Resultado); 9 pruebas pasan. Verificación con sesión real pendiente (Supabase externo).
 - [x] Home: la sección «Explorá por puesto» se muestra después de la quinta oferta; verificado en el navegador (orden CARD×5 → POSITIONS).
+- [ ] Home /empleos y «Empleos similares»: 4 tarjetas skeleton (logo, título, empresa, etiqueta de tiempo) con brillo suave, mismos colores y bordes redondeados.
+- [ ] Corregir el desborde horizontal que apareció al mover la sección de puestos dentro de la lista (tarjetas cortadas a la derecha).

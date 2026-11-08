@@ -122,13 +122,6 @@ function ProfileScreen() {
       {searching && daysLeft <= 2 && <Button variant="outline" className="mt-3" disabled={savingSearch} onClick={() => void setActiveSearch(true)}>Renovar 7 días</Button>}
       {searchError && <p className="profile-error" role="alert">{searchError}</p>}
     </ProfileBlock>}
-    <ProfileBlock title="CONSENTIMIENTOS" subtitle="Gestiona tus comunicaciones">
-      <div className="profile-consent-row">
-        <span className="profile-icon-tile"><Megaphone /></span>
-        <div className="profile-consent-copy"><h3>Comunicaciones Urujobs Avisos</h3><p>{isCompany ? 'Recibí novedades sobre candidatos y herramientas para empresas. Podés retirarlo en cualquier momento.' : 'Recibe emails y push educativos o comerciales. Puedes retirarlo en cualquier momento.'}</p><span className="profile-pending">Pendiente de configuración</span></div>
-        <Switch className="profile-switch" aria-label="Comunicaciones Urujobs Avisos" checked={false} disabled title="Pendiente de configuración" />
-      </div>
-    </ProfileBlock>
     <ProfileBlock title="ACCESOS" subtitle="Acciones de tu cuenta" className="profile-access-block">
       <div className="profile-access-list">
         <Link to="/alertas" className="profile-access-row"><Bell /><span>Mis notificaciones</span><ChevronRight className="profile-access-arrow" /></Link>

@@ -17,8 +17,8 @@ import { useNewJobOffers } from "@/hooks/use-new-job-offers";
 import { isNewUnseenOffer, newUnseenOffers } from "@/lib/new-job-offers";
 import { NewOffersNotice } from "@/components/new-offers-notice";
 
-function EmployerLogo({ job }: { job: JobListItem }) {
-  const { src, ref, onError } = useEmployerLogo(job.fotoEmpresa || job.image);
+function EmployerLogo({ job, usePoster }: { job: JobListItem; usePoster: boolean }) {
+  const { src, ref, onError } = useEmployerLogo(job.fotoEmpresa?.trim() || job.image?.trim() || null, usePoster ? job.poster?.trim() || null : null);
   return <div className="job-logo">{src ? <img ref={ref} src={src} alt={job.Empresa || "Empresa"} onError={onError} /> : <Building2 aria-hidden="true" />}</div>;
 }
 
@@ -99,7 +99,7 @@ export function JobListScreen({ jobs, variant = "home", categoryTitle }: { jobs:
     <section className="employment-list" aria-label="Empleos disponibles">
       {shown.map((job, index) => <Fragment key={job.id}>
         <Link className={cn("employment-card", job.isFeatured && "featured", isUrgent(job) && "urgent")} to="/llamado/$jobId" params={{ jobId: String(job.id) }} preload="intent" preloadDelay={0} onClick={() => remember(search)}>
-        <div className="employment-card-main"><EmployerLogo job={job} /><div className="employment-copy"><p className="employment-company">{job.Empresa || "Empresa"}</p><h2>{job.titulo || "Oferta de empleo"}</h2><p className="employment-description">{job.descripcion}</p></div><span className="employment-arrow"><ChevronRight aria-hidden="true" /></span></div>
+        <div className="employment-card-main"><EmployerLogo job={job} usePoster={isHome} /><div className="employment-copy"><p className="employment-company">{job.Empresa || "Empresa"}</p><h2>{job.titulo || "Oferta de empleo"}</h2><p className="employment-description">{job.descripcion}</p></div><span className="employment-arrow"><ChevronRight aria-hidden="true" /></span></div>
         <div className="employment-meta"><span className="location-chip"><span className="location-pin" aria-hidden="true">📍</span><span>{job.ubicacion || job.ciudad || "Uruguay"}</span></span><span className="date-chip"><Clock aria-hidden="true" />{publishedAgo(job.created_at)}</span></div>
         {(job.isLlamado || job.isFeatured || isUrgent(job) || isNew(job)) && <div className="employment-badges">{isNew(job) && <span className="new-offer-badge">Nuevo</span>}{job.isLlamado && <span className="llamado-badge">Llamado público</span>}{job.isFeatured && <span>Destacada</span>}{isUrgent(job) && <span>Urgente</span>}</div>}
       </Link>

@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { DEFAULT_EMPLOYER_LOGO } from "@/lib/job-branding";
 
-type LogoSource = "photo" | "default" | "none";
+type LogoSource = "photo" | "poster" | "default" | "none";
 
 /**
  * Resolves the logo for a job: the company photo when there is one, the shared
@@ -12,13 +12,13 @@ type LogoSource = "photo" | "default" | "none";
  * it is loading is still replaced, and the stage guard keeps two handlers
  * reporting the same failure from skipping straight to the icon.
  */
-export function useEmployerLogo(photo: string | null) {
-  const [source, setSource] = useState<LogoSource>(photo ? "photo" : "default");
+export function useEmployerLogo(photo: string | null, poster: string | null = null) {
+  const [source, setSource] = useState<LogoSource>(photo ? "photo" : poster ? "poster" : "default");
   const ref = useRef<HTMLImageElement>(null);
-  const src = source === "photo" ? photo : source === "default" ? DEFAULT_EMPLOYER_LOGO : null;
+  const src = source === "photo" ? photo : source === "poster" ? poster : source === "default" ? DEFAULT_EMPLOYER_LOGO : null;
 
   const advance = (from: LogoSource) =>
-    setSource(current => (current === from ? (from === "photo" ? "default" : "none") : current));
+    setSource(current => (current === from ? (from === "photo" ? (poster ? "poster" : "default") : from === "poster" ? "default" : "none") : current));
   const onError = () => advance(source);
 
   useEffect(() => {
@@ -28,7 +28,7 @@ export function useEmployerLogo(photo: string | null) {
     // A photo that failed before React attached its own handler only shows it in
     // the element's load state. The placeholder is not re-checked that way, so a
     // never-loaded placeholder never cascades into the icon.
-    if (source === "photo" && element.complete && element.naturalWidth === 0) fail();
+    if ((source === "photo" || source === "poster") && element.complete && element.naturalWidth === 0) fail();
     element.addEventListener("error", fail, { once: true });
     return () => element.removeEventListener("error", fail);
   }, [src, source]);

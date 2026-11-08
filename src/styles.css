@@ -760,3 +760,10 @@ nav .employment-nav-item, .employment-nav .employment-nav-item { position: relat
 .application-history ul { display: grid; gap: 0.4rem; }
 .application-history li { display: flex; justify-content: space-between; gap: 1rem; font-size: 0.85rem; padding: 0.5rem 0.75rem; border-radius: 0.75rem; background: var(--muted); }
 .application-history time { color: var(--muted-foreground); }
+
+.curriculum-progress { margin: 0 0 1rem; padding: 0.9rem 1rem; border-radius: 1rem; background: var(--card); border: 1px solid var(--employment-card-border); }
+.curriculum-progress-head { display: flex; justify-content: space-between; align-items: baseline; font-size: 0.85rem; font-weight: 600; color: var(--employment-blue); }
+.curriculum-progress-head strong { font-size: 1.05rem; color: var(--employment-nav); }
+.curriculum-progress-track { margin-top: 0.5rem; height: 0.5rem; border-radius: 999px; background: var(--employment-surface); overflow: hidden; }
+.curriculum-progress-track span { display: block; height: 100%; border-radius: inherit; background: var(--employment-yellow); transition: width 0.3s ease; }
+.curriculum-progress p { margin-top: 0.5rem; font-size: 0.8rem; color: var(--muted-foreground); }

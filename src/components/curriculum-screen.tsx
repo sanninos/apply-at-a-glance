@@ -18,6 +18,7 @@ import {
   type CurriculumRow,
   type EducationDraft,
   type ExperienceDraft,
+  curriculumProgress,
 } from "@/lib/curriculum";
 
 export function CurriculumScreen() {
@@ -183,7 +184,14 @@ function AccountCurriculumScreen() {
   }, [draft, initialized, busy]);
   useEffect(() => () => { flush.current(); }, []);
 
+  const progress = curriculumProgress(draft);
+
   return <main className="curriculum-screen">
+    <section className="curriculum-progress" aria-label="Progreso del curriculum">
+      <div className="curriculum-progress-head"><span>Curriculum completo</span><strong>{progress.percent}%</strong></div>
+      <div className="curriculum-progress-track" role="progressbar" aria-valuenow={progress.percent} aria-valuemin={0} aria-valuemax={100}><span style={{ width: `${progress.percent}%` }} /></div>
+      <p>{progress.next ?? "¡Tu curriculum está completo!"}</p>
+    </section>
     <header className="curriculum-header">
       <div className="curriculum-avatar" aria-hidden="true"><User /><span><Camera /></span></div>
       <div className="curriculum-heading">

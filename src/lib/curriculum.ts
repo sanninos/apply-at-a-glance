@@ -398,3 +398,25 @@ export function applyImportedCurriculum(draft: CurriculumDraft, imported: Import
     education,
   };
 }
+
+const ABOUT_CHECKS: { label: string; done: (d: CurriculumDraft) => boolean }[] = [
+  { label: "Completá tu nombre", done: (d) => Boolean((d.fullName || `${d.firstName}${d.lastName}`).trim()) },
+  { label: "Agregá tu teléfono", done: (d) => Boolean(d.phone.trim()) },
+  { label: "Agregá tu fecha de cumpleaños", done: (d) => Boolean(d.birthDate.trim()) },
+  { label: "Agregá tu ubicación", done: (d) => Boolean(d.city.trim()) },
+  { label: "Escribí una breve presentación sobre ti", done: (d) => Boolean(d.summary.trim()) },
+];
+
+/**
+ * Sobre ti, Experiencias and Educación each weigh one third; Sobre ti is split
+ * evenly between its fields. `next` is the first missing item, or null when complete.
+ */
+export function curriculumProgress(d: CurriculumDraft): { percent: number; next: string | null } {
+  const about = ABOUT_CHECKS.filter((c) => c.done(d)).length / ABOUT_CHECKS.length;
+  const hasExperience = d.experiences.some((e) => e.puesto.trim() || e.empresa.trim());
+  const hasEducation = d.education.some((e) => e.titulo.trim() || e.institucion.trim() || e.nivel.trim());
+  const percent = Math.round(((about + Number(hasExperience) + Number(hasEducation)) / 3) * 100);
+  const next = ABOUT_CHECKS.find((c) => !c.done(d))?.label
+    ?? (!hasExperience ? "Agregá tu primera experiencia" : !hasEducation ? "Agregá tu educación" : null);
+  return { percent, next };
+}

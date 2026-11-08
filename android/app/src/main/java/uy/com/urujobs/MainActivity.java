@@ -18,6 +18,7 @@ public class MainActivity extends BridgeActivity {
 
     @Override
     public void onCreate(android.os.Bundle savedInstanceState) {
+        registerPlugin(UrujobsGoogleAuthPlugin.class);
         super.onCreate(savedInstanceState);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
                 ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS)

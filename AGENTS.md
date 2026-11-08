@@ -21,6 +21,7 @@
 - Company and poster images resolve through a shared browser-safe fallback attached to the current element, so a photo that fails after mount still falls back instead of rendering a broken image.
 - Radar uses Google Maps JavaScript with a callback-based asynchronous loader and public display-only paginated job reads; parse stored coordinates in a browser-safe helper to keep invalid locations off the map.
 - App access uses Supabase Auth, a single root session subscriber, and a private profiles table created by a signup trigger; keep public browsing available and clear query caches before sign-out.
+- Android Google login uses a registered Capacitor Credential Manager plugin restricted to the configured app HTTPS origin; send a hashed nonce to Google and its raw value to Supabase, never fall back to browser OAuth on native Android, and never log tokens.
 - Profile is a public session-aware screen linked from the bottom navigation; display actual account data and keep unimplemented access and consent controls disabled rather than inventing activity or consent.
 - Account-deletion requests use authenticated server functions, shared validation, account-email matching and own-row RLS; persist one request per account, read it back for confirmation, and never delete accounts automatically.
 - Alertas opens a focused configuration drawer with local draft preferences; do not simulate saved alerts or notification delivery until persistence and delivery are implemented, and explicitly disclose that submission does not save.

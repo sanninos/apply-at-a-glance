@@ -7,7 +7,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { useAccess } from '@/components/access-provider';
 import { accessSchema, registrationSchema } from '@/lib/access-validation';
 import { DEFAULT_EMPLOYER_LOGO } from '@/lib/job-branding';
-import { hasNativeGoogle, signInWithNativeGoogle } from '@/lib/native-google';
+import { hasNativeGoogle, nativeGoogleError, signInWithNativeGoogle } from '@/lib/native-google';
 
 // Shared access form: rendered full screen at /auth (OAuth and recovery callbacks
 // land here) and inside the floating access dialog elsewhere in the app.
@@ -57,7 +57,7 @@ export function AccessPanel({ onClose, embedded = false }: { onClose?: () => voi
     setBusy(true); setError('');
     if (hasNativeGoogle()) {
       try { await signInWithNativeGoogle(); }
-      catch (err) { if (!(err instanceof Error && err.message === 'cancelled')) setError('No pudimos iniciar el ingreso con Google.'); }
+      catch (err) { setError(nativeGoogleError(err) || ''); }
       finally { setBusy(false); }
       return;
     }

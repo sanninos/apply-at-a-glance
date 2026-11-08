@@ -754,3 +754,9 @@ nav .employment-nav-item, .employment-nav .employment-nav-item { position: relat
 .application-timeline-copy span { font-size: 12px; color: var(--muted-foreground); }
 .application-timeline-step.is-current .application-timeline-copy span { color: var(--primary); font-weight: 650; }
 .application-timeline-link { margin-top: 12px; height: 46px; border-radius: 16px; font-size: 13px; font-weight: 650; }
+
+.application-history { margin: 0.25rem 0 1rem; }
+.application-history h3 { font-size: 0.8rem; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: var(--muted-foreground); margin-bottom: 0.5rem; }
+.application-history ul { display: grid; gap: 0.4rem; }
+.application-history li { display: flex; justify-content: space-between; gap: 1rem; font-size: 0.85rem; padding: 0.5rem 0.75rem; border-radius: 0.75rem; background: var(--muted); }
+.application-history time { color: var(--muted-foreground); }

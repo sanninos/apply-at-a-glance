@@ -16,6 +16,7 @@ export type ApplicationRow = {
   estado: string;
   created_at: string;
   job_id: number;
+  postulaciones_historial?: { estado: string; changed_at: string }[] | null;
   JobsDetails: ApplicationJob | null;
 };
 
@@ -25,6 +26,7 @@ export type ApplicationItem = {
   estado: string;
   appliedAt: string;
   job: ApplicationJob;
+  history: { estado: string; changedAt: string }[];
 };
 
 export type ApplicationTone = "sent" | "review" | "interview" | "rejected";
@@ -37,7 +39,10 @@ export type ApplicationTone = "sent" | "review" | "interview" | "rejected";
 export function toApplicationItem(row: ApplicationRow): ApplicationItem | null {
   const job = row.JobsDetails;
   if (!job || job.isLlamado === true) return null;
-  return { id: row.id, jobId: job.id, estado: row.estado, appliedAt: row.created_at, job };
+  const history = (row.postulaciones_historial ?? [])
+    .map((h) => ({ estado: h.estado, changedAt: h.changed_at }))
+    .sort((a, b) => Date.parse(a.changedAt) - Date.parse(b.changedAt));
+  return { id: row.id, jobId: job.id, estado: row.estado, appliedAt: row.created_at, job, history };
 }
 
 /** Newest first, one card per offer even if it was applied to twice. */
@@ -81,7 +86,29 @@ export type TimelineStep = {
  * how far the process got. Only the application date is real — later steps
  * have no recorded date yet, so they show none instead of inventing one.
  */
+const STEP_ESTADO: Record<string, string[]> = {
+  sent: ["Enviada"],
+  review: ["En revision"],
+  interview: ["Entrevista"],
+  result: ["No seleccionada", "Seleccionada"],
+};
+
+/** Each step shows the first recorded date the application reached that estado. */
 export function applicationTimeline(item: ApplicationItem): TimelineStep[] {
+  const history = item.history ?? [];
+  const dateFor = (key: string) => history.find((h) => STEP_ESTADO[key]?.includes(h.estado))?.changedAt ?? null;
+  return baseTimeline(item).map((step) => ({
+    ...step,
+    date: step.key === "sent" ? dateFor("sent") ?? item.appliedAt : step.state === "upcoming" ? null : dateFor(step.key),
+  }));
+}
+
+/** Status changes recorded for the application, oldest first. */
+export function applicationHistory(item: ApplicationItem) {
+  return (item.history ?? []).map((h) => ({ ...h, label: applicationStatus(h.estado).label }));
+}
+
+function baseTimeline(item: ApplicationItem): TimelineStep[] {
   const applied = item.appliedAt;
   switch (item.estado) {
     case "En revision":

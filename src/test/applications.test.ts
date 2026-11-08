@@ -57,7 +57,7 @@ describe('mis postulaciones list', () => {
 });
 
 describe('applicationTimeline', () => {
-  const base = { id: 'a1', jobId: 1, appliedAt: '2026-11-01T10:00:00Z', job: { id: 1, titulo: 'Cajera', Empresa: 'Tienda', ubicacion: null, ciudad: null, fotoEmpresa: null, image: null, tipoContrato: null, estado_postulacion: null, isLlamado: false } };
+  const base = { id: 'a1', jobId: 1, appliedAt: '2026-11-01T10:00:00Z', job: { id: 1, titulo: 'Cajera', Empresa: 'Tienda', ubicacion: null, ciudad: null, fotoEmpresa: null, image: null, tipoContrato: null, estado_postulacion: null, isLlamado: false }, history: [] as { estado: string; changedAt: string }[] };
 
   it('marks only the sent step as current for a fresh application', () => {
     const steps = applicationTimeline({ ...base, estado: 'Enviada' });
@@ -78,5 +78,17 @@ describe('applicationTimeline', () => {
     const selected = applicationTimeline({ ...base, estado: 'Seleccionada' });
     expect(selected[3]?.state).toBe('done');
     expect(selected[3]?.label).toBe('Seleccionada');
+  });
+});
+
+describe('applicationTimeline history dates', () => {
+  it('uses the recorded date of each status change', () => {
+    const job = { id: 1, titulo: null, Empresa: null, ubicacion: null, ciudad: null, fotoEmpresa: null, image: null, tipoContrato: null, estado_postulacion: null, isLlamado: false };
+    const steps = applicationTimeline({ id: 'a', jobId: 1, appliedAt: '2026-11-01T10:00:00Z', estado: 'Entrevista', job, history: [
+      { estado: 'Enviada', changedAt: '2026-11-01T10:00:00Z' },
+      { estado: 'En revision', changedAt: '2026-11-03T09:00:00Z' },
+      { estado: 'Entrevista', changedAt: '2026-11-05T15:00:00Z' },
+    ] });
+    expect(steps.map((s) => s.date)).toEqual(['2026-11-01T10:00:00Z', '2026-11-03T09:00:00Z', '2026-11-05T15:00:00Z', null]);
   });
 });

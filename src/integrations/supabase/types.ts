@@ -729,18 +729,21 @@ export type Database = {
       }
       profiles: {
         Row: {
+          account_type: string
           created_at: string
           full_name: string
           id: string
           updated_at: string
         }
         Insert: {
+          account_type?: string
           created_at?: string
           full_name?: string
           id: string
           updated_at?: string
         }
         Update: {
+          account_type?: string
           created_at?: string
           full_name?: string
           id?: string

@@ -660,25 +660,31 @@ export type Database = {
       postulaciones: {
         Row: {
           created_at: string
+          cv_snapshot: Json | null
           estado: string
           id: string
           job_id: number
+          mensaje: string | null
           updated_at: string
           user_id: string
         }
         Insert: {
           created_at?: string
+          cv_snapshot?: Json | null
           estado?: string
           id?: string
           job_id: number
+          mensaje?: string | null
           updated_at?: string
           user_id: string
         }
         Update: {
           created_at?: string
+          cv_snapshot?: Json | null
           estado?: string
           id?: string
           job_id?: number
+          mensaje?: string | null
           updated_at?: string
           user_id?: string
         }
@@ -1052,8 +1058,10 @@ export type Database = {
         Returns: {
           candidato: string
           created_at: string
+          cv_snapshot: Json
           estado: string
           job_id: number
+          mensaje: string
           postulacion_id: string
           titulo: string
           updated_at: string

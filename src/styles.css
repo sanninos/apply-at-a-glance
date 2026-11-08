@@ -829,3 +829,21 @@ nav .employment-nav-item, .employment-nav .employment-nav-item { position: relat
 
 .curriculum-export-actions { display: flex; gap: 0.5rem; }
 .curriculum-export-actions > * { flex: 1; }
+
+/* Home poster carousel stays inside the employment-list grid. */
+.home-job-posters { min-width: 0; margin-block: 4px; }
+.home-posters-header { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 8px; }
+.home-posters-header h2 { font-size: 15px; font-weight: 700; color: var(--employment-blue); }
+.home-posters-controls { display: flex; gap: 4px; flex-shrink: 0; }
+.home-posters-controls button { width: 32px; height: 32px; border-radius: 50%; color: var(--employment-blue); }
+.home-posters-controls svg { width: 16px; height: 16px; }
+.home-posters-rail { display: flex; gap: 12px; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; overscroll-behavior-x: contain; padding: 2px 1px 4px; }
+.home-posters-rail::-webkit-scrollbar { display: none; }
+.home-poster-card { flex: 0 0 82%; min-width: 0; scroll-snap-align: start; overflow: hidden; border: 1px solid var(--employment-card-border); border-radius: 22px; background: var(--card); color: var(--foreground); }
+.home-poster-card:hover { border-color: var(--employment-blue); }
+.home-poster-card:focus-visible, .home-posters-rail:focus-visible { outline: 2px solid var(--employment-blue); outline-offset: -2px; }
+.home-poster-image { aspect-ratio: 3 / 4; background: var(--employment-surface); }
+.home-poster-image img { width: 100%; height: 100%; object-fit: contain; }
+.home-poster-caption { padding: 12px; }
+.home-poster-caption h3 { font-size: 13px; line-height: 1.4; font-weight: 600; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; overflow-wrap: anywhere; }
+.home-poster-caption p { font-size: 11px; color: var(--muted-foreground); margin-top: 4px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }

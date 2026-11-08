@@ -655,17 +655,13 @@ nav .employment-nav-item, .employment-nav .employment-nav-item { position: relat
 
 /* Job-position browsing */
 .home-positions { margin: 0; min-width: 0; }
-.home-positions > header { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 10px; }
-.home-positions h2 { font-size: 14px; font-weight: 700; color: var(--foreground); }
-.home-positions > header a { display: inline-flex; align-items: center; gap: 4px; font-size: 12px; color: var(--employment-blue); }
-.home-positions > header svg { width: 14px; height: 14px; }
 .position-category-rail { display: grid; grid-auto-flow: column; grid-auto-columns: 100px; gap: 8px; overflow-x: auto; scrollbar-width: none; padding-bottom: 3px; }
 .position-category-rail::-webkit-scrollbar { display: none; }
 .position-category { display: flex; flex-direction: column; align-items: center; justify-content: flex-start; gap: 8px; min-width: 0; padding: 12px 8px; border-radius: 8px; border: 1px solid var(--employment-card-border); background: var(--card); color: var(--foreground); }
 .position-category:hover { border-color: var(--employment-blue); }
 .position-category:focus-visible { outline: 2px solid var(--employment-blue); outline-offset: -2px; }
-.position-category > span:last-child { font-size: 11px; line-height: 1.35; text-align: center; overflow-wrap: anywhere; }
-.position-category-rail .position-category > span:last-child { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.position-category > .position-name { font-size: 11px; line-height: 1.35; text-align: center; overflow-wrap: anywhere; }
+.position-category-rail .position-category > .position-name { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 .position-icon { display: grid; place-items: center; width: 38px; height: 38px; flex-shrink: 0; color: var(--employment-blue); }
 .position-icon img { width: 100%; height: 100%; object-fit: contain; }
 .position-icon svg { width: 26px; height: 26px; }
@@ -786,6 +782,18 @@ nav .employment-nav-item, .employment-nav .employment-nav-item { position: relat
 .similar-job-card:first-child { margin-left: 1.25rem; }
 .similar-job-card:last-child { margin-right: 1.25rem; }
 
+/* Loading placeholders: same shape as the cards they replace, with a soft glow */
+.skeleton { display: block; position: relative; overflow: hidden; border-radius: 999px; background: color-mix(in oklab, var(--employment-blue) 8%, var(--card)); }
+.skeleton::after { content: ""; position: absolute; inset: 0; transform: translateX(-100%); background: linear-gradient(90deg, transparent, color-mix(in oklab, var(--employment-blue) 22%, transparent), transparent); animation: skeleton-shine 1.5s ease-in-out infinite; }
+@keyframes skeleton-shine { 100% { transform: translateX(100%); } }
+@media (prefers-reduced-motion: reduce) { .skeleton::after { animation: none; } }
+.skeleton-fill { width: 100%; height: 100%; border-radius: inherit; }
+.job-card-skeleton { pointer-events: none; }
+.job-card-skeleton .employment-company, .job-card-skeleton .employment-description { margin: 0; }
+.job-card-skeleton h2 { margin: 6px 0; }
+.job-card-skeleton .employment-copy { display: grid; gap: 6px; align-content: center; }
+.job-card-skeleton .location-chip, .job-card-skeleton .date-chip { padding: 0; max-width: none; }
+
 .recent-searches { margin: 4px 0 16px; }
 .recent-searches > header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
 .recent-searches h2 { font-size: 14px; font-weight: 700; color: var(--foreground); }
@@ -805,4 +813,9 @@ nav .employment-nav-item, .employment-nav .employment-nav-item { position: relat
 .position-category-rail .position-category:nth-child(4n+4) { --band: color-mix(in oklab, var(--employment-blue) 18%, var(--card)); }
 .position-category-rail .position-icon { position: absolute; top: -22px; left: 50%; transform: translateX(-50%); width: 56px; height: 56px; border-radius: 999px; background: var(--card); display: grid; place-items: center; box-shadow: var(--employment-shadow); }
 .position-category-rail .position-icon img, .position-category-rail .position-icon svg { width: 34px; height: 34px; object-fit: contain; color: var(--employment-blue); }
-.position-category-rail .position-category > span:last-child { padding: 10px 8px 0; font-size: 13px; font-weight: 700; text-align: center; line-height: 1.2; }
+.position-category-rail .position-category > .position-name { padding: 10px 8px 0; font-size: 13px; font-weight: 700; text-align: center; line-height: 1.2; }
+.position-count { display: inline-block; padding: 3px 8px; border-radius: 999px; border: 1px solid var(--employment-card-border); background: color-mix(in oklab, var(--employment-blue) 8%, var(--card)); color: var(--employment-blue); font-size: 10px; font-weight: 700; line-height: 1.3; white-space: nowrap; }
+.position-category-rail .position-count { margin-top: 6px; }
+.position-category.is-empty { opacity: .55; }
+.position-category.is-empty .position-count { background: var(--muted); border-color: var(--border); color: var(--muted-foreground); }
+.position-category.is-empty .position-icon { color: var(--muted-foreground); }

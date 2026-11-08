@@ -1,12 +1,13 @@
 import { useState } from "react";
 import { Link, createFileRoute } from "@tanstack/react-router";
-import { useSuspenseQuery } from "@tanstack/react-query";
+import { useQuery, useSuspenseQuery } from "@tanstack/react-query";
 import { ArrowLeft, Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { AppBottomNav } from "@/components/app-bottom-nav";
 import { NavigationLoading } from "@/components/navigation-loading";
 import { PositionLink } from "@/components/job-position-categories";
-import { positionsQueryOptions } from "@/lib/job-positions-query";
+import { positionCountsQueryOptions, positionsQueryOptions } from "@/lib/job-positions-query";
+import { positionCount } from "@/lib/job-positions";
 
 export const Route = createFileRoute("/puestos/")({
   head: () => ({ meta: [
@@ -24,13 +25,14 @@ export const Route = createFileRoute("/puestos/")({
 
 function PositionsPage() {
   const { data } = useSuspenseQuery(positionsQueryOptions);
+  const counts = useQuery(positionCountsQueryOptions);
   const [search, setSearch] = useState("");
   const normalize = (text: string) => text.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
   const positions = data.filter(position => normalize(position.nombre).includes(normalize(search.trim())));
   return <main className="employment-screen positions-screen">
     <header className="positions-header"><Link to="/" aria-label="Volver a Empleos"><ArrowLeft /></Link><h1>Puestos de trabajo</h1></header>
     <div className="employment-search position-search"><Search aria-hidden="true" /><Input type="search" aria-label="Buscar categoría" placeholder="Buscar un puesto" value={search} onChange={event => setSearch(event.target.value)} /></div>
-    <section className="position-category-grid" aria-label="Puestos de trabajo">{positions.map(position => <PositionLink key={position.id} position={position} />)}</section>
+    <section className="position-category-grid" aria-label="Puestos de trabajo">{positions.map(position => <PositionLink key={position.id} position={position} count={counts.data ? positionCount(counts.data, position) : undefined} />)}</section>
     {!positions.length && <p className="position-empty">No se encontraron puestos.</p>}
     <AppBottomNav active="empleos" />
   </main>;

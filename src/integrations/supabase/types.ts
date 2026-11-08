@@ -736,6 +736,7 @@ export type Database = {
       profiles: {
         Row: {
           account_type: string
+          busqueda_activa_hasta: string | null
           created_at: string
           full_name: string
           id: string
@@ -743,6 +744,7 @@ export type Database = {
         }
         Insert: {
           account_type?: string
+          busqueda_activa_hasta?: string | null
           created_at?: string
           full_name?: string
           id: string
@@ -750,6 +752,7 @@ export type Database = {
         }
         Update: {
           account_type?: string
+          busqueda_activa_hasta?: string | null
           created_at?: string
           full_name?: string
           id?: string
@@ -1059,6 +1062,7 @@ export type Database = {
           candidato: string
           created_at: string
           cv_snapshot: Json
+          disponible: boolean
           estado: string
           job_id: number
           mensaje: string

@@ -725,3 +725,11 @@ nav .employment-nav-item, .employment-nav .employment-nav-item { position: relat
 .experience-screen-save { flex: 1; height: 48px; border-radius: 999px; background: var(--employment-blue); color: var(--primary-foreground); font-size: 15px; font-weight: 600; }
 .experience-screen-save:hover { background: var(--employment-blue); opacity: 0.92; }
 .experience-screen-delete { color: var(--destructive); }
+
+/* Curriculum import */
+.curriculum-import-input { display: none; }
+.curriculum-import { display: grid; gap: 6px; }
+.curriculum-import-button { height: 46px; border-radius: 16px; border: 1.5px dashed var(--primary); color: var(--primary); font-size: 13px; font-weight: 650; gap: 8px; background: transparent; }
+.curriculum-import-button:disabled { opacity: 0.6; }
+.curriculum-import-hint { margin: 0; font-size: 11.5px; color: var(--muted-foreground); text-align: center; }
+.curriculum-import-message { margin: 0; font-size: 12px; font-weight: 600; color: var(--primary); text-align: center; }

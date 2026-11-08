@@ -48,4 +48,5 @@
 - [x] Mis postulaciones: drawer con línea de tiempo del proceso (Enviada → En revisión → Entrevista → Resultado); 9 pruebas pasan. Verificación con sesión real pendiente (Supabase externo).
 - [x] Home: la sección «Explorá por puesto» se muestra después de la quinta oferta; verificado en el navegador (orden CARD×5 → POSITIONS).
 - [ ] Home /empleos y «Empleos similares»: 4 tarjetas skeleton (logo, título, empresa, etiqueta de tiempo) con brillo suave, mismos colores y bordes redondeados.
-- [ ] Corregir el desborde horizontal que apareció al mover la sección de puestos dentro de la lista (tarjetas cortadas a la derecha).
+- [x] Corregir el desborde horizontal que apareció al mover la sección de puestos dentro de la lista (tarjetas cortadas a la derecha); scrollWidth vuelve a 420 en teléfono.
+- [x] Home «Explorá por puesto» y /puestos: chip con la cantidad de empleos por categoría («12 empleos», «1 empleo»); sin ofertas queda atenuada con «Sin ofertas»; 5 pruebas pasan y verificado en el navegador.

@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import {
   curriculumPayload,
   emptyCurriculum,
+  emptyEducation,
   emptyExperience,
   toCurriculumDraft,
   type CurriculumRow,

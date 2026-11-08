@@ -20,7 +20,7 @@ export const Route = createFileRoute('/panel-empresa')({
 });
 
 type Cv = { [k: string]: any };
-type Candidate = { postulacion_id: string; job_id: number; titulo: string | null; candidato: string; estado: string; created_at: string; mensaje: string | null; cv_snapshot: Cv | null };
+type Candidate = { postulacion_id: string; job_id: number; titulo: string | null; candidato: string; estado: string; created_at: string; mensaje: string | null; cv_snapshot: Cv | null; disponible?: boolean };
 
 function CvSummary({ cv }: { cv: Cv }) {
   const name = [cv['first_name'], cv['last_name']].filter(Boolean).join(' ') || cv['full_name'];
@@ -82,7 +82,7 @@ function CompanyPanel() {
       <header className="profile-heading"><h2>{g.titulo}</h2><p>{g.items.length} {g.items.length === 1 ? 'candidato' : 'candidatos'}</p></header>
       {g.items.map((c) => <div key={c.postulacion_id} className="profile-account-row" style={{ justifyContent: 'space-between' }}>
         <div className="profile-account-copy">
-          <strong>{c.candidato}</strong><p>Postulado el {new Date(c.created_at).toLocaleDateString('es-UY')}</p>
+          <strong>{c.candidato}</strong>{c.disponible && <span className="ml-2 rounded-full bg-success/15 px-2 py-0.5 text-xs font-semibold text-success">Disponible ya</span>}<p>Postulado el {new Date(c.created_at).toLocaleDateString('es-UY')}</p>
           {c.mensaje && <p className="text-sm italic">“{c.mensaje}”</p>}
           {c.cv_snapshot ? <details className="text-sm"><summary className="cursor-pointer text-primary">Ver currículum</summary><CvSummary cv={c.cv_snapshot} /></details> : <p className="text-xs text-muted-foreground">Sin currículum adjunto</p>}
         </div>

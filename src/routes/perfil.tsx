@@ -9,6 +9,7 @@ import { useAccess } from '@/components/access-provider';
 import { useAccessDialog } from '@/components/access-dialog';
 import { supabase } from '@/integrations/supabase/client';
 import { AccountDeletion } from '@/components/account-deletion';
+import { activeSearchDaysLeft, activeSearchUntil, isActiveSearch } from '@/lib/active-search';
 
 export const Route = createFileRoute('/perfil')({
   head: () => ({ meta: [

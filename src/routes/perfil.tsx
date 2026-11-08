@@ -93,6 +93,7 @@ function ProfileScreen() {
         </button>)}
       </div>
       {typeError && <p className="profile-error" role="alert">{typeError}</p>}
+      {accountType === 'empresa' && <Link to="/panel-empresa" className="profile-access-row"><Building2 /><span>Panel de empresa · candidatos</span><ChevronRight className="profile-access-arrow" /></Link>}
     </ProfileBlock>}
     <ProfileBlock title="CONSENTIMIENTOS" subtitle="Gestiona tus comunicaciones">
       <div className="profile-consent-row">

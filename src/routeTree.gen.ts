@@ -18,6 +18,7 @@ import { Route as EmpleosRouteImport } from './routes/empleos'
 import { Route as EstadisticasRouteImport } from './routes/estadisticas'
 import { Route as MisPostulacionesRouteImport } from './routes/mis-postulaciones'
 import { Route as OfertasGuardadasRouteImport } from './routes/ofertas-guardadas'
+import { Route as PanelEmpresaRouteImport } from './routes/panel-empresa'
 import { Route as PerfilRouteImport } from './routes/perfil'
 import { Route as PuestosRouteImport } from './routes/puestos'
 import { Route as RadarRouteImport } from './routes/radar'
@@ -72,6 +73,11 @@ const OfertasGuardadasRoute = OfertasGuardadasRouteImport.update({
   path: '/ofertas-guardadas',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PanelEmpresaRoute = PanelEmpresaRouteImport.update({
+  id: '/panel-empresa',
+  path: '/panel-empresa',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PerfilRoute = PerfilRouteImport.update({
   id: '/perfil',
   path: '/perfil',
@@ -123,6 +129,7 @@ export interface FileRoutesByFullPath {
   '/estadisticas': typeof EstadisticasRoute
   '/mis-postulaciones': typeof MisPostulacionesRoute
   '/ofertas-guardadas': typeof OfertasGuardadasRoute
+  '/panel-empresa': typeof PanelEmpresaRoute
   '/perfil': typeof PerfilRoute
   '/puestos': typeof PuestosRouteWithChildren
   '/radar': typeof RadarRoute
@@ -142,6 +149,7 @@ export interface FileRoutesByTo {
   '/estadisticas': typeof EstadisticasRoute
   '/mis-postulaciones': typeof MisPostulacionesRoute
   '/ofertas-guardadas': typeof OfertasGuardadasRoute
+  '/panel-empresa': typeof PanelEmpresaRoute
   '/perfil': typeof PerfilRoute
   '/radar': typeof RadarRoute
   '/reset-password': typeof ResetPasswordRoute
@@ -161,6 +169,7 @@ export interface FileRoutesById {
   '/estadisticas': typeof EstadisticasRoute
   '/mis-postulaciones': typeof MisPostulacionesRoute
   '/ofertas-guardadas': typeof OfertasGuardadasRoute
+  '/panel-empresa': typeof PanelEmpresaRoute
   '/perfil': typeof PerfilRoute
   '/puestos': typeof PuestosRouteWithChildren
   '/radar': typeof RadarRoute
@@ -182,6 +191,7 @@ export interface FileRouteTypes {
     | '/estadisticas'
     | '/mis-postulaciones'
     | '/ofertas-guardadas'
+    | '/panel-empresa'
     | '/perfil'
     | '/puestos'
     | '/radar'
@@ -201,6 +211,7 @@ export interface FileRouteTypes {
     | '/estadisticas'
     | '/mis-postulaciones'
     | '/ofertas-guardadas'
+    | '/panel-empresa'
     | '/perfil'
     | '/radar'
     | '/reset-password'
@@ -219,6 +230,7 @@ export interface FileRouteTypes {
     | '/estadisticas'
     | '/mis-postulaciones'
     | '/ofertas-guardadas'
+    | '/panel-empresa'
     | '/perfil'
     | '/puestos'
     | '/radar'
@@ -239,6 +251,7 @@ export interface RootRouteChildren {
   EstadisticasRoute: typeof EstadisticasRoute
   MisPostulacionesRoute: typeof MisPostulacionesRoute
   OfertasGuardadasRoute: typeof OfertasGuardadasRoute
+  PanelEmpresaRoute: typeof PanelEmpresaRoute
   PerfilRoute: typeof PerfilRoute
   PuestosRoute: typeof PuestosRouteWithChildren
   RadarRoute: typeof RadarRoute
@@ -310,6 +323,13 @@ declare module '@tanstack/react-router' {
       path: '/ofertas-guardadas'
       fullPath: '/ofertas-guardadas'
       preLoaderRoute: typeof OfertasGuardadasRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/panel-empresa': {
+      id: '/panel-empresa'
+      path: '/panel-empresa'
+      fullPath: '/panel-empresa'
+      preLoaderRoute: typeof PanelEmpresaRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/perfil': {
@@ -394,6 +414,7 @@ const rootRouteChildren: RootRouteChildren = {
   EstadisticasRoute: EstadisticasRoute,
   MisPostulacionesRoute: MisPostulacionesRoute,
   OfertasGuardadasRoute: OfertasGuardadasRoute,
+  PanelEmpresaRoute: PanelEmpresaRoute,
   PerfilRoute: PerfilRoute,
   PuestosRoute: PuestosRouteWithChildren,
   RadarRoute: RadarRoute,

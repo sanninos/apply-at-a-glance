@@ -8,6 +8,10 @@ export function isNewUnseenOffer(job: Pick<JobListItem, "id" | "created_at" | "i
   return job.isLlamado === false && Number.isFinite(age) && age >= 0 && age <= 24 * 60 * 60 * 1000 && !seen.has(String(job.id));
 }
 
+export function newUnseenOffers<T extends Pick<JobListItem, "id" | "created_at" | "isLlamado">>(jobs: T[], seen: ReadonlySet<string>, now: number): T[] {
+  return jobs.filter(job => isNewUnseenOffer(job, seen, now));
+}
+
 export function readViewedJobs(userId: string | null): Set<string> {
   try {
     const parsed: unknown = JSON.parse(window.localStorage.getItem(jobViewsKey(userId)) || "[]");

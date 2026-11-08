@@ -1,11 +1,16 @@
 import { beforeEach, describe, expect, it } from "vitest";
-import { isNewUnseenOffer, jobViewsKey, markJobViewed, readViewedJobs } from "@/lib/new-job-offers";
+import { isNewUnseenOffer, newUnseenOffers, jobViewsKey, markJobViewed, readViewedJobs } from "@/lib/new-job-offers";
 
 const now = Date.parse("2026-11-02T22:38:00Z");
 const offer = { id: 42, created_at: "2026-11-02T22:00:00Z", isLlamado: false };
 
 describe("new unseen job offers", () => {
   beforeEach(() => window.localStorage.clear());
+  it("counts and selects only unseen normal offers within 24 hours for the home notice", () => {
+    const jobs = [offer, { ...offer, id: 43 }, { ...offer, id: 44, isLlamado: true }, { ...offer, id: 45, created_at: new Date(now - 24 * 3600000 - 1).toISOString() }];
+    expect(newUnseenOffers(jobs, new Set(["43"]), now).map(job => job.id)).toEqual([42]);
+    expect(newUnseenOffers(jobs, new Set(["42", "43"]), now)).toHaveLength(0);
+  });
   it("requires isLlamado to be exactly false", () => {
     expect(isNewUnseenOffer(offer, new Set(), now)).toBe(true);
     expect(isNewUnseenOffer({ ...offer, isLlamado: true }, new Set(), now)).toBe(false);

@@ -48,7 +48,7 @@ function ProfileScreen() {
     enabled: ready && Boolean(user),
     queryFn: async () => {
       if (!user) return null;
-      const { data, error } = await supabase.from('profiles').select('full_name, account_type').eq('id', user.id).single();
+      const { data, error } = await supabase.from('profiles').select('full_name, account_type, busqueda_activa_hasta').eq('id', user.id).single();
       if (error) throw error;
       return data;
     },
@@ -75,6 +75,19 @@ function ProfileScreen() {
     if (error) { setTypeError('No pudimos cambiar el tipo de cuenta. Intentá nuevamente.'); return; }
     await queryClient.invalidateQueries({ queryKey: ['access-profile', user.id] });
   }
+  const searchUntil = profile.data?.busqueda_activa_hasta ?? null;
+  const searching = isActiveSearch(searchUntil);
+  const daysLeft = activeSearchDaysLeft(searchUntil);
+  const [savingSearch, setSavingSearch] = useState(false);
+  const [searchError, setSearchError] = useState('');
+  async function setActiveSearch(on: boolean) {
+    if (!user || savingSearch) return;
+    setSavingSearch(true); setSearchError('');
+    const { error } = await supabase.from('profiles').update({ busqueda_activa_hasta: on ? activeSearchUntil() : null }).eq('id', user.id);
+    setSavingSearch(false);
+    if (error) { setSearchError('No pudimos actualizar tu búsqueda activa. Intentá nuevamente.'); return; }
+    await queryClient.invalidateQueries({ queryKey: ['access-profile', user.id] });
+  }
   return <main className="profile-screen">
     <h1 className="sr-only">Mi perfil</h1>
     <ProfileBlock title="CUENTA" subtitle="Datos de tu sesión en Urujobs">
@@ -94,6 +107,19 @@ function ProfileScreen() {
         </button>)}
       </div>
       {typeError && <p className="profile-error" role="alert">{typeError}</p>}
+    </ProfileBlock>}
+    {user && !isCompany && <ProfileBlock title="BÚSQUEDA ACTIVA" subtitle="Mostrá a las empresas que estás disponible">
+      <div className="flex items-center justify-between gap-3">
+        <div>
+          <strong>Estoy buscando trabajo activamente</strong>
+          <p className="text-sm text-muted-foreground">
+            {searching ? `Tu CV muestra «Disponible ya». Vence en ${daysLeft} ${daysLeft === 1 ? 'día' : 'días'}.` : 'Dura 7 días. Renovala cada semana para seguir visible.'}
+          </p>
+        </div>
+        <Switch checked={searching} disabled={savingSearch || profile.isPending} onCheckedChange={(on) => void setActiveSearch(on)} aria-label="Estoy buscando trabajo activamente" />
+      </div>
+      {searching && daysLeft <= 2 && <Button variant="outline" className="mt-3" disabled={savingSearch} onClick={() => void setActiveSearch(true)}>Renovar 7 días</Button>}
+      {searchError && <p className="profile-error" role="alert">{searchError}</p>}
     </ProfileBlock>}
     <ProfileBlock title="CONSENTIMIENTOS" subtitle="Gestiona tus comunicaciones">
       <div className="profile-consent-row">

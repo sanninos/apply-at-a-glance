@@ -819,3 +819,6 @@ nav .employment-nav-item, .employment-nav .employment-nav-item { position: relat
 .position-category.is-empty { opacity: .55; }
 .position-category.is-empty .position-count { background: var(--muted); border-color: var(--border); color: var(--muted-foreground); }
 .position-category.is-empty .position-icon { color: var(--muted-foreground); }
+
+.curriculum-export-actions { display: flex; gap: 0.5rem; }
+.curriculum-export-actions > * { flex: 1; }

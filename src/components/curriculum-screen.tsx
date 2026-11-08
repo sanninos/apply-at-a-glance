@@ -1,6 +1,6 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useRef, useState } from "react";
-import { Cake, Camera, Check, ChevronLeft, FileUp, Lightbulb, LogIn, Mail, Pencil, Plus, RefreshCw, Smartphone, Star, Trash2, User, X } from "lucide-react";
+import { Cake, Camera, Check, ChevronLeft, Download, FileUp, Share2, Lightbulb, LogIn, Mail, Pencil, Plus, RefreshCw, Smartphone, Star, Trash2, User, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { AppBottomNav } from "@/components/app-bottom-nav";
 import { useAccessDialog } from "@/components/access-dialog";
@@ -44,6 +44,20 @@ function AccountCurriculumScreen() {
   const [importing, setImporting] = useState(false);
   const [importMessage, setImportMessage] = useState("");
   const importInput = useRef<HTMLInputElement | null>(null);
+  const [exporting, setExporting] = useState(false);
+  async function handleExport(mode: "download" | "share") {
+    setExporting(true);
+    try {
+      const { buildCurriculumPdf, curriculumFileName, downloadBlob, shareOrDownload } = await import("@/lib/curriculum-pdf");
+      const blob = await buildCurriculumPdf(draft, user?.email);
+      const name = curriculumFileName(draft);
+      if (mode === "share") await shareOrDownload(blob, name); else downloadBlob(blob, name);
+    } catch {
+      setImportMessage("No pudimos generar el PDF. Probá de nuevo.");
+    } finally {
+      setExporting(false);
+    }
+  }
   const [initialized, setInitialized] = useState(false);
   const dirty = useRef(false);
   const saving = useRef(false);
@@ -225,6 +239,17 @@ function AccountCurriculumScreen() {
         </Button>
         <p className="curriculum-import-hint">Completamos los campos automáticamente con los datos del archivo.</p>
         {importMessage && <p className="curriculum-import-message" role="status">{importMessage}</p>}
+      </section>
+      <section className="curriculum-import" aria-label="Exportar currículum">
+        <div className="curriculum-export-actions">
+          <Button type="button" className="curriculum-import-button" disabled={exporting} onClick={() => void handleExport("download")}>
+            <Download aria-hidden="true" />{exporting ? "Generando…" : "Descargar PDF"}
+          </Button>
+          <Button type="button" variant="outline" className="curriculum-import-button" disabled={exporting} onClick={() => void handleExport("share")}>
+            <Share2 aria-hidden="true" />Compartir
+          </Button>
+        </div>
+        <p className="curriculum-import-hint">Enviá tu currículum por WhatsApp o correo con un diseño profesional.</p>
       </section>
       <fieldset className="curriculum-fields">
       <section className="curriculum-block">

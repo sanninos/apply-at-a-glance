@@ -1,12 +1,13 @@
 import { Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { BriefcaseBusiness, Building2, ChevronRight, Clock, LogIn, RefreshCw } from "lucide-react";
+import { useState } from "react";
+import { BriefcaseBusiness, Building2, Check, ChevronRight, Clock, LogIn, RefreshCw, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { AppBottomNav } from "@/components/app-bottom-nav";
 import { useAccessDialog } from "@/components/access-dialog";
 import { useAccess } from "@/components/access-provider";
 import { supabase } from "@/integrations/supabase/client";
-import { applicationCountLabel, applicationStatus, listApplications, type ApplicationItem, type ApplicationRow } from "@/lib/applications";
+import { applicationCountLabel, applicationStatus, applicationTimeline, listApplications, type ApplicationItem, type ApplicationRow } from "@/lib/applications";
 import { publishedAgo } from "@/lib/job-list";
 import { useEmployerLogo } from "@/hooks/use-employer-logo";
 import { cn } from "@/lib/utils";
@@ -33,6 +34,7 @@ export function ApplicationsScreen() {
   });
   const signedIn = ready && Boolean(user);
   const total = applications.data?.length ?? 0;
+  const [selected, setSelected] = useState<ApplicationItem | null>(null);
 
   return <main className="applications-screen">
     <header className="applications-header">
@@ -62,7 +64,7 @@ export function ApplicationsScreen() {
       ? <section className="applications-list" aria-label="Tus postulaciones">
         {applications.data.map(item => {
           const status = applicationStatus(item.estado);
-          return <Link key={item.id} className="applications-card" to="/llamado/$jobId" params={{ jobId: String(item.jobId) }} preload="intent" preloadDelay={0}>
+          return <button key={item.id} type="button" className="applications-card" onClick={() => setSelected(item)} aria-label={`Ver proceso de ${item.job.titulo || "la oferta"}`}>
             <ApplicationLogo item={item} />
             <div className="applications-copy">
               <p className="applications-company">{item.job.Empresa || "Empresa"}</p>
@@ -73,7 +75,7 @@ export function ApplicationsScreen() {
               </div>
             </div>
             <ChevronRight className="applications-arrow" aria-hidden="true" />
-          </Link>;
+          </button>;
         })}
       </section>
       : <section className="applications-empty">
@@ -82,6 +84,28 @@ export function ApplicationsScreen() {
         <p>Todavía no te postulaste a ninguna oferta. Abrí una oferta y tocá «Postularme» para anotarla acá.</p>
         <Button asChild variant="outline"><Link to="/">Ver ofertas</Link></Button>
       </section>)}
+
+    {selected && <div className="application-timeline-backdrop" onClick={() => setSelected(null)}>
+      <section className="application-timeline-sheet" role="dialog" aria-modal="true" aria-labelledby="application-timeline-title" onClick={(event) => event.stopPropagation()}>
+        <span className="about-sheet-handle" aria-hidden="true" />
+        <button type="button" className="about-sheet-close" aria-label="Cerrar" onClick={() => setSelected(null)}><X aria-hidden="true" /></button>
+        <h2 id="application-timeline-title">Proceso de tu postulación</h2>
+        <p className="application-timeline-job">{selected.job.titulo || "Oferta de empleo"}{selected.job.Empresa ? ` · ${selected.job.Empresa}` : ""}</p>
+        <ol className="application-timeline">
+          {applicationTimeline(selected).map((step) => (
+            <li key={step.key} className={`application-timeline-step is-${step.state}`}>
+              <span className="application-timeline-dot" aria-hidden="true">{step.state === "done" ? <Check /> : step.state === "rejected" ? <X /> : null}</span>
+              <div className="application-timeline-copy">
+                <p>{step.label}</p>
+                {step.date && <span>{new Date(step.date).toLocaleDateString("es-UY", { day: "numeric", month: "long", year: "numeric" })}</span>}
+                {step.state === "current" && <span>Etapa actual</span>}
+              </div>
+            </li>
+          ))}
+        </ol>
+        <Button asChild className="application-timeline-link"><Link to="/llamado/$jobId" params={{ jobId: String(selected.jobId) }} onClick={() => setSelected(null)}>Ver la oferta</Link></Button>
+      </section>
+    </div>}
 
     <AppBottomNav active="perfil" />
   </main>;

@@ -14,6 +14,7 @@ import {
   toCurriculumDraft,
   type CurriculumDraft,
   type CurriculumRow,
+  type EducationDraft,
   type ExperienceDraft,
 } from "@/lib/curriculum";
 
@@ -36,6 +37,7 @@ function AccountCurriculumScreen() {
   const [editingExperience, setEditingExperience] = useState<string | null>(null);
   const [experienceIsNew, setExperienceIsNew] = useState(false);
   const [editingEducation, setEditingEducation] = useState<string | null>(null);
+  const [educationIsNew, setEducationIsNew] = useState(false);
   const [initialized, setInitialized] = useState(false);
   const dirty = useRef(false);
   const saving = useRef(false);
@@ -82,7 +84,29 @@ function AccountCurriculumScreen() {
     void save();
   }
 
+  function openEducation(id?: string) {
+    if (id) {
+      setEducationIsNew(false);
+      setEditingEducation(id);
+      return;
+    }
+    const entry = emptyEducation();
+    edit({ education: [...draft.education, entry] });
+    setEducationIsNew(true);
+    setEditingEducation(entry.id);
+  }
+
+  function updateEducation(id: string, patch: Partial<EducationDraft>) {
+    edit({ education: draft.education.map((row) => (row.id === id ? { ...row, ...patch } : row)) });
+  }
+
+  function closeEducation() {
+    setEditingEducation(null);
+    void save();
+  }
+
   const editingExperienceEntry = editingExperience ? draft.experiences.find((entry) => entry.id === editingExperience) ?? null : null;
+  const editingEducationEntry = editingEducation ? draft.education.find((entry) => entry.id === editingEducation) ?? null : null;
 
   const signedIn = ready && Boolean(user);
   // Seed the draft once from the stored curriculum; a stored row with entries
@@ -195,26 +219,13 @@ function AccountCurriculumScreen() {
       </section>
 
       <section className="curriculum-block">
-        <div className="curriculum-section-head"><h2 className="curriculum-block-title">EDUCACIÓN</h2><GraduationCap aria-hidden="true" /></div>
+        <div className="curriculum-section-head"><h2 className="curriculum-block-title">EDUCACIÓN</h2><Button type="button" variant="ghost" size="icon" title="Añadir educación" aria-label="Añadir educación" onClick={() => openEducation()}><Plus /></Button></div>
         {draft.education.map((entry, index) => (
-          (entry.titulo || entry.institucion || entry.desde || entry.hasta || editingEducation === entry.id) && <div className="curriculum-entry" key={entry.id}>
-            {editingEducation !== entry.id && <div className="curriculum-item-summary"><span className="curriculum-timeline-dot" /><div><h3>{entry.titulo || "Educación"}{entry.institucion && ` · ${entry.institucion}`}</h3><p>{[entry.desde, entry.hasta].filter(Boolean).join(" - ")}</p></div><Button type="button" variant="ghost" size="icon" title="Editar educación" aria-label={`Editar educación ${index + 1}`} onClick={() => setEditingEducation(entry.id)}><Pencil /></Button></div>}
-            {editingEducation === entry.id && <div className="curriculum-editor"><div className="curriculum-entry-head">
-              <span className="curriculum-entry-label"><GraduationCap aria-hidden="true" />Educación {index + 1}</span>
-              <Button variant="ghost" size="icon" type="button" className="curriculum-remove" aria-label={`Quitar educación ${index + 1}`} onClick={() => edit({ education: draft.education.filter((row) => row.id !== entry.id) })}>
-                <Trash2 aria-hidden="true" />
-              </Button>
-            </div>
-            <div className="curriculum-grid-2">
-              <div className="curriculum-field"><label htmlFor={`cv-edu-titulo-${index}`}>Título</label><input id={`cv-edu-titulo-${index}`} value={entry.titulo} onChange={(event) => edit({ education: draft.education.map((row) => row.id === entry.id ? { ...row, titulo: event.target.value } : row) })} /></div>
-              <div className="curriculum-field"><label htmlFor={`cv-edu-institucion-${index}`}>Institución</label><input id={`cv-edu-institucion-${index}`} value={entry.institucion} onChange={(event) => edit({ education: draft.education.map((row) => row.id === entry.id ? { ...row, institucion: event.target.value } : row) })} /></div>
-              <div className="curriculum-field"><label htmlFor={`cv-edu-desde-${index}`}>Desde</label><input id={`cv-edu-desde-${index}`} value={entry.desde} onChange={(event) => edit({ education: draft.education.map((row) => row.id === entry.id ? { ...row, desde: event.target.value } : row) })} placeholder="Ej: 2018" /></div>
-              <div className="curriculum-field"><label htmlFor={`cv-edu-hasta-${index}`}>Hasta</label><input id={`cv-edu-hasta-${index}`} value={entry.hasta} onChange={(event) => edit({ education: draft.education.map((row) => row.id === entry.id ? { ...row, hasta: event.target.value } : row) })} placeholder="Ej: 2021" /></div>
-            </div>
-            <Button type="button" variant="ghost" className="curriculum-done" onClick={() => setEditingEducation(null)}><Check />Listo</Button></div>}
+          (entry.nivel || entry.titulo || entry.institucion || entry.desde || entry.hasta || entry.descripcion || entry.lugar) && <div className="curriculum-entry" key={entry.id}>
+            <div className="curriculum-item-summary"><span className="curriculum-timeline-dot" /><div><h3>{entry.titulo || entry.nivel || "Educación"}{entry.institucion && ` · ${entry.institucion}`}</h3><p>{[entry.desde, entry.actualmente ? "Actualidad" : entry.hasta].filter(Boolean).join(" - ")}</p></div><Button type="button" variant="ghost" size="icon" title="Editar educación" aria-label={`Editar educación ${index + 1}`} onClick={() => openEducation(entry.id)}><Pencil /></Button></div>
           </div>
         ))}
-        <Button type="button" variant="ghost" className="curriculum-add" onClick={() => { const entry = emptyEducation(); edit({ education: [...draft.education, entry] }); setEditingEducation(entry.id); }}>Añadir educación</Button>
+        <Button type="button" variant="ghost" className="curriculum-add" onClick={() => openEducation()}>Añadir educación</Button>
       </section>
 
       <section className="curriculum-block">

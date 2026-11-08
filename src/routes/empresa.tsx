@@ -27,7 +27,7 @@ const COMPANY_FIELDS = [
   ['telefono', 'Teléfono'], ['sitio_web', 'Sitio web'], ['direccion', 'Dirección'], ['ciudad', 'Ciudad'],
   ['departamento', 'Departamento'], ['imagen', 'URL del logo'],
 ] as const;
-type Company = { [key: string]: any };
+type Company = { [key: string]: any; id?: number; nombre?: string | null; descripcion?: string | null; imagen?: string | null };
 type Offer = { id: number; titulo: string | null; descripcion: string | null; ubicacion: string | null; ciudad: string | null; jornada: string | null; tipoContrato: string | null; salario: number | null; puesto: string | null; created_at: string };
 const emptyOffer = { titulo: '', descripcion: '', ubicacion: '', ciudad: '', jornada: '', tipoContrato: '', salario: '', puesto: '' };
 type OfferDraft = typeof emptyOffer;

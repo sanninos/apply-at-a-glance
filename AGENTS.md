@@ -20,6 +20,7 @@
 - Job detail uses shared query options with a short freshness window and intent-based link preloading so navigation reuses complete detail responses without duplicate reads or prefetching the entire list.
 - Company and poster images resolve through a shared browser-safe fallback attached to the current element, so a photo that fails after mount still falls back instead of rendering a broken image.
 - Home logo resolution accepts the job poster as an intermediate fallback using the existing fixed logo frame; other screens omit that fallback to preserve their presentation.
+- Home poster browsing uses a focused horizontal carousel over the existing filtered list data, with lazy whole-poster images and intent-only detail preloading to avoid extra list reads or layout overflow.
 - Radar uses Google Maps JavaScript with a callback-based asynchronous loader and public display-only paginated job reads; parse stored coordinates in a browser-safe helper to keep invalid locations off the map.
 - App access uses Supabase Auth, a single root session subscriber, and a private profiles table created by a signup trigger; keep public browsing available and clear query caches before sign-out.
 - Android Google login uses a registered Capacitor Credential Manager plugin restricted to the configured app HTTPS origin; send a hashed nonce to Google and its raw value to Supabase, never fall back to browser OAuth on native Android, and never log tokens.

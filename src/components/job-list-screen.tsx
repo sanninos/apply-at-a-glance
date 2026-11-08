@@ -7,6 +7,7 @@ import { JobFilterPanel } from "@/components/job-filter-panel";
 import { AppBottomNav } from "@/components/app-bottom-nav";
 import { HomeAdvertisement } from "@/components/home-advertisement";
 import { JobPositionCategories } from "@/components/job-position-categories";
+import { HomeJobPosters } from "@/components/home-job-posters";
 import { addRecent, loadRecent, storeRecent } from "@/lib/recent-searches";
 import { positionsQueryOptions } from "@/lib/job-positions-query";
 import { useQuery } from "@tanstack/react-query";
@@ -104,6 +105,7 @@ export function JobListScreen({ jobs, variant = "home", categoryTitle }: { jobs:
         {(job.isLlamado || job.isFeatured || isUrgent(job) || isNew(job)) && <div className="employment-badges">{isNew(job) && <span className="new-offer-badge">Nuevo</span>}{job.isLlamado && <span className="llamado-badge">Llamado público</span>}{job.isFeatured && <span>Destacada</span>}{isUrgent(job) && <span>Urgente</span>}</div>}
       </Link>
         {positionsBlock && index === POSITIONS_AFTER - 1 && positionsBlock}
+        {isHome && index === 7 && <HomeJobPosters jobs={visible} />}
       </Fragment>)}
       {positionsBlock && shown.length < POSITIONS_AFTER && positionsBlock}
       {!idle && !visible.length && <div className="employment-empty"><Search /><h2>No se encontraron empleos</h2><Button variant="outline" onClick={() => { setSearch(""); setLocation(""); setContract(""); setMode("all"); }}>Ver todos</Button></div>}

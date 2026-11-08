@@ -1,0 +1,2 @@
+ALTER TABLE public.profiles ADD COLUMN account_type text NOT NULL DEFAULT 'postulante' CHECK (account_type IN ('postulante','empresa'));
+GRANT UPDATE (account_type) ON public.profiles TO authenticated;

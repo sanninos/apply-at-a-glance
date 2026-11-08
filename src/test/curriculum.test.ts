@@ -1,5 +1,7 @@
-import { describe, expect, it } from 'vitest';
 import {
+  applyImportedCurriculum, describe, expect, it } from 'vitest';
+import {
+  applyImportedCurriculum,
   curriculumPayload,
   emptyCurriculum,
   emptyEducation,
@@ -156,5 +158,42 @@ describe('curriculum editor', () => {
     expect(draft.fullName).toBe('');
     expect(draft.skills).toBe('');
     expect(draft.experiences.every((entry) => entry.puesto === '')).toBe(true);
+  });
+});
+
+describe('applyImportedCurriculum', () => {
+  it('fills empty fields and keeps existing ones when the import lacks them', () => {
+    const draft = emptyCurriculum();
+    draft.city = 'Montevideo';
+    const merged = applyImportedCurriculum(draft, {
+      firstName: 'María',
+      lastName: 'Pérez',
+      phone: '099 111 222',
+      city: null,
+      summary: 'Profesional de atención al cliente.',
+      skills: 'Caja, Excel',
+    });
+    expect(merged.firstName).toBe('María');
+    expect(merged.lastName).toBe('Pérez');
+    expect(merged.fullName).toBe('María Pérez');
+    expect(merged.phone).toBe('099 111 222');
+    expect(merged.city).toBe('Montevideo');
+    expect(merged.summary).toBe('Profesional de atención al cliente.');
+    expect(merged.skills).toBe('Caja, Excel');
+  });
+
+  it('replaces experiences and education only when the import found entries', () => {
+    const draft = emptyCurriculum();
+    draft.experiences = [{ ...emptyExperience(), id: 'keep', puesto: 'Cajera' }];
+    const untouched = applyImportedCurriculum(draft, { experiences: [], education: null });
+    expect(untouched.experiences[0]?.puesto).toBe('Cajera');
+    const replaced = applyImportedCurriculum(draft, {
+      experiences: [{ puesto: 'Vendedora', empresa: 'Tienda', desde: '2022', actualmente: true }],
+      education: [{ nivel: 'Secundaria', titulo: 'Bachillerato', institucion: 'Liceo 1', desde: '2016', hasta: '2018' }],
+    });
+    expect(replaced.experiences).toHaveLength(1);
+    expect(replaced.experiences[0]?.puesto).toBe('Vendedora');
+    expect(replaced.experiences[0]?.actualmente).toBe(true);
+    expect(replaced.education[0]?.titulo).toBe('Bachillerato');
   });
 });

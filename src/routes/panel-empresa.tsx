@@ -34,7 +34,7 @@ function CvSummary({ cv }: { cv: Cv }) {
     {phone && <p>📞 {phone}</p>}
     {place && <p>📍 {place}</p>}
     {cv['summary'] && <p>{cv['summary']}</p>}
-    {exps.length > 0 && <><b>Experiencia</b>{exps.map((e: any, i: number) => <p key={i}>{[e?.role ?? e?.cargo ?? e?.title, e?.company ?? e?.empresa].filter(Boolean).join(' · ')}</p>)}</>}
+    {exps.length > 0 && <><b>Experiencia</b>{exps.map((e: any, i: number) => <p key={i}>{[e?.puesto ?? e?.cargo, e?.company ?? e?.empresa].filter(Boolean).join(' · ')}</p>)}</>}
     {edu.length > 0 && <><b>Educación</b>{edu.map((e: any, i: number) => <p key={i}>{[e?.degree ?? e?.title ?? e?.titulo, e?.institution ?? e?.institucion].filter(Boolean).join(' · ')}</p>)}</>}
     {skills.length > 0 && <p><b>Habilidades:</b> {skills.map((s: any) => typeof s === 'string' ? s : s?.name).filter(Boolean).join(', ')}</p>}
   </div>;

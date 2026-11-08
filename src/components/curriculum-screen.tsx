@@ -1,12 +1,14 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useRef, useState } from "react";
-import { Cake, Camera, Check, ChevronLeft, Lightbulb, LogIn, Mail, Pencil, Plus, RefreshCw, Smartphone, Star, Trash2, User, X } from "lucide-react";
+import { Cake, Camera, Check, ChevronLeft, FileUp, Lightbulb, LogIn, Mail, Pencil, Plus, RefreshCw, Smartphone, Star, Trash2, User, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { AppBottomNav } from "@/components/app-bottom-nav";
 import { useAccessDialog } from "@/components/access-dialog";
 import { useAccess } from "@/components/access-provider";
 import { supabase } from "@/integrations/supabase/client";
+import { importCurriculumFile } from "@/lib/curriculum-import.functions";
 import {
+  applyImportedCurriculum,
   curriculumPayload,
   emptyCurriculum,
   emptyEducation,
@@ -38,6 +40,9 @@ function AccountCurriculumScreen() {
   const [experienceIsNew, setExperienceIsNew] = useState(false);
   const [editingEducation, setEditingEducation] = useState<string | null>(null);
   const [educationIsNew, setEducationIsNew] = useState(false);
+  const [importing, setImporting] = useState(false);
+  const [importMessage, setImportMessage] = useState("");
+  const importInput = useRef<HTMLInputElement | null>(null);
   const [initialized, setInitialized] = useState(false);
   const dirty = useRef(false);
   const saving = useRef(false);
@@ -150,6 +155,26 @@ function AccountCurriculumScreen() {
     }
   }
 
+  async function handleImportFile(file: File) {
+    setImporting(true);
+    setImportMessage("");
+    try {
+      const buffer = await file.arrayBuffer();
+      let binary = "";
+      const bytes = new Uint8Array(buffer);
+      const chunk = 0x8000;
+      for (let i = 0; i < bytes.length; i += chunk) binary += String.fromCharCode(...bytes.subarray(i, i + chunk));
+      const imported = await importCurriculumFile({ data: { fileName: file.name, mimeType: file.type, base64: btoa(binary) } });
+      edit(applyImportedCurriculum(draft, imported));
+      setImportMessage("Listo: completamos los campos con los datos de tu currículum. Revisalos antes de seguir.");
+    } catch (cause) {
+      setImportMessage(cause instanceof Error ? cause.message : "No pudimos importar el archivo.");
+    } finally {
+      setImporting(false);
+      if (importInput.current) importInput.current.value = "";
+    }
+  }
+
   flush.current = () => { void save(); };
   useEffect(() => {
     if (!initialized || busy || !dirty.current || lastAttempt.current === version.current) return;
@@ -185,6 +210,14 @@ function AccountCurriculumScreen() {
     </section>}
 
     {signedIn && initialized && !curriculum.isError && <form className="curriculum-form" onBlur={() => { if (lastAttempt.current !== version.current) void save(); }} onSubmit={(event) => { event.preventDefault(); void save(); }}>
+      <input ref={importInput} type="file" accept=".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document" className="curriculum-import-input" aria-hidden="true" tabIndex={-1} onChange={(event) => { const file = event.target.files?.[0]; if (file) void handleImportFile(file); }} />
+      <section className="curriculum-import">
+        <Button type="button" variant="outline" className="curriculum-import-button" disabled={importing} onClick={() => importInput.current?.click()}>
+          <FileUp aria-hidden="true" />{importing ? "Analizando tu currículum…" : "Importar currículum (PDF o Word)"}
+        </Button>
+        <p className="curriculum-import-hint">Completamos los campos automáticamente con los datos del archivo.</p>
+        {importMessage && <p className="curriculum-import-message" role="status">{importMessage}</p>}
+      </section>
       <fieldset className="curriculum-fields">
       <section className="curriculum-block">
         <div className="curriculum-section-head"><h2 className="curriculum-block-title">SOBRE TI</h2>

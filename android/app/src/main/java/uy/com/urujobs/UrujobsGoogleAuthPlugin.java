@@ -23,6 +23,13 @@ import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential;
 public class UrujobsGoogleAuthPlugin extends Plugin {
     private CancellationSignal cancellation;
 
+    private boolean isTrustedPage() {
+        String url = getBridge().getWebView().getUrl();
+        if (url == null) return false;
+        Uri page = Uri.parse(url);
+        return "https".equals(page.getScheme()) && "apply-at-a-glance.lovable.app".equals(page.getHost());
+    }
+
     @PluginMethod
     public void signIn(PluginCall call) {
         String nonce = call.getString("hashedNonce");
@@ -31,8 +38,7 @@ public class UrujobsGoogleAuthPlugin extends Plugin {
             return;
         }
         getActivity().runOnUiThread(() -> {
-            Uri page = Uri.parse(getBridge().getWebView().getUrl());
-            if (!"https".equals(page.getScheme()) || !"apply-at-a-glance.lovable.app".equals(page.getHost())) {
+            if (!isTrustedPage()) {
                 call.reject("Untrusted origin", "untrusted_origin");
                 return;
             }
@@ -54,6 +60,10 @@ public class UrujobsGoogleAuthPlugin extends Plugin {
                             @Override
                             public void onResult(GetCredentialResponse response) {
                                 cancellation = null;
+                                if (!isTrustedPage()) {
+                                    call.reject("Untrusted origin", "untrusted_origin");
+                                    return;
+                                }
                                 try {
                                     Credential credential = response.getCredential();
                                     if (!(credential instanceof CustomCredential) ||

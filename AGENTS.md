@@ -12,6 +12,7 @@
 - The employment list is the home screen ("/"); /empleos redirects there so older links keep working, and /llamado/$jobId retains the original detail screen.
 - Job list presentation and filtering live in a focused component and browser-safe helper; public list reads project only display fields and paginate Supabase results to avoid silently missing rows.
 - New-offer badges use browser-local viewed IDs scoped by account (or guest); record views only on mounted detail screens, not preloads, to avoid marking unopened offers as seen or adding private reads to public loaders.
+- The home new-offers notice reuses the badge's unseen-offer predicate; dismissing the notice never records views, and its local filter stays scoped to the active account to avoid mixing histories.
 - Home filters use a separate drawer with a local draft applied on confirmation; use selectors for high-cardinality real location and contract options to keep the panel compact.
 - Home advertisement placement is a separate reserved frame before the search header; keep its dimensions stable and do not invent campaign content or personalized delivery without a real source.
 - Curriculum uses account-keyed expandable editors and serialized automatic saves after a brief typing pause or field blur; wait for initial loading, retain failed drafts and queue edits made during a save. Unsupported personal fields and photo uploads must not pretend to persist.

@@ -14,7 +14,8 @@ import { filterJobs, isUrgent, publishedAgo, publishedInLastDaysCount, searchSug
 import { useEmployerLogo } from "@/hooks/use-employer-logo";
 import { cn } from "@/lib/utils";
 import { useNewJobOffers } from "@/hooks/use-new-job-offers";
-import { isNewUnseenOffer } from "@/lib/new-job-offers";
+import { isNewUnseenOffer, newUnseenOffers } from "@/lib/new-job-offers";
+import { NewOffersNotice } from "@/components/new-offers-notice";
 
 function EmployerLogo({ job }: { job: JobListItem }) {
   const { src, ref, onError } = useEmployerLogo(job.fotoEmpresa || job.image);
@@ -30,6 +31,10 @@ export function JobListScreen({ jobs, variant = "home", categoryTitle }: { jobs:
   const isNew = (job: JobListItem) => newOffers ? isNewUnseenOffer(job, newOffers.seen, newOffers.now) : false;
   const isSearch = variant === "search";
   const isHome = variant === "home";
+  const accountScope = newOffers?.userId || "guest";
+  const [newOnlyScope, setNewOnlyScope] = useState<string | null>(null);
+  const newOnly = isHome && newOnlyScope === accountScope;
+  const unseenJobs = newOffers ? newUnseenOffers(jobs, newOffers.seen, newOffers.now) : [];
   const positions = useQuery({ ...positionsQueryOptions, enabled: isHome });
   const [search, setSearch] = useState("");
   const [recent, setRecent] = useState<string[]>([]);
@@ -42,14 +47,14 @@ export function JobListScreen({ jobs, variant = "home", categoryTitle }: { jobs:
   const [contract, setContract] = useState("");
   const [limit, setLimit] = useState(CARD_BATCH);
   const sentinelRef = useRef<HTMLDivElement | null>(null);
-  const visible = filterJobs(jobs, search, mode, location, contract);
+  const visible = filterJobs(newOnly ? unseenJobs : jobs, search, mode, location, contract);
   const idle = isSearch && !search.trim();
   const shown = idle ? [] : visible.slice(0, limit);
   const suggestions = isSearch ? searchSuggestions(jobs, search) : [];
   const positionsBlock = isHome && positions.data ? <JobPositionCategories positions={positions.data} jobs={jobs} /> : null;
 
   // Restart incremental rendering whenever the result set changes.
-  useEffect(() => { setLimit(CARD_BATCH); }, [search, mode, location, contract]);
+  useEffect(() => { setLimit(CARD_BATCH); }, [search, mode, location, contract, newOnly]);
 
   // Mount the next batch only when the user scrolls near the end.
   useEffect(() => {
@@ -71,6 +76,7 @@ export function JobListScreen({ jobs, variant = "home", categoryTitle }: { jobs:
   return <main className={cn("employment-screen", isSearch && "search-screen")}>
     <h1 className={categoryTitle ? "position-jobs-title" : "sr-only"}>{categoryTitle || "Empleos en Uruguay"}</h1>
     {isHome && <HomeAdvertisement />}
+    {isHome && newOffers && <NewOffersNotice key={accountScope} count={unseenJobs.length} signature={unseenJobs.map(job => job.id).sort((a, b) => a - b).join(",")} onView={() => { setNewOnlyScope(accountScope); setMode("all"); setLocation(""); setContract(""); }} />}
     <header className="employment-header">
       <div className="employment-search-row">
         {!isHome && <Button variant="ghost" size="icon" className="search-back" aria-label="Volver" onClick={() => (window.history.length > 1 ? router.history.back() : router.navigate({ to: isSearch ? "/" : "/puestos" }))}><ArrowLeft /></Button>}
@@ -80,9 +86,10 @@ export function JobListScreen({ jobs, variant = "home", categoryTitle }: { jobs:
         <Button variant="outline" size="icon" className={cn("employment-filter", (location || contract) && "filter-active")} aria-label="Filtrar empleos" title="Filtrar empleos" onClick={() => setFiltersOpen(true)}><SlidersHorizontal /></Button>
       </div>
       {isHome && <div className="employment-tabs" role="tablist" aria-label="Tipo de empleos">
-        {tabs.map(({ id, label, icon: Icon, count }) => <Button key={id} role="tab" aria-selected={mode === id} variant="ghost" className={cn("employment-tab", mode === id && "selected")} onClick={() => setMode(id)}><Icon /><span>{label}</span>{count !== undefined && <span className="tab-count">{count}</span>}</Button>)}
+        {tabs.map(({ id, label, icon: Icon, count }) => <Button key={id} role="tab" aria-selected={!newOnly && mode === id} variant="ghost" className={cn("employment-tab", !newOnly && mode === id && "selected")} onClick={() => { setMode(id); setNewOnlyScope(null); }}><Icon /><span>{label}</span>{count !== undefined && <span className="tab-count">{count}</span>}</Button>)}
       </div>}
     </header>
+    {newOnly && <div className="new-offers-selection"><span>Nuevas sin ver · {unseenJobs.length}</span><Button variant="link" onClick={() => setNewOnlyScope(null)}>Ver todas</Button></div>}
     {idle && recent.length > 0 && <section className="recent-searches" aria-labelledby="recent-searches-title">
       <header><h2 id="recent-searches-title">Búsquedas recientes</h2><button type="button" onClick={() => updateRecent([])}>Borrar todo</button></header>
       <ul>{recent.map(term => <li key={term} className="recent-chip"><button type="button" onClick={() => { setSearch(term); remember(term); }}>{term}</button><button type="button" aria-label={`Borrar ${term}`} onClick={() => updateRecent(recent.filter(x => x !== term))}><X aria-hidden="true" /></button></li>)}</ul>

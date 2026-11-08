@@ -1,7 +1,7 @@
 import { createFileRoute, Link, useNavigate } from '@tanstack/react-router';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useState, type ReactNode } from 'react';
-import { UserCircle, Megaphone, Bell, UsersRound, ListTodo, ChartNoAxesColumnIncreasing, LogOut, ChevronRight, Download, Trash2, GraduationCap, Bookmark } from 'lucide-react';
+import { UserCircle, Megaphone, Bell, UsersRound, ListTodo, ChartNoAxesColumnIncreasing, LogOut, ChevronRight, Download, Trash2, GraduationCap, Bookmark, Building2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
 import { AppBottomNav } from '@/components/app-bottom-nav';
@@ -21,6 +21,12 @@ export const Route = createFileRoute('/perfil')({
   ] }),
   component: ProfileScreen,
 });
+
+type AccountType = 'postulante' | 'empresa';
+const ACCOUNT_TYPES = [
+  { value: 'postulante' as const, label: 'Postulante', hint: 'Buscá y postulate a ofertas', Icon: UserCircle },
+  { value: 'empresa' as const, label: 'Business', hint: 'Cuenta para tu empresa', Icon: Building2 },
+];
 
 function ProfileBlock({ title, subtitle, children, className = '' }: { title: string; subtitle: string; children: ReactNode; className?: string }) {
   return <section className={`profile-block ${className}`}>
@@ -42,7 +48,7 @@ function ProfileScreen() {
     enabled: ready && Boolean(user),
     queryFn: async () => {
       if (!user) return null;
-      const { data, error } = await supabase.from('profiles').select('full_name').eq('id', user.id).single();
+      const { data, error } = await supabase.from('profiles').select('full_name, account_type').eq('id', user.id).single();
       if (error) throw error;
       return data;
     },
@@ -57,6 +63,17 @@ function ProfileScreen() {
     void navigate({ to: '/auth', replace: true });
   }
   const fullName = profile.data?.full_name;
+  const accountType = (profile.data?.account_type ?? 'postulante') as AccountType;
+  const [typeError, setTypeError] = useState('');
+  const [savingType, setSavingType] = useState(false);
+  async function changeAccountType(next: AccountType) {
+    if (!user || next === accountType || savingType) return;
+    setSavingType(true); setTypeError('');
+    const { error } = await supabase.from('profiles').update({ account_type: next }).eq('id', user.id);
+    setSavingType(false);
+    if (error) { setTypeError('No pudimos cambiar el tipo de cuenta. Intentá nuevamente.'); return; }
+    await queryClient.invalidateQueries({ queryKey: ['access-profile', user.id] });
+  }
   return <main className="profile-screen">
     <h1 className="sr-only">Mi perfil</h1>
     <ProfileBlock title="CUENTA" subtitle="Datos de tu sesión en Urujobs">
@@ -69,6 +86,14 @@ function ProfileScreen() {
       {profile.isError && <p className="profile-error" role="alert">No pudimos cargar el nombre de tu perfil.</p>}
       {!user && ready && <Button variant="outline" className="profile-login" onClick={openAccess}>Ingresar o registrarse<ChevronRight /></Button>}
     </ProfileBlock>
+    {user && <ProfileBlock title="TIPO DE CUENTA" subtitle="Elegí cómo usás Urujobs">
+      <div className="profile-account-type" role="radiogroup" aria-label="Tipo de cuenta">
+        {ACCOUNT_TYPES.map(({ value, label, hint, Icon }) => <button key={value} type="button" role="radio" aria-checked={accountType === value} disabled={savingType || profile.isPending} className={accountType === value ? 'is-active' : ''} onClick={() => void changeAccountType(value)}>
+          <Icon aria-hidden="true" /><strong>{label}</strong><span>{hint}</span>
+        </button>)}
+      </div>
+      {typeError && <p className="profile-error" role="alert">{typeError}</p>}
+    </ProfileBlock>}
     <ProfileBlock title="CONSENTIMIENTOS" subtitle="Gestiona tus comunicaciones">
       <div className="profile-consent-row">
         <span className="profile-icon-tile"><Megaphone /></span>

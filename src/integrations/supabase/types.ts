@@ -1059,6 +1059,7 @@ export type Database = {
           updated_at: string
         }[]
       }
+      owns_empresa: { Args: { _empresa_id: number }; Returns: boolean }
       postular_cv: {
         Args: { cv_id: string; job_id: number }
         Returns: undefined

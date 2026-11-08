@@ -1043,6 +1043,22 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      empresa_cambiar_estado: {
+        Args: { _estado: string; _postulacion_id: string }
+        Returns: undefined
+      }
+      empresa_candidatos: {
+        Args: never
+        Returns: {
+          candidato: string
+          created_at: string
+          estado: string
+          job_id: number
+          postulacion_id: string
+          titulo: string
+          updated_at: string
+        }[]
+      }
       postular_cv: {
         Args: { cv_id: string; job_id: number }
         Returns: undefined

@@ -13,7 +13,7 @@ export function PositionIcon({ position }: { position: JobPosition }) {
     : <BriefcaseBusiness />}</span>;
 }
 
-export function PositionLink({ position, count }: { position: JobPosition; count?: number }) {
+export function PositionLink({ position, count }: { position: JobPosition; count?: number | undefined }) {
   const empty = count === 0;
   return <Link to="/puestos/$puestoId" params={{ puestoId: position.id }} preload="intent" preloadDelay={0} className={cn("position-category", empty && "is-empty")}>
     <PositionIcon position={position} /><span className="position-name">{position.nombre}</span>

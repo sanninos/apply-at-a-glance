@@ -2,6 +2,9 @@
 import { useEffect, useRef, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { BriefcaseBusiness, ChevronDown, ChevronRight } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
+import { Button } from "@/components/ui/button";
+import { jobQueryOptions } from "@/lib/job-query";
 import { AppBottomNav } from "@/components/app-bottom-nav";
 import { useEmployerLogo } from "@/hooks/use-employer-logo";
 import { publishedAgo } from "@/lib/job-list";
@@ -54,7 +57,9 @@ function SocialPostCard({
   showScrollHint?: boolean;
 }) {
   const [broken, setBroken] = useState(false);
-  const cardRef = useRef<HTMLAnchorElement>(null);
+  const [tab, setTab] = useState<"poster" | "info">("poster");
+  const detail = useQuery({ ...jobQueryOptions(post.id), enabled: tab === "info" });
+  const cardRef = useRef<HTMLElement>(null);
   const { src, ref, onError } = useEmployerLogo(post.fotoEmpresa || post.image);
 
   useEffect(() => {
@@ -76,14 +81,16 @@ function SocialPostCard({
   if (broken) return null;
   const location = post.ubicacion || post.ciudad || "Uruguay";
   return (
-    <Link
+    <article
       ref={cardRef}
       className="social-post"
-      to="/llamado/$jobId"
-      params={{ jobId: String(post.id) }}
-      preload="intent"
-      preloadDelay={0}
     >
+      <div className="social-post-tabs" role="tablist" aria-label={`Vista de ${post.titulo || "empleo"}`}>
+        <Button variant="ghost" role="tab" id={`poster-tab-${post.id}`} aria-controls={`social-panel-${post.id}`} aria-selected={tab === "poster"} onClick={() => setTab("poster")}>Portada</Button>
+        <Button variant="ghost" role="tab" id={`info-tab-${post.id}`} aria-controls={`social-panel-${post.id}`} aria-selected={tab === "info"} onClick={() => setTab("info")}>Más información</Button>
+      </div>
+      <div className="social-post-panel" id={`social-panel-${post.id}`} role="tabpanel" aria-labelledby={`${tab === "poster" ? "poster" : "info"}-tab-${post.id}`}>
+      {tab === "poster" ? <Link className="social-poster-link" to="/llamado/$jobId" params={{ jobId: String(post.id) }} preload="intent" preloadDelay={0}>
       <img
         className="social-poster-blur"
         src={post.poster}
@@ -99,7 +106,20 @@ function SocialPostCard({
         loading="lazy"
         onError={() => setBroken(true)}
       />
-      <div className="social-summary">
+      </Link> : <div className="social-post-information">
+        <p className="social-info-company">{post.Empresa || "Empresa"}</p>
+        <h2>{post.titulo || "Oferta de empleo"}</h2>
+        <p className="social-info-location">📍 {location}</p>
+        <p className="social-info-time">{publishedAgo(post.created_at)}</p>
+        {detail.isPending ? <p role="status">Cargando información…</p> : detail.isError ? <p>No pudimos cargar la información. <Button variant="link" onClick={() => detail.refetch()}>Reintentar</Button></p> : <>
+          {detail.data?.tipoContrato && <p><strong>Contrato:</strong> {detail.data.tipoContrato}</p>}
+          {detail.data?.jornada && <p><strong>Jornada:</strong> {detail.data.jornada}</p>}
+          {detail.data?.descripcion && <section><h3>Descripción</h3><p>{detail.data.descripcion}</p></section>}
+          {Boolean(detail.data?.requisitos?.length) && <section><h3>Requisitos</h3><ul>{detail.data?.requisitos?.map((item, index) => <li key={index}>{item}</li>)}</ul></section>}
+          {Boolean(detail.data?.empleabilidad?.length) && <section><h3>Beneficios</h3><ul>{detail.data?.empleabilidad?.map((item, index) => <li key={index}>{item}</li>)}</ul></section>}
+        </>}
+      </div>}
+      <Link to="/llamado/$jobId" params={{ jobId: String(post.id) }} preload="intent" preloadDelay={0} className="social-summary">
         <div className="job-logo">
           {src ? (
             <img ref={ref} src={src} alt={post.Empresa || "Empresa"} onError={onError} />
@@ -118,13 +138,14 @@ function SocialPostCard({
         <span className="employment-arrow">
           <ChevronRight aria-hidden="true" />
         </span>
-      </div>
+      </Link>
       {showScrollHint && (
         <p className="social-scroll-hint" aria-hidden="true">
           <span>Deslizá</span>
           <ChevronDown />
         </p>
       )}
-    </Link>
+      </div>
+    </article>
   );
 }

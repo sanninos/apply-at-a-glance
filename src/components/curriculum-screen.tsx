@@ -18,6 +18,7 @@ import {
   type CurriculumRow,
   type EducationDraft,
   type ExperienceDraft,
+  curriculumProgress,
 } from "@/lib/curriculum";
 
 export function CurriculumScreen() {

@@ -29,6 +29,7 @@ export type JobDetailData = {
   puesto: string | null;
   estadoPostulacion: string | null;
   isLlamado: boolean | null;
+  poster: string | null;
 };
 
 export const getJobById = createServerFn({ method: "GET" })
@@ -37,7 +38,7 @@ export const getJobById = createServerFn({ method: "GET" })
     const { data, error } = await supabase
       .from("JobsDetails")
       .select(
-        "id, titulo, descripcion, Empresa, Inciso, UnidadEjecutora, ubicacion, ciudad, jornada, tipoContrato, salario, llamadoFechaInicio, llamadoFechaCierre, cantidadCupos, requisitos, empleabilidad, fotoEmpresa, image, categoria, puesto, estado_postulacion, isLlamado",
+        "id, titulo, descripcion, Empresa, Inciso, UnidadEjecutora, ubicacion, ciudad, jornada, tipoContrato, salario, llamadoFechaInicio, llamadoFechaCierre, cantidadCupos, requisitos, empleabilidad, fotoEmpresa, image, categoria, puesto, estado_postulacion, isLlamado, poster",
       )
       .eq("id", id)
       .maybeSingle();
@@ -68,6 +69,7 @@ export const getJobById = createServerFn({ method: "GET" })
       puesto: data.puesto,
       estadoPostulacion: data.estado_postulacion,
       isLlamado: data.isLlamado,
+      poster: data.poster,
     };
   });
 

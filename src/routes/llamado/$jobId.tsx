@@ -281,6 +281,16 @@ function JobDetail() {
           </section>
         )}
 
+        {job.poster && (
+          <section className="mx-5 mt-6">
+            <h2 className="font-bold text-foreground mb-3">Portada del trabajo</h2>
+            <a href={job.poster} target="_blank" rel="noreferrer" className="block rounded-3xl overflow-hidden border border-border shadow-sm">
+              <img src={job.poster} alt={`Portada de ${job.titulo ?? "la oferta"}`} className="w-full h-auto block" loading="lazy" onError={(event) => { event.currentTarget.closest("section")?.remove(); }} />
+            </a>
+            <p className="text-xs text-muted-foreground mt-2">Tocá la imagen para verla en grande.</p>
+          </section>
+        )}
+
         {job.requisitos && job.requisitos.length > 0 && (
           <section className="mx-5 mt-6">
             <h2 className="font-bold text-foreground mb-3">Requisitos</h2>

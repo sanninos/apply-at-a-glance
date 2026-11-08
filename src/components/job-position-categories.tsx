@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "@tanstack/react-router";
-import { ArrowRight, BriefcaseBusiness } from "lucide-react";
+import { BriefcaseBusiness } from "lucide-react";
 import { countJobsByPosition, positionCount, positionCountLabel, positionIconUrl, type JobPosition } from "@/lib/job-positions";
 import type { JobListItem } from "@/lib/job-list";
 import { cn } from "@/lib/utils";
@@ -25,8 +25,7 @@ export function JobPositionCategories({ positions, jobs }: { positions: JobPosit
   if (!positions.length) return null;
   const counts = countJobsByPosition(jobs);
   const ordered = [...positions].sort((a, b) => positionCount(counts, b) - positionCount(counts, a));
-  return <section className="home-positions" aria-labelledby="home-positions-title">
-    <header><h2 id="home-positions-title">Explorá por puesto</h2><Link to="/puestos" preload="intent">Ver todos <ArrowRight aria-hidden="true" /></Link></header>
+  return <section className="home-positions" aria-label="Explorá por puesto">
     <div className="position-category-rail">{ordered.slice(0, 8).map(position => <PositionLink key={position.id} position={position} count={positionCount(counts, position)} />)}</div>
   </section>;
 }

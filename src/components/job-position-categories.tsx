@@ -16,7 +16,7 @@ export function PositionIcon({ position }: { position: JobPosition }) {
 export function PositionLink({ position, count }: { position: JobPosition; count?: number }) {
   const empty = count === 0;
   return <Link to="/puestos/$puestoId" params={{ puestoId: position.id }} preload="intent" preloadDelay={0} className={cn("position-category", empty && "is-empty")}>
-    <PositionIcon position={position} /><span>{position.nombre}</span>
+    <PositionIcon position={position} /><span className="position-name">{position.nombre}</span>
     {count !== undefined && <span className="position-count">{positionCountLabel(count)}</span>}
   </Link>;
 }

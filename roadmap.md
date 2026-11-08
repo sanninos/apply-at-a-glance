@@ -46,3 +46,5 @@
 - [ ] Detalle de oferta: sección para ver la portada del trabajo cuando existe.
 - [x] Editar curriculum: botón importar PDF/Word con extracción por IA; gateway verificado en vivo con PDF real, fusión con 2 pruebas nuevas (17 en total).
 - [ ] Mis postulaciones: drawer con línea de tiempo del proceso de la oferta postulada.
+- [x] Detalle de oferta: sección «Portada del trabajo» con la imagen del póster cuando existe; build OK.
+- [x] Mis postulaciones: drawer con línea de tiempo del proceso (Enviada → En revisión → Entrevista → Resultado); 9 pruebas pasan. Verificación con sesión real pendiente (Supabase externo).

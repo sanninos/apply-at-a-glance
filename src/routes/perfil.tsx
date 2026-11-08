@@ -64,6 +64,7 @@ function ProfileScreen() {
   }
   const fullName = profile.data?.full_name;
   const accountType = (profile.data?.account_type ?? 'postulante') as AccountType;
+  const isCompany = Boolean(user) && accountType === 'empresa';
   const [typeError, setTypeError] = useState('');
   const [savingType, setSavingType] = useState(false);
   async function changeAccountType(next: AccountType) {
@@ -93,29 +94,34 @@ function ProfileScreen() {
         </button>)}
       </div>
       {typeError && <p className="profile-error" role="alert">{typeError}</p>}
-      {accountType === 'empresa' && <Link to="/panel-empresa" className="profile-access-row"><Building2 /><span>Panel de empresa · candidatos</span><ChevronRight className="profile-access-arrow" /></Link>}
     </ProfileBlock>}
     <ProfileBlock title="CONSENTIMIENTOS" subtitle="Gestiona tus comunicaciones">
       <div className="profile-consent-row">
         <span className="profile-icon-tile"><Megaphone /></span>
-        <div className="profile-consent-copy"><h3>Comunicaciones Urujobs Avisos</h3><p>Recibe emails y push educativos o comerciales. Puedes retirarlo en cualquier momento.</p><span className="profile-pending">Pendiente de configuración</span></div>
+        <div className="profile-consent-copy"><h3>Comunicaciones Urujobs Avisos</h3><p>{isCompany ? 'Recibí novedades sobre candidatos y herramientas para empresas. Podés retirarlo en cualquier momento.' : 'Recibe emails y push educativos o comerciales. Puedes retirarlo en cualquier momento.'}</p><span className="profile-pending">Pendiente de configuración</span></div>
         <Switch className="profile-switch" aria-label="Comunicaciones Urujobs Avisos" checked={false} disabled title="Pendiente de configuración" />
       </div>
     </ProfileBlock>
     <ProfileBlock title="ACCESOS" subtitle="Acciones de tu cuenta" className="profile-access-block">
       <div className="profile-access-list">
         <Link to="/alertas" className="profile-access-row"><Bell /><span>Mis notificaciones</span><ChevronRight className="profile-access-arrow" /></Link>
-        <Link to="/mis-postulaciones" className="profile-access-row"><UsersRound /><span>Tus postulaciones</span><ChevronRight className="profile-access-arrow" /></Link>
-        <Link to="/ofertas-guardadas" className="profile-access-row"><Bookmark /><span>Ofertas guardadas</span><ChevronRight className="profile-access-arrow" /></Link>
-        <Link to="/editar-curriculum" className="profile-access-row"><ListTodo /><span>Edita tu curriculum</span><ChevronRight className="profile-access-arrow" /></Link>
-        <Link to="/estadisticas" className="profile-access-row"><ChartNoAxesColumnIncreasing /><span>Visitas a tu perfil</span><ChevronRight className="profile-access-arrow" /></Link>
+        {isCompany ? <>
+          <Link to="/panel-empresa" className="profile-access-row"><UsersRound /><span>Candidatos de tus ofertas</span><ChevronRight className="profile-access-arrow" /></Link>
+          <button type="button" className="profile-access-row" disabled title="Próximamente"><Megaphone /><span>Publicar una oferta · Próximamente</span></button>
+          <button type="button" className="profile-access-row" disabled title="Próximamente"><Building2 /><span>Datos de la empresa · Próximamente</span></button>
+        </> : <>
+          <Link to="/mis-postulaciones" className="profile-access-row"><UsersRound /><span>Tus postulaciones</span><ChevronRight className="profile-access-arrow" /></Link>
+          <Link to="/ofertas-guardadas" className="profile-access-row"><Bookmark /><span>Ofertas guardadas</span><ChevronRight className="profile-access-arrow" /></Link>
+          <Link to="/editar-curriculum" className="profile-access-row"><ListTodo /><span>Edita tu curriculum</span><ChevronRight className="profile-access-arrow" /></Link>
+          <Link to="/estadisticas" className="profile-access-row"><ChartNoAxesColumnIncreasing /><span>Visitas a tu perfil</span><ChevronRight className="profile-access-arrow" /></Link>
+        </>}
       </div>
     </ProfileBlock>
     <ProfileBlock title="DATOS DE TU CUENTA" subtitle="GDPR · privacidad y portabilidad">
       <div className="profile-data-list">
         <Button variant="ghost" className="profile-data-row" disabled title="Exportar mis datos: próximamente">
           <span className="profile-icon-tile"><Download /></span>
-          <span className="profile-data-copy"><strong>Exportar mis datos</strong><span>Descarga un JSON con tu perfil, convocatorias guardadas y consentimientos.</span><small>Próximamente</small></span>
+          <span className="profile-data-copy"><strong>Exportar mis datos</strong><span>{isCompany ? 'Descarga un JSON con tu perfil, tu empresa y consentimientos.' : 'Descarga un JSON con tu perfil, convocatorias guardadas y consentimientos.'}</span><small>Próximamente</small></span>
           <ChevronRight className="profile-data-arrow" />
         </Button>
         <Button variant="ghost" className="profile-data-row profile-data-delete" onClick={() => setDeletionOpen(true)}>

@@ -13,6 +13,23 @@ function LogoTest({ photo }: { photo: string | null }) {
 }
 
 describe("useEmployerLogo", () => {
+  it("uses the poster when the company logo is missing", () => {
+    const { result } = renderHook(() => useEmployerLogo(null, "https://cdn.example/poster.jpg"));
+    expect(result.current.src).toBe("https://cdn.example/poster.jpg");
+  });
+  it("keeps company logo priority over poster", () => {
+    const { result } = renderHook(() => useEmployerLogo("https://cdn.example/logo.png", "https://cdn.example/poster.jpg"));
+    expect(result.current.src).toBe("https://cdn.example/logo.png");
+  });
+  it("falls back from failed company logo to poster, then flag, then no image", () => {
+    const { result } = renderHook(() => useEmployerLogo("https://cdn.example/logo.png", "https://cdn.example/poster.jpg"));
+    act(() => result.current.onError());
+    expect(result.current.src).toBe("https://cdn.example/poster.jpg");
+    act(() => result.current.onError());
+    expect(result.current.src).toBe(DEFAULT_EMPLOYER_LOGO);
+    act(() => result.current.onError());
+    expect(result.current.src).toBeNull();
+  });
   it("uses the shared placeholder when the job has no company photo", () => {
     const { result } = renderHook(() => useEmployerLogo(null));
     expect(result.current.src).toBe(DEFAULT_EMPLOYER_LOGO);

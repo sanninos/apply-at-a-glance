@@ -7,6 +7,7 @@ export type JobListItem = {
   ciudad: string | null;
   fotoEmpresa: string | null;
   image: string | null;
+  poster?: string | null;
   created_at: string;
   isFeatured: boolean | null;
   isLlamado: boolean | null;

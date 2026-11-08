@@ -303,3 +303,81 @@ export function curriculumPayload(draft: CurriculumDraft): { ok: true; payload: 
 export function curriculumCountLabel(skills: number): string {
   return skills === 1 ? "1 habilidad" : `${skills} habilidades`;
 }
+
+/** Data extracted from an imported resume file; null means "not found". */
+export type ImportedCurriculumData = {
+  firstName?: string | null;
+  lastName?: string | null;
+  documentType?: string | null;
+  documentNumber?: string | null;
+  birthDate?: string | null;
+  gender?: string | null;
+  phone?: string | null;
+  phoneCountryCode?: string | null;
+  extraPhone?: string | null;
+  country?: string | null;
+  city?: string | null;
+  nationality?: string | null;
+  summary?: string | null;
+  skills?: string | null;
+  experiences?: Partial<ExperienceDraft>[] | null;
+  education?: Partial<EducationDraft>[] | null;
+};
+
+function pick(imported: string | null | undefined, current: string): string {
+  const value = typeof imported === "string" ? imported.trim() : "";
+  return value || current;
+}
+
+/**
+ * Merges imported resume data into the draft: imported values win when
+ * present, existing values survive when the file did not include them.
+ * Experiences and education are replaced only when the import found entries.
+ */
+export function applyImportedCurriculum(draft: CurriculumDraft, imported: ImportedCurriculumData): CurriculumDraft {
+  const experiences = Array.isArray(imported.experiences) && imported.experiences.length > 0
+    ? imported.experiences.map((entry) => ({
+        ...emptyExperience(),
+        puesto: str(entry?.puesto),
+        empresa: str(entry?.empresa),
+        desde: str(entry?.desde),
+        hasta: entry?.actualmente ? "" : str(entry?.hasta),
+        descripcion: str(entry?.descripcion),
+        lugar: str(entry?.lugar),
+        actualmente: entry?.actualmente === true,
+      }))
+    : draft.experiences;
+  const education = Array.isArray(imported.education) && imported.education.length > 0
+    ? imported.education.map((entry) => ({
+        ...emptyEducation(),
+        nivel: str(entry?.nivel),
+        titulo: str(entry?.titulo),
+        institucion: str(entry?.institucion),
+        desde: str(entry?.desde),
+        hasta: entry?.actualmente ? "" : str(entry?.hasta),
+        descripcion: str(entry?.descripcion),
+        lugar: str(entry?.lugar),
+        actualmente: entry?.actualmente === true,
+      }))
+    : draft.education;
+  return {
+    ...draft,
+    firstName: pick(imported.firstName, draft.firstName),
+    lastName: pick(imported.lastName, draft.lastName),
+    fullName: [pick(imported.firstName, draft.firstName), pick(imported.lastName, draft.lastName)].filter(Boolean).join(" ") || draft.fullName,
+    documentType: pick(imported.documentType, draft.documentType),
+    documentNumber: pick(imported.documentNumber, draft.documentNumber),
+    birthDate: pick(imported.birthDate, draft.birthDate),
+    gender: pick(imported.gender, draft.gender),
+    phone: pick(imported.phone, draft.phone),
+    phoneCountryCode: pick(imported.phoneCountryCode, draft.phoneCountryCode),
+    extraPhone: pick(imported.extraPhone, draft.extraPhone),
+    country: pick(imported.country, draft.country),
+    city: pick(imported.city, draft.city),
+    nationality: pick(imported.nationality, draft.nationality),
+    summary: pick(imported.summary, draft.summary),
+    skills: pick(imported.skills, draft.skills),
+    experiences,
+    education,
+  };
+}

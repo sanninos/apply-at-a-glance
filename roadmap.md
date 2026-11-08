@@ -42,3 +42,5 @@
 - [x] Reemplazar el ícono de ubicación por el emoji 📍 en home, detalle, Social, Radar y filtros; verificado en el navegador (sin íconos de ubicación restantes).
 - [ ] Educación: pantalla completa de edición como la de Experiencias (en curso).
 - [ ] Editar curriculum: botón para importar PDF/DOC y rellenar los campos automáticamente con extracción por IA.
+- [x] Educación: pantalla completa de edición como la de Experiencias; 15 pruebas pasan.
+- [ ] Detalle de oferta: sección para ver la portada del trabajo cuando existe.

@@ -22,6 +22,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useEmployerLogo } from "@/hooks/use-employer-logo";
 import { useSavedOffer } from '@/hooks/use-saved-offer';
 import { Button } from '@/components/ui/button';
+import { SimilarJobs } from '@/components/similar-jobs';
 import { markJobViewed } from '@/lib/new-job-offers';
 
 export const Route = createFileRoute("/llamado/$jobId")({
@@ -317,6 +318,8 @@ function JobDetail() {
             </div>
           </section>
         )}
+
+        <SimilarJobs jobId={job.id} puesto={job.puesto} />
 
         <footer className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-md bg-background/95 backdrop-blur border-t p-4 flex flex-col gap-2">
           <div className="flex gap-3">

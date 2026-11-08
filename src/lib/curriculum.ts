@@ -403,7 +403,7 @@ const ABOUT_CHECKS: { label: string; done: (d: CurriculumDraft) => boolean }[] =
   { label: "Completá tu nombre", done: (d) => Boolean((d.fullName || `${d.firstName}${d.lastName}`).trim()) },
   { label: "Agregá tu teléfono", done: (d) => Boolean(d.phone.trim()) },
   { label: "Agregá tu fecha de cumpleaños", done: (d) => Boolean(d.birthDate.trim()) },
-  { label: "Agregá tu ubicación", done: (d) => Boolean(d.city.trim() || d.country.trim()) },
+  { label: "Agregá tu ubicación", done: (d) => Boolean(d.city.trim()) },
   { label: "Escribí una breve presentación sobre ti", done: (d) => Boolean(d.summary.trim()) },
 ];
 

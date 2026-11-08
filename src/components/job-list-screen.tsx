@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { Fragment, useEffect, useRef, useState } from "react";
 import { Link, useRouter } from "@tanstack/react-router";
 import { BriefcaseBusiness, Search, SlidersHorizontal, Flame, Clock, ChevronRight, Building2, ArrowLeft, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -22,6 +22,7 @@ function EmployerLogo({ job }: { job: JobListItem }) {
 }
 
 const CARD_BATCH = 40;
+const POSITIONS_AFTER = 5;
 
 export function JobListScreen({ jobs, variant = "home", categoryTitle }: { jobs: JobListItem[]; variant?: "home" | "search" | "category"; categoryTitle?: string }) {
   const router = useRouter();
@@ -45,6 +46,7 @@ export function JobListScreen({ jobs, variant = "home", categoryTitle }: { jobs:
   const idle = isSearch && !search.trim();
   const shown = idle ? [] : visible.slice(0, limit);
   const suggestions = isSearch ? searchSuggestions(jobs, search) : [];
+  const positionsBlock = isHome && positions.data ? <JobPositionCategories positions={positions.data} jobs={jobs} /> : null;
 
   // Restart incremental rendering whenever the result set changes.
   useEffect(() => { setLimit(CARD_BATCH); }, [search, mode, location, contract]);
@@ -81,7 +83,6 @@ export function JobListScreen({ jobs, variant = "home", categoryTitle }: { jobs:
         {tabs.map(({ id, label, icon: Icon, count }) => <Button key={id} role="tab" aria-selected={mode === id} variant="ghost" className={cn("employment-tab", mode === id && "selected")} onClick={() => setMode(id)}><Icon /><span>{label}</span>{count !== undefined && <span className="tab-count">{count}</span>}</Button>)}
       </div>}
     </header>
-    {isHome && positions.data && <JobPositionCategories positions={positions.data} jobs={jobs} />}
     {idle && recent.length > 0 && <section className="recent-searches" aria-labelledby="recent-searches-title">
       <header><h2 id="recent-searches-title">Búsquedas recientes</h2><button type="button" onClick={() => updateRecent([])}>Borrar todo</button></header>
       <ul>{recent.map(term => <li key={term} className="recent-chip"><button type="button" onClick={() => { setSearch(term); remember(term); }}>{term}</button><button type="button" aria-label={`Borrar ${term}`} onClick={() => updateRecent(recent.filter(x => x !== term))}><X aria-hidden="true" /></button></li>)}</ul>
@@ -89,11 +90,15 @@ export function JobListScreen({ jobs, variant = "home", categoryTitle }: { jobs:
     {idle && <div className="search-idle"><Search aria-hidden="true" /><p>Escribí un puesto, empresa o ciudad para ver ofertas.</p></div>}
     {suggestions.length > 0 && <ul className="search-suggestions" aria-label="Sugerencias de búsqueda">{suggestions.map(title => <li key={title}><button type="button" onClick={() => { setSearch(title); remember(title); }}><Search aria-hidden="true" /><span>{title}</span></button></li>)}</ul>}
     <section className="employment-list" aria-label="Empleos disponibles">
-      {shown.map(job => <Link className={cn("employment-card", job.isFeatured && "featured", isUrgent(job) && "urgent")} key={job.id} to="/llamado/$jobId" params={{ jobId: String(job.id) }} preload="intent" preloadDelay={0} onClick={() => remember(search)}>
+      {shown.map((job, index) => <Fragment key={job.id}>
+        <Link className={cn("employment-card", job.isFeatured && "featured", isUrgent(job) && "urgent")} to="/llamado/$jobId" params={{ jobId: String(job.id) }} preload="intent" preloadDelay={0} onClick={() => remember(search)}>
         <div className="employment-card-main"><EmployerLogo job={job} /><div className="employment-copy"><p className="employment-company">{job.Empresa || "Empresa"}</p><h2>{job.titulo || "Oferta de empleo"}</h2><p className="employment-description">{job.descripcion}</p></div><span className="employment-arrow"><ChevronRight aria-hidden="true" /></span></div>
         <div className="employment-meta"><span className="location-chip"><span className="location-pin" aria-hidden="true">📍</span><span>{job.ubicacion || job.ciudad || "Uruguay"}</span></span><span className="date-chip"><Clock aria-hidden="true" />{publishedAgo(job.created_at)}</span></div>
         {(job.isLlamado || job.isFeatured || isUrgent(job) || isNew(job)) && <div className="employment-badges">{isNew(job) && <span className="new-offer-badge">Nuevo</span>}{job.isLlamado && <span className="llamado-badge">Llamado público</span>}{job.isFeatured && <span>Destacada</span>}{isUrgent(job) && <span>Urgente</span>}</div>}
-      </Link>)}
+      </Link>
+        {positionsBlock && index === POSITIONS_AFTER - 1 && positionsBlock}
+      </Fragment>)}
+      {positionsBlock && shown.length < POSITIONS_AFTER && positionsBlock}
       {!idle && !visible.length && <div className="employment-empty"><Search /><h2>No se encontraron empleos</h2><Button variant="outline" onClick={() => { setSearch(""); setLocation(""); setContract(""); setMode("all"); }}>Ver todos</Button></div>}
       {!idle && shown.length < visible.length && <div ref={sentinelRef} className="employment-list-sentinel" aria-hidden="true" />}
     </section>

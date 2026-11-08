@@ -19,7 +19,26 @@ export const Route = createFileRoute('/panel-empresa')({
   component: CompanyPanel,
 });
 
-type Candidate = { postulacion_id: string; job_id: number; titulo: string | null; candidato: string; estado: string; created_at: string };
+type Cv = { [k: string]: any };
+type Candidate = { postulacion_id: string; job_id: number; titulo: string | null; candidato: string; estado: string; created_at: string; mensaje: string | null; cv_snapshot: Cv | null };
+
+function CvSummary({ cv }: { cv: Cv }) {
+  const name = [cv['first_name'], cv['last_name']].filter(Boolean).join(' ') || cv['full_name'];
+  const phone = [cv['phone_country_code'], cv['phone']].filter(Boolean).join(' ');
+  const place = [cv['city'], cv['country']].filter(Boolean).join(', ');
+  const exps = Array.isArray(cv['experiences']) ? cv['experiences'] : [];
+  const edu = Array.isArray(cv['education']) ? cv['education'] : [];
+  const skills = Array.isArray(cv['skills']) ? cv['skills'] : [];
+  return <div className="grid gap-1 pt-1">
+    {name && <p><b>{name}</b></p>}
+    {phone && <p>📞 {phone}</p>}
+    {place && <p>📍 {place}</p>}
+    {cv['summary'] && <p>{cv['summary']}</p>}
+    {exps.length > 0 && <><b>Experiencia</b>{exps.map((e: any, i: number) => <p key={i}>{[e?.role ?? e?.cargo ?? e?.title, e?.company ?? e?.empresa].filter(Boolean).join(' · ')}</p>)}</>}
+    {edu.length > 0 && <><b>Educación</b>{edu.map((e: any, i: number) => <p key={i}>{[e?.degree ?? e?.title ?? e?.titulo, e?.institution ?? e?.institucion].filter(Boolean).join(' · ')}</p>)}</>}
+    {skills.length > 0 && <p><b>Habilidades:</b> {skills.map((s: any) => typeof s === 'string' ? s : s?.name).filter(Boolean).join(', ')}</p>}
+  </div>;
+}
 const ESTADOS = ['Enviada', 'En revision', 'Entrevista', 'Seleccionada', 'No seleccionada'];
 const LABEL: Record<string, string> = { 'En revision': 'En revisión' };
 
@@ -62,7 +81,11 @@ function CompanyPanel() {
     {[...groups.entries()].map(([jobId, g]) => <section key={jobId} className="profile-block">
       <header className="profile-heading"><h2>{g.titulo}</h2><p>{g.items.length} {g.items.length === 1 ? 'candidato' : 'candidatos'}</p></header>
       {g.items.map((c) => <div key={c.postulacion_id} className="profile-account-row" style={{ justifyContent: 'space-between' }}>
-        <div className="profile-account-copy"><strong>{c.candidato}</strong><p>Postulado el {new Date(c.created_at).toLocaleDateString('es-UY')}</p></div>
+        <div className="profile-account-copy">
+          <strong>{c.candidato}</strong><p>Postulado el {new Date(c.created_at).toLocaleDateString('es-UY')}</p>
+          {c.mensaje && <p className="text-sm italic">“{c.mensaje}”</p>}
+          {c.cv_snapshot ? <details className="text-sm"><summary className="cursor-pointer text-primary">Ver currículum</summary><CvSummary cv={c.cv_snapshot} /></details> : <p className="text-xs text-muted-foreground">Sin currículum adjunto</p>}
+        </div>
         <select aria-label={`Estado de ${c.candidato}`} value={c.estado} onChange={(e) => void change(c.postulacion_id, e.target.value)} className="rounded-md border border-input bg-background px-2 py-1 text-sm">
           {ESTADOS.map((s) => <option key={s} value={s} disabled={s === 'Enviada'}>{LABEL[s] ?? s}</option>)}
         </select>

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { applicationCountLabel, applicationStatus, listApplications, type ApplicationRow } from '../lib/applications';
+import { applicationCountLabel, applicationStatus, applicationTimeline, listApplications, type ApplicationRow } from '../lib/applications';
 
 const job = (id: number, extra: Partial<ApplicationRow['JobsDetails'] & object> = {}) => ({
   id,
@@ -53,5 +53,30 @@ describe('mis postulaciones list', () => {
     expect(applicationCountLabel(1)).toBe('1 postulación');
     expect(applicationCountLabel(0)).toBe('0 postulaciones');
     expect(applicationCountLabel(3)).toBe('3 postulaciones');
+  });
+});
+
+describe('applicationTimeline', () => {
+  const base = { id: 'a1', jobId: 1, appliedAt: '2026-11-01T10:00:00Z', job: { id: 1, titulo: 'Cajera', Empresa: 'Tienda', ubicacion: null, ciudad: null, fotoEmpresa: null, image: null, tipoContrato: null, estado_postulacion: null, isLlamado: false } };
+
+  it('marks only the sent step as current for a fresh application', () => {
+    const steps = applicationTimeline({ ...base, estado: 'Enviada' });
+    expect(steps.map((s) => s.state)).toEqual(['current', 'upcoming', 'upcoming', 'upcoming']);
+    expect(steps[0]?.date).toBe(base.appliedAt);
+    expect(steps[1]?.date).toBeNull();
+  });
+
+  it('advances the current step with the stored estado', () => {
+    expect(applicationTimeline({ ...base, estado: 'En revision' }).map((s) => s.state)).toEqual(['done', 'current', 'upcoming', 'upcoming']);
+    expect(applicationTimeline({ ...base, estado: 'Entrevista' }).map((s) => s.state)).toEqual(['done', 'done', 'current', 'upcoming']);
+  });
+
+  it('ends rejected or selected at the result step', () => {
+    const rejected = applicationTimeline({ ...base, estado: 'No seleccionada' });
+    expect(rejected[3]?.state).toBe('rejected');
+    expect(rejected[3]?.label).toBe('No seleccionada');
+    const selected = applicationTimeline({ ...base, estado: 'Seleccionada' });
+    expect(selected[3]?.state).toBe('done');
+    expect(selected[3]?.label).toBe('Seleccionada');
   });
 });

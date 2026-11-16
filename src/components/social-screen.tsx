@@ -1,5 +1,5 @@
 // ============= Full file contents =============
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { BriefcaseBusiness, ChevronDown, ChevronRight } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
@@ -20,6 +20,47 @@ export function SocialScreen({
   focusJobId?: number | null;
 }) {
   const [seenScroll, setSeenScroll] = useState(false);
+  const feedRef = useRef<HTMLElement>(null);
+  const frameRef = useRef(0);
+  const [activeId, setActiveId] = useState<number | null>(null);
+
+  // Only the poster currently on screen gets the «Portada / Más información» tabs.
+  const syncActive = useCallback(() => {
+    const feed = feedRef.current;
+    if (!feed) return;
+    const feedTop = feed.getBoundingClientRect().top;
+    let nearest: number | null = null;
+    let nearestDistance = Number.POSITIVE_INFINITY;
+    for (const card of Array.from(feed.querySelectorAll<HTMLElement>("[data-job-id]"))) {
+      const distance = Math.abs(card.getBoundingClientRect().top - feedTop);
+      if (distance < nearestDistance) {
+        nearestDistance = distance;
+        nearest = Number(card.dataset["jobId"]);
+      }
+    }
+    setActiveId(nearest);
+  }, []);
+
+  const scheduleSync = useCallback(() => {
+    if (frameRef.current) return;
+    frameRef.current = requestAnimationFrame(() => {
+      frameRef.current = 0;
+      syncActive();
+    });
+  }, [syncActive]);
+
+  useEffect(() => {
+    const frame = requestAnimationFrame(syncActive);
+    return () => cancelAnimationFrame(frame);
+  }, [syncActive, posts]);
+
+  useEffect(() => {
+    window.addEventListener("resize", scheduleSync);
+    return () => {
+      window.removeEventListener("resize", scheduleSync);
+      if (frameRef.current) cancelAnimationFrame(frameRef.current);
+    };
+  }, [scheduleSync]);
 
   useEffect(() => {
     recordSocialPosterIds(posts.map((post) => String(post.id)));
@@ -33,6 +74,7 @@ export function SocialScreen({
       document
         .getElementById(`social-post-${focusJobId}`)
         ?.scrollIntoView({ block: "start", behavior: "instant" });
+      scheduleSync();
     };
     const frame = requestAnimationFrame(jump);
     const retry = setTimeout(jump, 250);
@@ -40,7 +82,7 @@ export function SocialScreen({
       cancelAnimationFrame(frame);
       clearTimeout(retry);
     };
-  }, [focusJobId, posts]);
+  }, [focusJobId, posts, scheduleSync]);
 
 
   return (
@@ -48,10 +90,12 @@ export function SocialScreen({
       <h1 className="sr-only">Social</h1>
       {posts.length ? (
         <section
+          ref={feedRef}
           className="social-feed"
           aria-label="Pósteres de ofertas de trabajo"
           onScroll={(event) => {
             if (!seenScroll && event.currentTarget.scrollTop > 24) setSeenScroll(true);
+            scheduleSync();
           }}
         >
           {posts.map((post, index) => (
@@ -59,6 +103,7 @@ export function SocialScreen({
               key={post.id}
               post={post}
               showScrollHint={false}
+              isActive={activeId === post.id}
             />
           ))}
         </section>
@@ -76,9 +121,11 @@ export function SocialScreen({
 function SocialPostCard({
   post,
   showScrollHint = false,
+  isActive = false,
 }: {
   post: SocialPost;
   showScrollHint?: boolean;
+  isActive?: boolean;
 }) {
   const [broken, setBroken] = useState(false);
   const [tab, setTab] = useState<"poster" | "info">("poster");
@@ -108,13 +155,14 @@ function SocialPostCard({
     <article
       ref={cardRef}
       id={`social-post-${post.id}`}
+      data-job-id={post.id}
       className="social-post"
     >
-      <div className="social-post-tabs" role="tablist" aria-label={`Vista de ${post.titulo || "empleo"}`}>
+      {isActive && <div className="social-post-tabs" role="tablist" aria-label={`Vista de ${post.titulo || "empleo"}`}>
         <Button variant="ghost" role="tab" id={`poster-tab-${post.id}`} aria-controls={`social-panel-${post.id}`} aria-selected={tab === "poster"} onClick={() => setTab("poster")}>Portada</Button>
         <Button variant="ghost" role="tab" id={`info-tab-${post.id}`} aria-controls={`social-panel-${post.id}`} aria-selected={tab === "info"} onClick={() => setTab("info")}>Más información</Button>
-      </div>
-      <div className="social-post-panel" id={`social-panel-${post.id}`} role="tabpanel" aria-labelledby={`${tab === "poster" ? "poster" : "info"}-tab-${post.id}`}>
+      </div>}
+      <div className="social-post-panel" id={`social-panel-${post.id}`} role={isActive ? "tabpanel" : undefined} aria-labelledby={isActive ? `${tab === "poster" ? "poster" : "info"}-tab-${post.id}` : undefined}>
       {tab === "poster" ? <Link className="social-poster-link" to="/llamado/$jobId" params={{ jobId: String(post.id) }} preload="intent" preloadDelay={0}>
       <img
         className="social-poster-blur"

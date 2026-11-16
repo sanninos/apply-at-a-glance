@@ -436,6 +436,7 @@ export type Database = {
           contadorVisitas: number | null
           created_at: string
           descripcion: string | null
+          direccion_exacta: string | null
           email_postulacion: string | null
           empleabilidad: string[] | null
           Empresa: string | null
@@ -444,6 +445,8 @@ export type Database = {
           Estudios: string | null
           fotoEmpresa: string | null
           fuente_id: string | null
+          geocode_estado: string | null
+          geocode_fuente: string | null
           havePoster: boolean | null
           id: number
           idEmpresa: string | null
@@ -478,6 +481,7 @@ export type Database = {
           contadorVisitas?: number | null
           created_at?: string
           descripcion?: string | null
+          direccion_exacta?: string | null
           email_postulacion?: string | null
           empleabilidad?: string[] | null
           Empresa?: string | null
@@ -486,6 +490,8 @@ export type Database = {
           Estudios?: string | null
           fotoEmpresa?: string | null
           fuente_id?: string | null
+          geocode_estado?: string | null
+          geocode_fuente?: string | null
           havePoster?: boolean | null
           id?: number
           idEmpresa?: string | null
@@ -520,6 +526,7 @@ export type Database = {
           contadorVisitas?: number | null
           created_at?: string
           descripcion?: string | null
+          direccion_exacta?: string | null
           email_postulacion?: string | null
           empleabilidad?: string[] | null
           Empresa?: string | null
@@ -528,6 +535,8 @@ export type Database = {
           Estudios?: string | null
           fotoEmpresa?: string | null
           fuente_id?: string | null
+          geocode_estado?: string | null
+          geocode_fuente?: string | null
           havePoster?: boolean | null
           id?: number
           idEmpresa?: string | null
@@ -927,6 +936,33 @@ export type Database = {
         }
         Relationships: []
       }
+      scrape_runs: {
+        Row: {
+          detalle: string | null
+          estado: string
+          finalizado_at: string | null
+          id: number
+          iniciado_at: string
+          page_url: string
+        }
+        Insert: {
+          detalle?: string | null
+          estado?: string
+          finalizado_at?: string | null
+          id?: never
+          iniciado_at?: string
+          page_url: string
+        }
+        Update: {
+          detalle?: string | null
+          estado?: string
+          finalizado_at?: string | null
+          id?: never
+          iniciado_at?: string
+          page_url?: string
+        }
+        Relationships: []
+      }
       scraped_posts: {
         Row: {
           post_id: string
@@ -1052,6 +1088,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      ejecutar_scrape_si_falta: { Args: never; Returns: undefined }
       empresa_cambiar_estado: {
         Args: { _estado: string; _postulacion_id: string }
         Returns: undefined

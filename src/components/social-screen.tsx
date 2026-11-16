@@ -121,9 +121,11 @@ export function SocialScreen({
 function SocialPostCard({
   post,
   showScrollHint = false,
+  isActive = false,
 }: {
   post: SocialPost;
   showScrollHint?: boolean;
+  isActive?: boolean;
 }) {
   const [broken, setBroken] = useState(false);
   const [tab, setTab] = useState<"poster" | "info">("poster");
@@ -153,12 +155,13 @@ function SocialPostCard({
     <article
       ref={cardRef}
       id={`social-post-${post.id}`}
+      data-job-id={post.id}
       className="social-post"
     >
-      <div className="social-post-tabs" role="tablist" aria-label={`Vista de ${post.titulo || "empleo"}`}>
+      {isActive && <div className="social-post-tabs" role="tablist" aria-label={`Vista de ${post.titulo || "empleo"}`}>
         <Button variant="ghost" role="tab" id={`poster-tab-${post.id}`} aria-controls={`social-panel-${post.id}`} aria-selected={tab === "poster"} onClick={() => setTab("poster")}>Portada</Button>
         <Button variant="ghost" role="tab" id={`info-tab-${post.id}`} aria-controls={`social-panel-${post.id}`} aria-selected={tab === "info"} onClick={() => setTab("info")}>Más información</Button>
-      </div>
+      </div>}
       <div className="social-post-panel" id={`social-panel-${post.id}`} role="tabpanel" aria-labelledby={`${tab === "poster" ? "poster" : "info"}-tab-${post.id}`}>
       {tab === "poster" ? <Link className="social-poster-link" to="/llamado/$jobId" params={{ jobId: String(post.id) }} preload="intent" preloadDelay={0}>
       <img

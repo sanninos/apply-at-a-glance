@@ -41,9 +41,9 @@
 - [ ] Verify deletion submission and receipt reload through a real signed-in account; blocked by external unmanaged Supabase authenticated testing.
 - [x] Reemplazar el ícono de ubicación por el emoji 📍 en home, detalle, Social, Radar y filtros; verificado en el navegador (sin íconos de ubicación restantes).
 - [x] Educación: pantalla completa de edición como la de Experiencias; 15 pruebas pasan.
-- [ ] Detalle de oferta: sección para ver la portada del trabajo cuando existe.
+- [x] Detalle de oferta: sección para ver la portada del trabajo cuando existe (hecha más abajo con «Portada del trabajo»).
 - [x] Editar curriculum: botón importar PDF/Word con extracción por IA; gateway verificado en vivo con PDF real, fusión con 2 pruebas nuevas (17 en total).
-- [ ] Mis postulaciones: drawer con línea de tiempo del proceso de la oferta postulada.
+- [x] Mis postulaciones: drawer con línea de tiempo del proceso de la oferta postulada (hecha más abajo).
 - [x] Detalle de oferta: sección «Portada del trabajo» con la imagen del póster cuando existe; build OK.
 - [x] Mis postulaciones: drawer con línea de tiempo del proceso (Enviada → En revisión → Entrevista → Resultado); 9 pruebas pasan. Verificación con sesión real pendiente (Supabase externo).
 - [x] Home: la sección «Explorá por puesto» se muestra después de la quinta oferta; verificado en el navegador (orden CARD×5 → POSITIONS).

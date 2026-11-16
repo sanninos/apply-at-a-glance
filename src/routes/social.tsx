@@ -14,12 +14,12 @@ const socialQueryOptions = queryOptions({
 export type SocialSearch = { poster: number | null };
 
 export const Route = createFileRoute("/social")({
-  validateSearch: (search: Record<string, unknown>): SocialSearch => ({
-    poster:
-      typeof search.poster === "string" && /^\d+$/.test(search.poster)
-        ? Number(search.poster)
-        : null,
-  }),
+  validateSearch: (search: Record<string, unknown>): SocialSearch => {
+    const raw = search.poster;
+    const id =
+      typeof raw === "number" ? raw : typeof raw === "string" ? Number(raw) : NaN;
+    return { poster: Number.isInteger(id) && id > 0 ? id : null };
+  },
   head: () => ({
     meta: [
       { title: "EmpleosUy · Social: pósteres de ofertas" },

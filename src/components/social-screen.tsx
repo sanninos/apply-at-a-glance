@@ -1,5 +1,5 @@
 // ============= Full file contents =============
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { BriefcaseBusiness, ChevronDown, ChevronRight } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
@@ -20,6 +20,47 @@ export function SocialScreen({
   focusJobId?: number | null;
 }) {
   const [seenScroll, setSeenScroll] = useState(false);
+  const feedRef = useRef<HTMLElement>(null);
+  const frameRef = useRef(0);
+  const [activeId, setActiveId] = useState<number | null>(null);
+
+  // Only the poster currently on screen gets the «Portada / Más información» tabs.
+  const syncActive = useCallback(() => {
+    const feed = feedRef.current;
+    if (!feed) return;
+    const feedTop = feed.getBoundingClientRect().top;
+    let nearest: number | null = null;
+    let nearestDistance = Number.POSITIVE_INFINITY;
+    for (const card of Array.from(feed.querySelectorAll<HTMLElement>("[data-job-id]"))) {
+      const distance = Math.abs(card.getBoundingClientRect().top - feedTop);
+      if (distance < nearestDistance) {
+        nearestDistance = distance;
+        nearest = Number(card.dataset.jobId);
+      }
+    }
+    setActiveId(nearest);
+  }, []);
+
+  const scheduleSync = useCallback(() => {
+    if (frameRef.current) return;
+    frameRef.current = requestAnimationFrame(() => {
+      frameRef.current = 0;
+      syncActive();
+    });
+  }, [syncActive]);
+
+  useEffect(() => {
+    const frame = requestAnimationFrame(syncActive);
+    return () => cancelAnimationFrame(frame);
+  }, [syncActive, posts]);
+
+  useEffect(() => {
+    window.addEventListener("resize", scheduleSync);
+    return () => {
+      window.removeEventListener("resize", scheduleSync);
+      if (frameRef.current) cancelAnimationFrame(frameRef.current);
+    };
+  }, [scheduleSync]);
 
   useEffect(() => {
     recordSocialPosterIds(posts.map((post) => String(post.id)));

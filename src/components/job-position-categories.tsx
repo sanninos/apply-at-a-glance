@@ -8,8 +8,9 @@ import { cn } from "@/lib/utils";
 export function PositionIcon({ position }: { position: JobPosition }) {
   const url = positionIconUrl(position.icon);
   const [failedUrl, setFailedUrl] = useState<string | null>(null);
-  return <span className="position-icon" aria-hidden="true">{url && failedUrl !== url
-    ? <img src={url} alt="" loading="lazy" onError={() => setFailedUrl(url)} />
+  const hasImage = Boolean(url) && failedUrl !== url;
+  return <span className={cn("position-icon", !hasImage && "is-fallback")} aria-hidden="true">{hasImage
+    ? <img src={url ?? undefined} alt="" loading="lazy" onError={() => setFailedUrl(url)} />
     : <BriefcaseBusiness />}</span>;
 }
 

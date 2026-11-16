@@ -837,8 +837,9 @@ nav .employment-nav-item, .employment-nav .employment-nav-item { position: relat
 .position-category-rail .position-category:nth-child(4n+2) { --band: color-mix(in oklab, var(--employment-yellow) 55%, var(--card)); }
 .position-category-rail .position-category:nth-child(4n+3) { --band: color-mix(in oklab, var(--employment-orange) 45%, var(--card)); }
 .position-category-rail .position-category:nth-child(4n+4) { --band: color-mix(in oklab, var(--employment-blue) 18%, var(--card)); }
-.position-category-rail .position-icon { position: absolute; top: -22px; left: 50%; transform: translateX(-50%); width: 56px; height: 56px; border-radius: 999px; background: var(--card); display: grid; place-items: center; box-shadow: var(--employment-shadow); }
-.position-category-rail .position-icon img, .position-category-rail .position-icon svg { width: 34px; height: 34px; object-fit: contain; color: var(--employment-blue); }
+.position-category-rail .position-icon { position: absolute; top: -22px; left: 50%; transform: translateX(-50%); width: 56px; height: 56px; border-radius: 999px; background: var(--card); display: grid; place-items: center; box-shadow: var(--employment-shadow); overflow: hidden; }
+.position-category-rail .position-icon img { width: 100%; height: 100%; object-fit: cover; }
+.position-category-rail .position-icon svg { width: 34px; height: 34px; object-fit: contain; color: var(--employment-blue); }
 .position-category-rail .position-category > .position-name { padding: 10px 8px 0; font-size: 13px; font-weight: 700; text-align: center; line-height: 1.2; }
 .position-count { display: inline-block; padding: 3px 8px; border-radius: 999px; border: 1px solid var(--employment-card-border); background: color-mix(in oklab, var(--employment-blue) 8%, var(--card)); color: var(--employment-blue); font-size: 10px; font-weight: 700; line-height: 1.3; white-space: nowrap; }
 .position-category-rail .position-count { margin-top: 6px; }

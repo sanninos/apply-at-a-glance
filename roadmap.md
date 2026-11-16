@@ -55,3 +55,4 @@
 - [ ] Verify native Google sign-in on a device; requires rebuilt Android app, Google signing-certificate setup and a real Google account.
 - [x] Detalle: tocar «Portada del trabajo» abre esa portada en Social sobre la pestaña «Portada»; verificado por clic y por dirección directa (el póster queda arriba del feed).
 - [x] Social: pestañas «Portada» / «Más información» flotantes sobre la portada, con la misma familia de color del fondo (pastilla azul sobre tira translúcida); verificado en póster e información.
+- [x] Social: las pestañas solo aparecen en la tarjeta que se está viendo; al deslizar, la pastilla pasa a la nueva tarjeta (verificado en el navegador: 1 sola tira de pestañas en pantalla, sigue el scroll y la llegada directa por dirección).

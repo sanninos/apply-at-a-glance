@@ -53,3 +53,5 @@
 - [x] Home: quitar el encabezado de la sección de puestos (título «Explorá por puesto» + enlace «Ver todos»).
 - [x] Connect Android Credential Manager to Supabase using supplied Web client ID; 8 handoff tests pass, and browser verifies missing-plugin warning without navigation. Native compilation not available in sandbox.
 - [ ] Verify native Google sign-in on a device; requires rebuilt Android app, Google signing-certificate setup and a real Google account.
+- [x] Detalle: tocar «Portada del trabajo» abre esa portada en Social sobre la pestaña «Portada»; verificado por clic y por dirección directa (el póster queda arriba del feed).
+- [x] Social: pestañas «Portada» / «Más información» flotantes sobre la portada, con la misma familia de color del fondo (pastilla azul sobre tira translúcida); verificado en póster e información.

@@ -11,7 +11,15 @@ const socialQueryOptions = queryOptions({
   staleTime: 60_000,
 });
 
+export type SocialSearch = { poster: number | null };
+
 export const Route = createFileRoute("/social")({
+  validateSearch: (search: Record<string, unknown>): SocialSearch => {
+    const raw = search["poster"];
+    const id =
+      typeof raw === "number" ? raw : typeof raw === "string" ? Number(raw) : NaN;
+    return { poster: Number.isInteger(id) && id > 0 ? id : null };
+  },
   head: () => ({
     meta: [
       { title: "EmpleosUy · Social: pósteres de ofertas" },
@@ -36,5 +44,6 @@ export const Route = createFileRoute("/social")({
 
 function SocialPage() {
   const { data } = useSuspenseQuery(socialQueryOptions);
-  return <SocialScreen posts={data} />;
+  const { poster } = Route.useSearch();
+  return <SocialScreen posts={data} focusJobId={poster} />;
 }

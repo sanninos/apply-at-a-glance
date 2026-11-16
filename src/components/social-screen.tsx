@@ -12,12 +12,35 @@ import { markPosterSeen, recordSocialPosterIds } from "@/lib/social-badge";
 import { SocialQuickActions } from "@/components/social-quick-actions";
 import type { SocialPost } from "@/lib/social-posts";
 
-export function SocialScreen({ posts }: { posts: SocialPost[] }) {
+export function SocialScreen({
+  posts,
+  focusJobId = null,
+}: {
+  posts: SocialPost[];
+  focusJobId?: number | null;
+}) {
   const [seenScroll, setSeenScroll] = useState(false);
 
   useEffect(() => {
     recordSocialPosterIds(posts.map((post) => String(post.id)));
   }, [posts]);
+
+  // Open directly on the poster asked for (e.g. from the job detail screen).
+  useEffect(() => {
+    if (focusJobId == null) return;
+    if (!posts.some((post) => post.id === focusJobId)) return;
+    const jump = () => {
+      document
+        .getElementById(`social-post-${focusJobId}`)
+        ?.scrollIntoView({ block: "start", behavior: "instant" });
+    };
+    const frame = requestAnimationFrame(jump);
+    const retry = setTimeout(jump, 250);
+    return () => {
+      cancelAnimationFrame(frame);
+      clearTimeout(retry);
+    };
+  }, [focusJobId, posts]);
 
 
   return (
@@ -84,6 +107,7 @@ function SocialPostCard({
   return (
     <article
       ref={cardRef}
+      id={`social-post-${post.id}`}
       className="social-post"
     >
       <div className="social-post-tabs" role="tablist" aria-label={`Vista de ${post.titulo || "empleo"}`}>

@@ -29,12 +29,17 @@ export function SocialScreen({
   useEffect(() => {
     if (focusJobId == null) return;
     if (!posts.some((post) => post.id === focusJobId)) return;
-    const frame = requestAnimationFrame(() => {
+    const jump = () => {
       document
         .getElementById(`social-post-${focusJobId}`)
-        ?.scrollIntoView({ block: "start", behavior: "auto" });
-    });
-    return () => cancelAnimationFrame(frame);
+        ?.scrollIntoView({ block: "start", behavior: "instant" });
+    };
+    const frame = requestAnimationFrame(jump);
+    const retry = setTimeout(jump, 250);
+    return () => {
+      cancelAnimationFrame(frame);
+      clearTimeout(retry);
+    };
   }, [focusJobId, posts]);
 
 

@@ -162,7 +162,7 @@ function SocialPostCard({
         <Button variant="ghost" role="tab" id={`poster-tab-${post.id}`} aria-controls={`social-panel-${post.id}`} aria-selected={tab === "poster"} onClick={() => setTab("poster")}>Portada</Button>
         <Button variant="ghost" role="tab" id={`info-tab-${post.id}`} aria-controls={`social-panel-${post.id}`} aria-selected={tab === "info"} onClick={() => setTab("info")}>Más información</Button>
       </div>}
-      <div className="social-post-panel" id={`social-panel-${post.id}`} role="tabpanel" aria-labelledby={`${tab === "poster" ? "poster" : "info"}-tab-${post.id}`}>
+      <div className="social-post-panel" id={`social-panel-${post.id}`} role={isActive ? "tabpanel" : undefined} aria-labelledby={isActive ? `${tab === "poster" ? "poster" : "info"}-tab-${post.id}` : undefined}>
       {tab === "poster" ? <Link className="social-poster-link" to="/llamado/$jobId" params={{ jobId: String(post.id) }} preload="intent" preloadDelay={0}>
       <img
         className="social-poster-blur"

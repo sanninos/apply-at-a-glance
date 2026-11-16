@@ -15,7 +15,7 @@ export type SocialSearch = { poster: number | null };
 
 export const Route = createFileRoute("/social")({
   validateSearch: (search: Record<string, unknown>): SocialSearch => {
-    const raw = search.poster;
+    const raw = search["poster"];
     const id =
       typeof raw === "number" ? raw : typeof raw === "string" ? Number(raw) : NaN;
     return { poster: Number.isInteger(id) && id > 0 ? id : null };

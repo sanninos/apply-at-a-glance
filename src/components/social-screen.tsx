@@ -74,6 +74,7 @@ export function SocialScreen({
       document
         .getElementById(`social-post-${focusJobId}`)
         ?.scrollIntoView({ block: "start", behavior: "instant" });
+      scheduleSync();
     };
     const frame = requestAnimationFrame(jump);
     const retry = setTimeout(jump, 250);
@@ -81,7 +82,7 @@ export function SocialScreen({
       cancelAnimationFrame(frame);
       clearTimeout(retry);
     };
-  }, [focusJobId, posts]);
+  }, [focusJobId, posts, scheduleSync]);
 
 
   return (
@@ -89,10 +90,12 @@ export function SocialScreen({
       <h1 className="sr-only">Social</h1>
       {posts.length ? (
         <section
+          ref={feedRef}
           className="social-feed"
           aria-label="Pósteres de ofertas de trabajo"
           onScroll={(event) => {
             if (!seenScroll && event.currentTarget.scrollTop > 24) setSeenScroll(true);
+            scheduleSync();
           }}
         >
           {posts.map((post, index) => (
@@ -100,6 +103,7 @@ export function SocialScreen({
               key={post.id}
               post={post}
               showScrollHint={false}
+              isActive={activeId === post.id}
             />
           ))}
         </section>

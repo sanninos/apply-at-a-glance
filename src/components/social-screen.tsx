@@ -35,7 +35,7 @@ export function SocialScreen({
       const distance = Math.abs(card.getBoundingClientRect().top - feedTop);
       if (distance < nearestDistance) {
         nearestDistance = distance;
-        nearest = Number(card.dataset.jobId);
+        nearest = Number(card.dataset["jobId"]);
       }
     }
     setActiveId(nearest);

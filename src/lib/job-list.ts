@@ -1,4 +1,5 @@
 import { matchesDepartment } from "@/lib/job-departments";
+import { matchesContract } from "@/lib/job-contracts";
 
 export type JobListItem = {
   id: number;
@@ -27,7 +28,7 @@ export function filterJobs(jobs: JobListItem[], search: string, mode: JobListMod
   const source = mode === "latest" ? sorted.slice(0, 36) : mode === "urgent" ? sorted.filter(isUrgent) : sorted;
   const result = source.filter((job) => {
     const text = normalize([job.titulo, job.Empresa, job.descripcion, job.ubicacion, job.ciudad].filter(Boolean).join(" "));
-    return text.includes(normalize(search.trim())) && matchesDepartment(job, department) && (!contract || job.tipoContrato === contract);
+    return text.includes(normalize(search.trim())) && matchesDepartment(job, department) && matchesContract(job, contract);
   }).sort((a, b) => mode === "all" ? Number(Boolean(b.isFeatured)) - Number(Boolean(a.isFeatured)) : 0);
   return interleaveOffers(result);
 }

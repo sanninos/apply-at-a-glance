@@ -4,7 +4,7 @@ import { filterJobs, publishedAgo, publishedInLastDaysCount, type JobListItem } 
 const job = (id: number, extra: Partial<JobListItem> = {}): JobListItem => ({ id, titulo: "Cajera", descripcion: "Atención al público", Empresa: "Empresa", ubicacion: "Montevideo", ciudad: "Montevideo", fotoEmpresa: null, image: null, created_at: "2026-10-22T00:00:00Z", isFeatured: false, isLlamado: false, estado_postulacion: "Normal", tipoContrato: "Permanente", ...extra });
 describe("employment list filters", () => {
   it("matches searches without accents and combines department and contract filters", () => {
-    expect(filterJobs([job(1), job(2, { ciudad: "Salto", ubicacion: "Salto" })], "atencion", "all", "Montevideo", "Permanente").map(item => item.id)).toEqual([1]);
+    expect(filterJobs([job(1), job(2, { ciudad: "Salto", ubicacion: "Salto" })], "atencion", "all", "Montevideo", "otro").map(item => item.id)).toEqual([1]);
   });
   it("shows urgent offers only in urgent mode", () => {
     expect(filterJobs([job(1), job(2, { estado_postulacion: "Urgente" })], "", "urgent").map(item => item.id)).toEqual([2]);

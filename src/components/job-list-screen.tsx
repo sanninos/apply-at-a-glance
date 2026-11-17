@@ -12,6 +12,7 @@ import { addRecent, loadRecent, storeRecent } from "@/lib/recent-searches";
 import { positionsQueryOptions } from "@/lib/job-positions-query";
 import { useQuery } from "@tanstack/react-query";
 import { filterJobs, isUrgent, publishedAgo, publishedInLastDaysCount, searchSuggestions, type JobListItem, type JobListMode } from "@/lib/job-list";
+import { contractFamiliesIn } from "@/lib/job-contracts";
 import { useEmployerLogo } from "@/hooks/use-employer-logo";
 import { cn } from "@/lib/utils";
 import { useNewJobOffers } from "@/hooks/use-new-job-offers";
@@ -67,7 +68,7 @@ export function JobListScreen({ jobs, variant = "home", categoryTitle }: { jobs:
     observer.observe(sentinel);
     return () => observer.disconnect();
   }, [shown.length, visible.length]);
-  const contracts = [...new Set(jobs.map(job => job.tipoContrato).filter((value): value is string => Boolean(value)))].sort();
+  const contracts = contractFamiliesIn(jobs);
   const tabs = [
     { id: "all" as const, label: "Todas", icon: BriefcaseBusiness, count: `+${publishedInLastDaysCount(jobs)}` },
     { id: "urgent" as const, label: "Urgentes", icon: Flame, count: undefined },

@@ -18,6 +18,8 @@ import { cn } from "@/lib/utils";
 import { useNewJobOffers } from "@/hooks/use-new-job-offers";
 import { isNewUnseenOffer, newUnseenOffers } from "@/lib/new-job-offers";
 import { NewOffersNotice } from "@/components/new-offers-notice";
+import { HomeProBar } from "@/components/home-pro-bar";
+import { proBarSlotIndex } from "@/lib/pro-bar";
 
 function EmployerLogo({ job, usePoster }: { job: JobListItem; usePoster: boolean }) {
   const { src, ref, onError } = useEmployerLogo(job.fotoEmpresa?.trim() || job.image?.trim() || null, usePoster ? job.poster?.trim() || null : null);
@@ -52,6 +54,7 @@ export function JobListScreen({ jobs, variant = "home", categoryTitle }: { jobs:
   const visible = filterJobs(newOnly ? unseenJobs : jobs, search, mode, department, contract);
   const idle = isSearch && !search.trim();
   const shown = idle ? [] : visible.slice(0, limit);
+  const proBarSlot = proBarSlotIndex(shown.length);
   const suggestions = isSearch ? searchSuggestions(jobs, search) : [];
   const positionsBlock = isHome && positions.data ? <JobPositionCategories positions={positions.data} jobs={jobs} /> : null;
 
@@ -105,9 +108,11 @@ export function JobListScreen({ jobs, variant = "home", categoryTitle }: { jobs:
         {(job.isLlamado || job.isFeatured || isUrgent(job) || isNew(job)) && <div className="employment-badges">{isNew(job) && <span className="new-offer-badge">Nuevo</span>}{job.isLlamado && <span className="llamado-badge">Llamado público</span>}{job.isFeatured && <span>Destacada</span>}{isUrgent(job) && <span>Urgente</span>}</div>}
       </Link>
         {positionsBlock && index === POSITIONS_AFTER - 1 && positionsBlock}
+        {isHome && index === proBarSlot && <HomeProBar />}
         {isHome && index === 7 && <HomeJobPosters jobs={visible} />}
       </Fragment>)}
       {positionsBlock && shown.length < POSITIONS_AFTER && positionsBlock}
+      {isHome && proBarSlot < 0 && shown.length > 0 && <HomeProBar />}
       {!idle && !visible.length && <div className="employment-empty"><Search /><h2>No se encontraron empleos</h2><Button variant="outline" onClick={() => { setSearch(""); setDepartment(""); setContract(""); setMode("all"); }}>Ver todos</Button></div>}
       {!idle && shown.length < visible.length && <div ref={sentinelRef} className="employment-list-sentinel" aria-hidden="true" />}
     </section>

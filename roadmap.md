@@ -57,3 +57,4 @@
 - [x] Social: pestañas «Portada» / «Más información» flotantes sobre la portada, con la misma familia de color del fondo (pastilla azul sobre tira translúcida); verificado en póster e información.
 - [x] Social: las pestañas solo aparecen en la tarjeta que se está viendo; al deslizar, la pastilla pasa a la nueva tarjeta (verificado en el navegador: 1 sola tira de pestañas en pantalla, sigue el scroll y la llegada directa por dirección).
 - [ ] Filtros: comprobar el chip de contrato dentro de /puestos/$puestoId (la fila aparece con los chips correctos; falta confirmar el conteo al filtrar ahí).
+- [x] Home: barra PRO amarilla (#f5d118) con el logo animado después de la tercera oferta, sin acción y con X para cerrarla.

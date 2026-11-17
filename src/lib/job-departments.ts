@@ -83,19 +83,33 @@ function mentionsWord(text: string, name: string) {
 
 export type JobLocationFields = { ubicacion: string | null; ciudad: string | null };
 
-/** Department of a job's locality, or null when the offer does not point to one. */
-export function jobDepartment(job: JobLocationFields): string | null {
-  const text = normalize([job.ciudad, job.ubicacion].filter(Boolean).join(", ").trim());
-  if (!text) return null;
+/** Department named in a text, keeping the one written last ("Av. Artigas 1234, Montevideo"). */
+function departmentMentioned(text: string): string | null {
+  const found = URUGUAY_DEPARTMENTS.filter((department) => mentionsWord(text, department));
+  if (!found.length) return null;
+  return found.reduce((best, department) => (text.lastIndexOf(normalize(department)) > text.lastIndexOf(normalize(best)) ? department : best));
+}
 
+/** Department of a locality that does not name it ("Punta del Este" -> Maldonado). */
+function localityDepartment(text: string): string | null {
   for (const [locality, department] of Object.entries(LOCALITY_DEPARTMENTS)) {
     if (mentionsWord(text, locality)) return department;
   }
+  return null;
+}
 
-  const found = URUGUAY_DEPARTMENTS.filter((department) => mentionsWord(text, department));
-  if (!found.length) return null;
-  // "Av. Artigas 1234, Montevideo" names the street first: keep the last mention.
-  return found.reduce((best, department) => (text.lastIndexOf(normalize(department)) > text.lastIndexOf(normalize(best)) ? department : best));
+/** Department of a job's locality, or null when the offer does not point to one. */
+export function jobDepartment(job: JobLocationFields): string | null {
+  const city = normalize(job.ciudad?.trim() || "");
+  const full = normalize([job.ciudad, job.ubicacion].filter(Boolean).join(", ").trim());
+  if (!full) return null;
+
+  // The structured city comes first: "Mercedes 1265" is an address on Av. Mercedes, Montevideo.
+  if (city) {
+    const inCity = departmentMentioned(city) || localityDepartment(city);
+    if (inCity) return inCity;
+  }
+  return departmentMentioned(full) || localityDepartment(full);
 }
 
 /** True when the job belongs to `department`, or when no department is filtered. */

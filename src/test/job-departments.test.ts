@@ -30,6 +30,11 @@ describe("departamentos de Uruguay", () => {
     expect(jobDepartment({ ciudad: "Av. Artigas 1234, Montevideo", ubicacion: null })).toBe("Montevideo");
   });
 
+  it("trusts the city over a street that is another department's name", () => {
+    expect(jobDepartment({ ciudad: "Montevideo", ubicacion: "Mercedes 1265" })).toBe("Montevideo");
+    expect(jobDepartment({ ciudad: "Montevideo", ubicacion: "Av. Artigas 363" })).toBe("Montevideo");
+  });
+
   it("filters the employment list by department", () => {
     const jobs = [
       job(1, { ciudad: "Montevideo", ubicacion: "Montevideo" }),

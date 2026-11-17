@@ -1,3 +1,5 @@
+import { matchesDepartment } from "@/lib/job-departments";
+
 export type JobListItem = {
   id: number;
   titulo: string | null;
@@ -20,12 +22,12 @@ export type JobListMode = "all" | "urgent" | "latest";
 
 const normalize = (value: string) => value.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
 
-export function filterJobs(jobs: JobListItem[], search: string, mode: JobListMode, location = "", contract = "") {
+export function filterJobs(jobs: JobListItem[], search: string, mode: JobListMode, department = "", contract = "") {
   const sorted = [...jobs].sort((a, b) => Date.parse(b.created_at) - Date.parse(a.created_at));
   const source = mode === "latest" ? sorted.slice(0, 36) : mode === "urgent" ? sorted.filter(isUrgent) : sorted;
   const result = source.filter((job) => {
     const text = normalize([job.titulo, job.Empresa, job.descripcion, job.ubicacion, job.ciudad].filter(Boolean).join(" "));
-    return text.includes(normalize(search.trim())) && (!location || (job.ciudad || job.ubicacion) === location) && (!contract || job.tipoContrato === contract);
+    return text.includes(normalize(search.trim())) && matchesDepartment(job, department) && (!contract || job.tipoContrato === contract);
   }).sort((a, b) => mode === "all" ? Number(Boolean(b.isFeatured)) - Number(Boolean(a.isFeatured)) : 0);
   return interleaveOffers(result);
 }

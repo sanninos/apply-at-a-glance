@@ -44,18 +44,18 @@ export function JobListScreen({ jobs, variant = "home", categoryTitle }: { jobs:
   const remember = (term: string) => { if (isSearch) updateRecent(addRecent(loadRecent(), term)); };
   const [mode, setMode] = useState<JobListMode>("all");
   const [filtersOpen, setFiltersOpen] = useState(false);
-  const [location, setLocation] = useState("");
+  const [department, setDepartment] = useState("");
   const [contract, setContract] = useState("");
   const [limit, setLimit] = useState(CARD_BATCH);
   const sentinelRef = useRef<HTMLDivElement | null>(null);
-  const visible = filterJobs(newOnly ? unseenJobs : jobs, search, mode, location, contract);
+  const visible = filterJobs(newOnly ? unseenJobs : jobs, search, mode, department, contract);
   const idle = isSearch && !search.trim();
   const shown = idle ? [] : visible.slice(0, limit);
   const suggestions = isSearch ? searchSuggestions(jobs, search) : [];
   const positionsBlock = isHome && positions.data ? <JobPositionCategories positions={positions.data} jobs={jobs} /> : null;
 
   // Restart incremental rendering whenever the result set changes.
-  useEffect(() => { setLimit(CARD_BATCH); }, [search, mode, location, contract, newOnly]);
+  useEffect(() => { setLimit(CARD_BATCH); }, [search, mode, department, contract, newOnly]);
 
   // Mount the next batch only when the user scrolls near the end.
   useEffect(() => {
@@ -67,7 +67,6 @@ export function JobListScreen({ jobs, variant = "home", categoryTitle }: { jobs:
     observer.observe(sentinel);
     return () => observer.disconnect();
   }, [shown.length, visible.length]);
-  const locations = [...new Set(jobs.map(job => job.ciudad || job.ubicacion).filter((value): value is string => Boolean(value)))].sort();
   const contracts = [...new Set(jobs.map(job => job.tipoContrato).filter((value): value is string => Boolean(value)))].sort();
   const tabs = [
     { id: "all" as const, label: "Todas", icon: BriefcaseBusiness, count: `+${publishedInLastDaysCount(jobs)}` },
@@ -77,14 +76,14 @@ export function JobListScreen({ jobs, variant = "home", categoryTitle }: { jobs:
   return <main className={cn("employment-screen", isSearch && "search-screen")}>
     <h1 className={categoryTitle ? "position-jobs-title" : "sr-only"}>{categoryTitle || "Empleos en Uruguay"}</h1>
     {isHome && <HomeAdvertisement />}
-    {isHome && newOffers && <NewOffersNotice key={accountScope} count={unseenJobs.length} signature={unseenJobs.map(job => job.id).sort((a, b) => a - b).join(",")} onView={() => { setNewOnlyScope(accountScope); setMode("all"); setLocation(""); setContract(""); }} />}
+    {isHome && newOffers && <NewOffersNotice key={accountScope} count={unseenJobs.length} signature={unseenJobs.map(job => job.id).sort((a, b) => a - b).join(",")} onView={() => { setNewOnlyScope(accountScope); setMode("all"); setDepartment(""); setContract(""); }} />}
     <header className="employment-header">
       <div className="employment-search-row">
         {!isHome && <Button variant="ghost" size="icon" className="search-back" aria-label="Volver" onClick={() => (window.history.length > 1 ? router.history.back() : router.navigate({ to: isSearch ? "/" : "/puestos" }))}><ArrowLeft /></Button>}
         {!isHome
           ? <div className="employment-search"><Search aria-hidden="true" /><Input autoFocus={isSearch} type="search" aria-label="Buscar un puesto de trabajo" placeholder={categoryTitle ? "Buscar en este puesto" : "Busca un puesto de trabajo"} value={search} onChange={event => setSearch(event.target.value)} onKeyDown={event => { if (event.key === "Enter") remember(search); }} />{search && <Button variant="ghost" size="icon" className="search-clear" aria-label="Borrar búsqueda" onClick={() => setSearch("")}><X /></Button>}</div>
           : <Link to="/buscar" preload="intent" preloadDelay={0} className="employment-search employment-search-link" aria-label="Buscar un puesto de trabajo"><Search aria-hidden="true" /><span>Busca un puesto de trabajo</span></Link>}
-        <Button variant="outline" size="icon" className={cn("employment-filter", (location || contract) && "filter-active")} aria-label="Filtrar empleos" title="Filtrar empleos" onClick={() => setFiltersOpen(true)}><SlidersHorizontal /></Button>
+        <Button variant="outline" size="icon" className={cn("employment-filter", (department || contract) && "filter-active")} aria-label="Filtrar empleos" title="Filtrar empleos" onClick={() => setFiltersOpen(true)}><SlidersHorizontal /></Button>
       </div>
       {isHome && <div className="employment-tabs" role="tablist" aria-label="Tipo de empleos">
         {tabs.map(({ id, label, icon: Icon, count }) => <Button key={id} role="tab" aria-selected={!newOnly && mode === id} variant="ghost" className={cn("employment-tab", !newOnly && mode === id && "selected")} onClick={() => { setMode(id); setNewOnlyScope(null); }}><Icon /><span>{label}</span>{count !== undefined && <span className="tab-count">{count}</span>}</Button>)}
@@ -108,10 +107,10 @@ export function JobListScreen({ jobs, variant = "home", categoryTitle }: { jobs:
         {isHome && index === 7 && <HomeJobPosters jobs={visible} />}
       </Fragment>)}
       {positionsBlock && shown.length < POSITIONS_AFTER && positionsBlock}
-      {!idle && !visible.length && <div className="employment-empty"><Search /><h2>No se encontraron empleos</h2><Button variant="outline" onClick={() => { setSearch(""); setLocation(""); setContract(""); setMode("all"); }}>Ver todos</Button></div>}
+      {!idle && !visible.length && <div className="employment-empty"><Search /><h2>No se encontraron empleos</h2><Button variant="outline" onClick={() => { setSearch(""); setDepartment(""); setContract(""); setMode("all"); }}>Ver todos</Button></div>}
       {!idle && shown.length < visible.length && <div ref={sentinelRef} className="employment-list-sentinel" aria-hidden="true" />}
     </section>
     <AppBottomNav active="empleos" />
-    <JobFilterPanel open={filtersOpen} onOpenChange={setFiltersOpen} value={{ mode, location, contract }} locations={locations} contracts={contracts} onApply={(value) => { setMode(value.mode); setLocation(value.location); setContract(value.contract); }} />
+    <JobFilterPanel open={filtersOpen} onOpenChange={setFiltersOpen} value={{ mode, department, contract }} contracts={contracts} onApply={(value) => { setMode(value.mode); setDepartment(value.department); setContract(value.contract); }} />
   </main>;
 }

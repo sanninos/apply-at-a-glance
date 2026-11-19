@@ -1,5 +1,5 @@
 import { useState } from "react";
-import premiumAsset from "@/assets/premium.svg.asset.json";
+const MASCOTA_URL = "https://stkkqtkoeonowmpmhejb.supabase.co/storage/v1/object/public/iconos/Carpincho%20coronado%20con%20mate%20y%20bandera%20uruguaya.png";
 
 export type PlanId = "mensual" | "anual";
 
@@ -73,9 +73,9 @@ export function Paywall({ onStart, onClose, onRestore, onTerms, onPrivacy }: Pay
         </div>
 
         <img
-          src={premiumAsset.url}
-          alt="Insignia de UruJobs Premium"
-          className="relative z-[1] mx-auto mb-4 mt-12 block w-[150px] max-w-[50%] motion-safe:animate-bounce [animation-duration:3.6s]"
+          src={MASCOTA_URL}
+          alt="Carpincho coronado con mate y bandera de Uruguay, la mascota de UruJobs"
+          className="relative z-[1] mx-auto mb-[-6px] mt-8 block w-[210px] max-w-[60%] motion-safe:animate-bounce [animation-duration:3.6s]"
         />
       </header>
 

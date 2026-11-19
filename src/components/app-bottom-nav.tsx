@@ -3,6 +3,7 @@ import { Bell, Radar, BriefcaseBusiness, Layers, UserRound } from "lucide-react"
 import { cn } from "@/lib/utils";
 import { useAlertBadgeCount } from "@/lib/alert-badge";
 import { useSocialBadgeCount } from "@/lib/social-badge";
+import { useRadarBadgeCount } from "@/lib/radar-badge";
 
 type AppSection = "alertas" | "empleos" | "social" | "radar" | "perfil";
 
@@ -17,11 +18,12 @@ const sections = [
 export function AppBottomNav({ active }: { active: AppSection }) {
   const alertBadge = useAlertBadgeCount();
   const socialBadge = useSocialBadgeCount();
+  const radarBadge = useRadarBadgeCount();
   return (
     <nav className="employment-nav" aria-label="Navegación principal">
       {sections.map(({ id, label, icon: Icon, to }) => {
         const isActive = id === active;
-        const badge = id === "alertas" ? alertBadge : id === "social" ? socialBadge : 0;
+        const badge = id === "alertas" ? alertBadge : id === "social" ? socialBadge : id === "radar" ? radarBadge : 0;
         const badgeLabel = badge > 99 ? "99+" : String(badge);
         const inner = (
           <>
@@ -41,7 +43,7 @@ export function AppBottomNav({ active }: { active: AppSection }) {
             preload="intent"
             preloadDelay={0}
             aria-current={isActive ? "page" : undefined}
-            aria-label={badge > 0 ? `${label}, ${badge} ${id === 'alertas' ? 'avisos sin leer' : 'pósteres sin ver'}` : label}
+            aria-label={badge > 0 ? `${label}, ${badge} ${id === 'alertas' ? 'avisos sin leer' : id === 'radar' ? 'ofertas nuevas en el mapa' : 'pósteres sin ver'}` : label}
             className={cn("employment-nav-item", isActive && "active")}
           >
             {inner}

@@ -1,11 +1,10 @@
 import { createFileRoute } from '@tanstack/react-router';
-import { queryOptions, useSuspenseQuery } from '@tanstack/react-query';
-import { getRadarJobs } from '@/lib/jobs.functions';
-import { toRadarJobs } from '@/lib/radar-jobs';
+import { useEffect } from 'react';
+import { useSuspenseQuery } from '@tanstack/react-query';
+import { markRadarSeen, radarQuery } from '@/lib/radar-badge';
 import { RadarScreen } from '@/components/radar-screen';
 import { NavigationLoading } from '@/components/navigation-loading';
 
-const radarQuery = queryOptions({ queryKey: ['radar-jobs'], queryFn: async () => toRadarJobs(await getRadarJobs()), staleTime: 60000 });
 export const Route = createFileRoute('/radar')({
   validateSearch: (search: Record<string, unknown>) => ({ q: typeof search['q'] === 'string' ? search['q'] : '' }),
   head: () => ({ meta: [
@@ -26,6 +25,7 @@ export const Route = createFileRoute('/radar')({
 });
 function RadarPage() {
   const { data } = useSuspenseQuery(radarQuery);
+  useEffect(() => { markRadarSeen(data.map((j) => String(j.id))); }, [data]);
   const { q } = Route.useSearch();
   const navigate = Route.useNavigate();
   return <RadarScreen jobs={data} search={q} onSearch={(value) => { void navigate({ search: { q: value }, replace: true }); }} />;

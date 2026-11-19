@@ -884,6 +884,4 @@ nav .employment-nav-item, .employment-nav .employment-nav-item { position: relat
 .home-poster-card:focus-visible, .home-posters-rail:focus-visible { outline: 2px solid var(--employment-blue); outline-offset: -2px; }
 .home-poster-image { aspect-ratio: 3 / 4; background: var(--employment-surface); }
 .home-poster-image img { width: 100%; height: 100%; object-fit: contain; }
-.home-poster-caption { padding: 12px; }
-.home-poster-caption h3 { font-size: 13px; line-height: 1.4; font-weight: 600; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; overflow-wrap: anywhere; }
-.home-poster-caption p { font-size: 11px; color: var(--muted-foreground); margin-top: 4px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+

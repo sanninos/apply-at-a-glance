@@ -445,6 +445,7 @@ export type Database = {
           Estudios: string | null
           fotoEmpresa: string | null
           fuente_id: string | null
+          fuente_url: string | null
           geocode_estado: string | null
           geocode_fuente: string | null
           havePoster: boolean | null
@@ -456,6 +457,7 @@ export type Database = {
           isLlamado: boolean | null
           jornada: string | null
           latLong: string | null
+          link_postulacion: string | null
           llamadoFechaCierre: string | null
           llamadoFechaInicio: string | null
           llamadoId: number | null
@@ -490,6 +492,7 @@ export type Database = {
           Estudios?: string | null
           fotoEmpresa?: string | null
           fuente_id?: string | null
+          fuente_url?: string | null
           geocode_estado?: string | null
           geocode_fuente?: string | null
           havePoster?: boolean | null
@@ -501,6 +504,7 @@ export type Database = {
           isLlamado?: boolean | null
           jornada?: string | null
           latLong?: string | null
+          link_postulacion?: string | null
           llamadoFechaCierre?: string | null
           llamadoFechaInicio?: string | null
           llamadoId?: number | null
@@ -535,6 +539,7 @@ export type Database = {
           Estudios?: string | null
           fotoEmpresa?: string | null
           fuente_id?: string | null
+          fuente_url?: string | null
           geocode_estado?: string | null
           geocode_fuente?: string | null
           havePoster?: boolean | null
@@ -546,6 +551,7 @@ export type Database = {
           isLlamado?: boolean | null
           jornada?: string | null
           latLong?: string | null
+          link_postulacion?: string | null
           llamadoFechaCierre?: string | null
           llamadoFechaInicio?: string | null
           llamadoId?: number | null

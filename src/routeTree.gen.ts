@@ -25,6 +25,7 @@ import { Route as PuestosRouteImport } from './routes/puestos'
 import { Route as RadarRouteImport } from './routes/radar'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as SocialRouteImport } from './routes/social'
+import { Route as SuscripcionRouteImport } from './routes/suscripcion'
 import { Route as LlamadoJobIdRouteImport } from './routes/llamado/$jobId'
 import { Route as PuestosIndexRouteImport } from './routes/puestos.index'
 import { Route as PuestosPuestoIdRouteImport } from './routes/puestos.$puestoId'
@@ -109,6 +110,11 @@ const SocialRoute = SocialRouteImport.update({
   path: '/social',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SuscripcionRoute = SuscripcionRouteImport.update({
+  id: '/suscripcion',
+  path: '/suscripcion',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const LlamadoJobIdRoute = LlamadoJobIdRouteImport.update({
   id: '/llamado/$jobId',
   path: '/llamado/$jobId',
@@ -142,6 +148,7 @@ export interface FileRoutesByFullPath {
   '/radar': typeof RadarRoute
   '/reset-password': typeof ResetPasswordRoute
   '/social': typeof SocialRoute
+  '/suscripcion': typeof SuscripcionRoute
   '/llamado/$jobId': typeof LlamadoJobIdRoute
   '/puestos/$puestoId': typeof PuestosPuestoIdRoute
   '/puestos/': typeof PuestosIndexRoute
@@ -162,6 +169,7 @@ export interface FileRoutesByTo {
   '/radar': typeof RadarRoute
   '/reset-password': typeof ResetPasswordRoute
   '/social': typeof SocialRoute
+  '/suscripcion': typeof SuscripcionRoute
   '/llamado/$jobId': typeof LlamadoJobIdRoute
   '/puestos/$puestoId': typeof PuestosPuestoIdRoute
   '/puestos': typeof PuestosIndexRoute
@@ -184,6 +192,7 @@ export interface FileRoutesById {
   '/radar': typeof RadarRoute
   '/reset-password': typeof ResetPasswordRoute
   '/social': typeof SocialRoute
+  '/suscripcion': typeof SuscripcionRoute
   '/llamado/$jobId': typeof LlamadoJobIdRoute
   '/puestos/$puestoId': typeof PuestosPuestoIdRoute
   '/puestos/': typeof PuestosIndexRoute
@@ -207,6 +216,7 @@ export interface FileRouteTypes {
     | '/radar'
     | '/reset-password'
     | '/social'
+    | '/suscripcion'
     | '/llamado/$jobId'
     | '/puestos/$puestoId'
     | '/puestos/'
@@ -227,6 +237,7 @@ export interface FileRouteTypes {
     | '/radar'
     | '/reset-password'
     | '/social'
+    | '/suscripcion'
     | '/llamado/$jobId'
     | '/puestos/$puestoId'
     | '/puestos'
@@ -248,6 +259,7 @@ export interface FileRouteTypes {
     | '/radar'
     | '/reset-password'
     | '/social'
+    | '/suscripcion'
     | '/llamado/$jobId'
     | '/puestos/$puestoId'
     | '/puestos/'
@@ -270,6 +282,7 @@ export interface RootRouteChildren {
   RadarRoute: typeof RadarRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
   SocialRoute: typeof SocialRoute
+  SuscripcionRoute: typeof SuscripcionRoute
   LlamadoJobIdRoute: typeof LlamadoJobIdRoute
 }
 
@@ -387,6 +400,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SocialRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/suscripcion': {
+      id: '/suscripcion'
+      path: '/suscripcion'
+      fullPath: '/suscripcion'
+      preLoaderRoute: typeof SuscripcionRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/llamado/$jobId': {
       id: '/llamado/$jobId'
       path: '/llamado/$jobId'
@@ -441,6 +461,7 @@ const rootRouteChildren: RootRouteChildren = {
   RadarRoute: RadarRoute,
   ResetPasswordRoute: ResetPasswordRoute,
   SocialRoute: SocialRoute,
+  SuscripcionRoute: SuscripcionRoute,
   LlamadoJobIdRoute: LlamadoJobIdRoute,
 }
 export const routeTree = rootRouteImport

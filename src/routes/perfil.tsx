@@ -1,7 +1,7 @@
 import { createFileRoute, Link, useNavigate } from '@tanstack/react-router';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useState, type ReactNode } from 'react';
-import { UserCircle, Megaphone, Bell, UsersRound, ListTodo, ChartNoAxesColumnIncreasing, LogOut, ChevronRight, Download, Trash2, GraduationCap, Bookmark, Building2 } from 'lucide-react';
+import { UserCircle, Megaphone, Bell, UsersRound, ListTodo, ChartNoAxesColumnIncreasing, LogOut, ChevronRight, Download, Trash2, GraduationCap, Bookmark, Building2, Crown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
 import { AppBottomNav } from '@/components/app-bottom-nav';
@@ -137,6 +137,11 @@ function ProfileScreen() {
         </>}
       </div>
     </ProfileBlock>
+    {user && <ProfileBlock title="SUSCRIPCIÓN" subtitle="Tu plan y facturación">
+      <div className="profile-access-list">
+        <Link to="/suscripcion" className="profile-access-row"><Crown /><span>Gestionar suscripción</span><ChevronRight className="profile-access-arrow" /></Link>
+      </div>
+    </ProfileBlock>}
     <ProfileBlock title="DATOS DE TU CUENTA" subtitle="GDPR · privacidad y portabilidad">
       <div className="profile-data-list">
         <Button variant="ghost" className="profile-data-row" disabled title="Exportar mis datos: próximamente">

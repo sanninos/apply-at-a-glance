@@ -127,7 +127,7 @@ function ProfileScreen() {
         <Link to="/alertas" className="profile-access-row"><Bell /><span>Mis notificaciones</span><ChevronRight className="profile-access-arrow" /></Link>
         {isCompany ? <>
           <Link to="/panel-empresa" className="profile-access-row"><UsersRound /><span>Candidatos de tus ofertas</span><ChevronRight className="profile-access-arrow" /></Link>
-          <Link to="/empresa" className="profile-access-row"><Megaphone /><span>Publicar y gestionar ofertas</span><ChevronRight className="profile-access-arrow" /></Link>
+          <Link to="/empresa-ofertas" className="profile-access-row"><Megaphone /><span>Publicar y gestionar ofertas</span><ChevronRight className="profile-access-arrow" /></Link>
           <Link to="/empresa" className="profile-access-row"><Building2 /><span>Datos de la empresa</span><ChevronRight className="profile-access-arrow" /></Link>
         </> : <>
           <Link to="/mis-postulaciones" className="profile-access-row"><UsersRound /><span>Tus postulaciones</span><ChevronRight className="profile-access-arrow" /></Link>

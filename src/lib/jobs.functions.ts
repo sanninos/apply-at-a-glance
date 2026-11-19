@@ -141,7 +141,7 @@ export const getRadarJobs = createServerFn({ method: "GET" }).handler(async (): 
   for (let offset = 0; ; offset += 1000) {
     const { data, error } = await client.from('JobsDetails')
       .select('id, titulo, Empresa, ubicacion, ciudad, fotoEmpresa, image, latLong')
-      .eq('isLlamado', false).not('latLong', 'is', null).neq('latLong', '')
+      .or('isLlamado.is.null,isLlamado.eq.false').not('latLong', 'is', null).neq('latLong', '')
       .order('id', { ascending: false }).range(offset, offset + 999);
     if (error) throw new Error('No pudimos cargar las ofertas del Radar.');
     jobs.push(...(data ?? []));

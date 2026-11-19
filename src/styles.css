@@ -885,3 +885,9 @@ nav .employment-nav-item, .employment-nav .employment-nav-item { position: relat
 .home-poster-image { aspect-ratio: 3 / 4; background: var(--employment-surface); }
 .home-poster-image img { width: 100%; height: 100%; object-fit: contain; }
 
+
+:root {
+  --paywall-blue: #0A3A9E; --paywall-blue-soft: #F2F6FF; --paywall-ring: rgb(10 58 158 / .12);
+  --paywall-yellow: #F6C21C; --paywall-yellow-shadow: #C99A0A; --paywall-on-yellow: #3A1A0E;
+  --paywall-ink: #1E1410; --paywall-muted: #6B5E57; --paywall-cream: #FFF6EC; --paywall-line: #EADFD6; --paywall-surface: #ffffff;
+}

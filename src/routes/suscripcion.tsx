@@ -4,6 +4,8 @@ import { Button } from '@/components/ui/button';
 import { AppBottomNav } from '@/components/app-bottom-nav';
 import { useAccess } from '@/components/access-provider';
 import { useAccessDialog } from '@/components/access-dialog';
+import { useState } from 'react';
+import { Paywall } from '@/components/paywall';
 
 export const Route = createFileRoute('/suscripcion')({
   head: () => ({ meta: [
@@ -22,6 +24,7 @@ const PLAY_SUBSCRIPTIONS_URL = 'https://play.google.com/store/account/subscripti
 function SubscriptionScreen() {
   const { user, ready } = useAccess();
   const { open: openAccess } = useAccessDialog();
+  const [paywallOpen, setPaywallOpen] = useState(false);
   return <main className="profile-screen">
     <Link to="/perfil" className="inline-flex items-center gap-2 text-sm font-semibold"><ArrowLeft className="size-4" />Volver al perfil</Link>
     <h1 className="mt-3 text-2xl font-bold">Mi suscripción</h1>
@@ -39,7 +42,7 @@ function SubscriptionScreen() {
       <section className="profile-block">
         <header className="profile-heading"><h2>GESTIONAR</h2><p>Compras realizadas en Google Play</p></header>
         <div className="flex flex-col gap-2">
-          <Button disabled title="Próximamente"><Crown />Obtener PRO · Próximamente</Button>
+          <Button onClick={() => setPaywallOpen(true)}><Crown />Ver planes PRO</Button>
           <Button variant="outline" disabled title="Próximamente"><RefreshCw />Restaurar compras · Próximamente</Button>
           <Button variant="outline" asChild><a href={PLAY_SUBSCRIPTIONS_URL} target="_blank" rel="noreferrer"><ExternalLink />Gestionar o cancelar en Google Play</a></Button>
         </div>
@@ -55,6 +58,9 @@ function SubscriptionScreen() {
         <p className="mt-3 flex items-center gap-2 text-sm"><ShieldCheck className="size-4" />Urujobs no almacena los datos de tu tarjeta.</p>
       </section>
     </>}
+    {paywallOpen && <div className="fixed inset-0 z-50 overflow-y-auto bg-background" role="dialog" aria-modal="true" aria-label="Planes UruJobs Premium">
+      <Paywall onClose={() => setPaywallOpen(false)} onStart={() => {}} onRestore={() => {}} onTerms={() => {}} onPrivacy={() => {}} />
+    </div>}
     <AppBottomNav active="perfil" />
   </main>;
 }

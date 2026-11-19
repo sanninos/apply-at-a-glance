@@ -20,7 +20,6 @@ import { Route as EstadisticasRouteImport } from './routes/estadisticas'
 import { Route as MisPostulacionesRouteImport } from './routes/mis-postulaciones'
 import { Route as OfertasGuardadasRouteImport } from './routes/ofertas-guardadas'
 import { Route as PanelEmpresaRouteImport } from './routes/panel-empresa'
-import { Route as PaywallPreviewRouteImport } from './routes/paywall-preview'
 import { Route as PerfilRouteImport } from './routes/perfil'
 import { Route as PuestosRouteImport } from './routes/puestos'
 import { Route as RadarRouteImport } from './routes/radar'
@@ -86,11 +85,6 @@ const PanelEmpresaRoute = PanelEmpresaRouteImport.update({
   path: '/panel-empresa',
   getParentRoute: () => rootRouteImport,
 } as any)
-const PaywallPreviewRoute = PaywallPreviewRouteImport.update({
-  id: '/paywall-preview',
-  path: '/paywall-preview',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const PerfilRoute = PerfilRouteImport.update({
   id: '/perfil',
   path: '/perfil',
@@ -149,7 +143,6 @@ export interface FileRoutesByFullPath {
   '/mis-postulaciones': typeof MisPostulacionesRoute
   '/ofertas-guardadas': typeof OfertasGuardadasRoute
   '/panel-empresa': typeof PanelEmpresaRoute
-  '/paywall-preview': typeof PaywallPreviewRoute
   '/perfil': typeof PerfilRoute
   '/puestos': typeof PuestosRouteWithChildren
   '/radar': typeof RadarRoute
@@ -172,7 +165,6 @@ export interface FileRoutesByTo {
   '/mis-postulaciones': typeof MisPostulacionesRoute
   '/ofertas-guardadas': typeof OfertasGuardadasRoute
   '/panel-empresa': typeof PanelEmpresaRoute
-  '/paywall-preview': typeof PaywallPreviewRoute
   '/perfil': typeof PerfilRoute
   '/radar': typeof RadarRoute
   '/reset-password': typeof ResetPasswordRoute
@@ -195,7 +187,6 @@ export interface FileRoutesById {
   '/mis-postulaciones': typeof MisPostulacionesRoute
   '/ofertas-guardadas': typeof OfertasGuardadasRoute
   '/panel-empresa': typeof PanelEmpresaRoute
-  '/paywall-preview': typeof PaywallPreviewRoute
   '/perfil': typeof PerfilRoute
   '/puestos': typeof PuestosRouteWithChildren
   '/radar': typeof RadarRoute
@@ -220,7 +211,6 @@ export interface FileRouteTypes {
     | '/mis-postulaciones'
     | '/ofertas-guardadas'
     | '/panel-empresa'
-    | '/paywall-preview'
     | '/perfil'
     | '/puestos'
     | '/radar'
@@ -243,7 +233,6 @@ export interface FileRouteTypes {
     | '/mis-postulaciones'
     | '/ofertas-guardadas'
     | '/panel-empresa'
-    | '/paywall-preview'
     | '/perfil'
     | '/radar'
     | '/reset-password'
@@ -265,7 +254,6 @@ export interface FileRouteTypes {
     | '/mis-postulaciones'
     | '/ofertas-guardadas'
     | '/panel-empresa'
-    | '/paywall-preview'
     | '/perfil'
     | '/puestos'
     | '/radar'
@@ -289,7 +277,6 @@ export interface RootRouteChildren {
   MisPostulacionesRoute: typeof MisPostulacionesRoute
   OfertasGuardadasRoute: typeof OfertasGuardadasRoute
   PanelEmpresaRoute: typeof PanelEmpresaRoute
-  PaywallPreviewRoute: typeof PaywallPreviewRoute
   PerfilRoute: typeof PerfilRoute
   PuestosRoute: typeof PuestosRouteWithChildren
   RadarRoute: typeof RadarRoute
@@ -376,13 +363,6 @@ declare module '@tanstack/react-router' {
       path: '/panel-empresa'
       fullPath: '/panel-empresa'
       preLoaderRoute: typeof PanelEmpresaRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/paywall-preview': {
-      id: '/paywall-preview'
-      path: '/paywall-preview'
-      fullPath: '/paywall-preview'
-      preLoaderRoute: typeof PaywallPreviewRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/perfil': {
@@ -476,7 +456,6 @@ const rootRouteChildren: RootRouteChildren = {
   MisPostulacionesRoute: MisPostulacionesRoute,
   OfertasGuardadasRoute: OfertasGuardadasRoute,
   PanelEmpresaRoute: PanelEmpresaRoute,
-  PaywallPreviewRoute: PaywallPreviewRoute,
   PerfilRoute: PerfilRoute,
   PuestosRoute: PuestosRouteWithChildren,
   RadarRoute: RadarRoute,

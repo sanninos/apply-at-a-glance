@@ -323,7 +323,9 @@ body:has(.alerts-screen) { background: var(--muted); }
 .pro-bar::after { content: ""; position: absolute; inset: 0; pointer-events: none; background: linear-gradient(100deg, transparent 18%, color-mix(in oklab, var(--card) 60%, transparent) 50%, transparent 82%); transform: translateX(-100%); animation: pro-bar-sheen 2.8s ease-in-out infinite; }
 @keyframes pro-bar-sheen { 0% { transform: translateX(-100%); } 60%, 100% { transform: translateX(100%); } }
 @media (prefers-reduced-motion: reduce) { .pro-bar::after { animation: none; opacity: 0; } }
-.pro-bar-body { position: relative; z-index: 1; flex: 1; min-width: 0; display: flex; align-items: center; gap: 10px; min-height: 44px; padding: 10px 12px; border-radius: 12px; background: color-mix(in oklab, var(--card) 22%, transparent); }
+.pro-bar-body { position: relative; z-index: 1; flex: 1; min-width: 0; display: flex; align-items: center; gap: 10px; min-height: 44px; padding: 10px 12px; border-radius: 12px; background: color-mix(in oklab, var(--card) 22%, transparent); appearance: none; border: 0; font: inherit; color: inherit; text-align: left; cursor: pointer; }
+.pro-bar-body:hover { background: color-mix(in oklab, var(--card) 34%, transparent); }
+.pro-bar-body:focus-visible { outline: 3px solid var(--pro-bar-foreground); outline-offset: 2px; }
 .pro-bar-icon { width: 34px; height: 34px; flex-shrink: 0; }
 .pro-bar-text { font-size: 13px; line-height: 1.4; font-weight: 700; }
 .pro-bar-close { position: relative; z-index: 1; flex-shrink: 0; width: 40px; height: 40px; color: inherit; border-radius: 12px; }

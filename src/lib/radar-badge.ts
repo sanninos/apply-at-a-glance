@@ -1,6 +1,5 @@
-// Browser-safe badge for the Radar tab: counts located offers added since the
-// user last opened Radar. The first time, current offers become the baseline
-// so only offers added afterwards are counted.
+// Browser-safe badge for the Radar tab: counts located offers the user has not
+// opened yet inside Radar (tapping its marker or picking it from the list).
 import { useEffect, useState } from "react";
 import { queryOptions, useQuery } from "@tanstack/react-query";
 import { getRadarJobs } from "@/lib/jobs.functions";
@@ -8,7 +7,7 @@ import { toRadarJobs } from "@/lib/radar-jobs";
 
 export const radarQuery = queryOptions({ queryKey: ["radar-jobs"], queryFn: async () => toRadarJobs(await getRadarJobs()), staleTime: 60000 });
 
-const KEY = "uru-radar-known-ids";
+const KEY = "uru-radar-opened-ids";
 const EVENT = "uru-radar-badge";
 
 function readKnown(): Set<string> | null {
@@ -19,13 +18,13 @@ function readKnown(): Set<string> | null {
   } catch { return null; }
 }
 
-/** Pure count of ids not yet known; a missing baseline counts nothing. */
+/** Pure count of offers not yet opened in Radar. */
 export function countNewRadarIds(ids: string[], known: ReadonlySet<string> | null): number {
-  if (!known) return 0;
+  if (!known) return ids.length;
   return ids.reduce((n, id) => (known.has(id) ? n : n + 1), 0);
 }
 
-/** Record ids as known (Radar opened, or first baseline). */
+/** Record offers as opened in Radar. */
 export function markRadarSeen(ids: string[]) {
   try {
     const known = readKnown() ?? new Set<string>();
@@ -48,9 +47,7 @@ export function useRadarBadgeCount(): number {
   useEffect(() => {
     if (!data) return;
     const ids = data.map((j) => String(j.id));
-    const known = readKnown();
-    if (!known) { markRadarSeen(ids); return; }
-    setCount(countNewRadarIds(ids, known));
+    setCount(countNewRadarIds(ids, readKnown()));
   }, [data, tick]);
   return count;
 }

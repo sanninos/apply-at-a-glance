@@ -1,3 +1,4 @@
+import { markRadarSeen } from '@/lib/radar-badge';
 /// <reference types="google.maps" />
 import { useEffect, useRef, useState } from 'react';
 import { Link } from '@tanstack/react-router';
@@ -18,6 +19,7 @@ export function RadarScreen({ jobs, search, onSearch }: { jobs: RadarJob[]; sear
   const [notice, setNotice] = useState('');
   const [open, setOpen] = useState(false);
   const [selected, setSelected] = useState<RadarJob | null>(null);
+  useEffect(() => { if (selected) markRadarSeen([String(selected.id)]); }, [selected]);
   const visible = jobs.filter((job) => `${job.titulo || ''} ${job.Empresa || ''} ${job.ubicacion || ''} ${job.ciudad || ''}`.toLocaleLowerCase().includes(search.toLocaleLowerCase()));
 
   useEffect(() => {

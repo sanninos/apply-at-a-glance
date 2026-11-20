@@ -33,6 +33,8 @@
         "@radix-ui/react-toggle": "^1.1.10",
         "@radix-ui/react-toggle-group": "^1.1.11",
         "@radix-ui/react-tooltip": "^1.2.8",
+        "@revenuecat/purchases-capacitor": "^14.1.2",
+        "@revenuecat/purchases-capacitor-ui": "^14.1.2",
         "@supabase/supabase-js": "^2.118.0",
         "@tailwindcss/vite": "^4.2.1",
         "@tanstack/react-query": "^5.101.1",
@@ -379,6 +381,12 @@
     "@radix-ui/react-visually-hidden": ["@radix-ui/react-visually-hidden@1.2.11", "https://europe-west1-npm.pkg.dev/lovable-core-prod/sandbox-npm-cache/@radix-ui/react-visually-hidden/-/react-visually-hidden-1.2.11.tgz", { "dependencies": { "@radix-ui/react-primitive": "2.1.10" }, "peerDependencies": { "@types/react": "*", "@types/react-dom": "*", "react": "^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc", "react-dom": "^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc" }, "optionalPeers": ["@types/react", "@types/react-dom"] }, "sha512-NFS86RYYZb4/exihaESBGOpMJFz8MGLAfu3mOBSGByVnVPC9JPASfYubxd/8KbkQK0sYAv8lVQDEQukDX/qXvQ=="],
 
     "@radix-ui/rect": ["@radix-ui/rect@1.1.3", "https://europe-west1-npm.pkg.dev/lovable-core-prod/sandbox-npm-cache/@radix-ui/rect/-/rect-1.1.3.tgz", {}, "sha512-JtyZR+mqgBibTo8xea3B6ZRmzZiM/YeVBtUkas6zMuXjAlfIFIW2FgqeM9eLyvEaYX66vr6DJMK+4U6LV0KhNw=="],
+
+    "@revenuecat/purchases-capacitor": ["@revenuecat/purchases-capacitor@14.1.2", "", { "dependencies": { "@revenuecat/purchases-typescript-internal-esm": "20.10.0" }, "peerDependencies": { "@capacitor/core": ">=8.0.0" } }, "sha512-NooPFCCBf6/5c38r7KpkbDSj1yUP6PCPqngi0/1H3YWFZ7wucZdtUyJETdmyDaIwNd3ZiPP0byDnjEAOTc7Slw=="],
+
+    "@revenuecat/purchases-capacitor-ui": ["@revenuecat/purchases-capacitor-ui@14.1.2", "", { "dependencies": { "@capacitor/core": "^8.0.0", "@revenuecat/purchases-typescript-internal-esm": "20.10.0" }, "peerDependencies": { "@revenuecat/purchases-capacitor": "14.1.2" } }, "sha512-fKOTh085suxdU6g3emJLdMMwTpdEsW8OLS54aFhKXQA3HxU+6im1T5Ugwe8YrbHGmDpWUWwupB3dDXF02+FBUw=="],
+
+    "@revenuecat/purchases-typescript-internal-esm": ["@revenuecat/purchases-typescript-internal-esm@20.10.0", "", {}, "sha512-m5NaLeJS8vXdt0Hd4FUXmt1CiwoVL4oVpgbJvUgrdQjqImBkz+PTbmFXOu83stAUUV8ReL4DKTUrYRJWQvToug=="],
 
     "@rolldown/binding-android-arm64": ["@rolldown/binding-android-arm64@1.2.1", "https://europe-west1-npm.pkg.dev/lovable-core-prod/sandbox-npm-cache/@rolldown/binding-android-arm64/-/binding-android-arm64-1.2.1.tgz", { "os": "android", "cpu": "arm64" }, "sha512-02hOeOSryYxVrOIphmLAsqnCJWxwlzFk+pEt/N/i6OgT3lShHO7xGCU5cpgchRDHboAEbSjzgGh+O/u1GswQmA=="],
 

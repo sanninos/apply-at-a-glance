@@ -12,4 +12,14 @@ export default defineConfig({
     // nitro/vite builds from this
     server: { entry: "server" },
   },
+  vite: {
+    // RevenueCat's ESM build uses extensionless imports that Node's SSR loader can't resolve.
+    ssr: {
+      noExternal: [
+        "@revenuecat/purchases-capacitor",
+        "@revenuecat/purchases-capacitor-ui",
+        "@revenuecat/purchases-typescript-internal-esm",
+      ],
+    },
+  },
 });

@@ -14,7 +14,7 @@ export function useNewJobOffers(jobs: JobListItem[]) {
       window.clearTimeout(timer);
       const now = Date.now();
       setSnapshot({ userId, seen: readViewedJobs(userId), now });
-      const boundaries = jobs.filter(job => job.isLlamado === false).map(job => Date.parse(job.created_at) + 24 * 60 * 60 * 1000 + 1).filter(expiry => expiry > now);
+      const boundaries = jobs.filter(job => job.isLlamado !== true).map(job => Date.parse(job.created_at) + 24 * 60 * 60 * 1000 + 1).filter(expiry => expiry > now);
       if (boundaries.length) timer = window.setTimeout(refresh, Math.min(Math.min(...boundaries) - now, 24 * 60 * 60 * 1000));
     };
     refresh();

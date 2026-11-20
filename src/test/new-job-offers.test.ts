@@ -11,10 +11,10 @@ describe("new unseen job offers", () => {
     expect(newUnseenOffers(jobs, new Set(["43"]), now).map(job => job.id)).toEqual([42]);
     expect(newUnseenOffers(jobs, new Set(["42", "43"]), now)).toHaveLength(0);
   });
-  it("requires isLlamado to be exactly false", () => {
+  it("excludes llamados but includes offers with empty isLlamado", () => {
     expect(isNewUnseenOffer(offer, new Set(), now)).toBe(true);
     expect(isNewUnseenOffer({ ...offer, isLlamado: true }, new Set(), now)).toBe(false);
-    expect(isNewUnseenOffer({ ...offer, isLlamado: null }, new Set(), now)).toBe(false);
+    expect(isNewUnseenOffer({ ...offer, isLlamado: null }, new Set(), now)).toBe(true);
   });
   it("includes exactly 24 hours but excludes older, future and invalid publications", () => {
     const at = (age: number) => ({ ...offer, created_at: new Date(now - age).toISOString() });

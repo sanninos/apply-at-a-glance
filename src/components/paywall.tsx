@@ -50,7 +50,7 @@ export function Paywall({ onStart, onClose, onRestore, onTerms, onPrivacy }: Pay
   const actual = PLANES[plan];
 
   return (
-    <div className="mx-auto flex min-h-full w-full max-w-[430px] flex-col overflow-hidden bg-[var(--paywall-surface)] font-['DM_Sans',system-ui,sans-serif] text-[var(--paywall-ink)]">
+    <div className="mx-auto flex min-h-full w-full max-w-[430px] flex-col overflow-x-clip bg-[var(--paywall-surface)] font-['DM_Sans',system-ui,sans-serif] text-[var(--paywall-ink)]">
       {/* Hero */}
       <header
         className="relative bg-[var(--paywall-blue)] px-6 pt-5 text-center text-[var(--paywall-surface)]"
@@ -152,23 +152,24 @@ export function Paywall({ onStart, onClose, onRestore, onTerms, onPrivacy }: Pay
             </li>
           ))}
         </ol>
-
+      </section>
+      <div className="sticky bottom-0 z-[3] border-t border-[var(--paywall-line)] bg-[var(--paywall-surface)] px-[22px] pb-[calc(12px+env(safe-area-inset-bottom,0px))] pt-3">
         <button
           onClick={() => onStart?.(plan)}
-          className="mt-[18px] block w-full rounded-[18px] bg-[var(--paywall-yellow)] px-[18px] py-[17px] font-['Fredoka',sans-serif] text-[19px] font-bold text-[var(--paywall-on-yellow)] shadow-[0_4px_0_var(--paywall-yellow-shadow)] transition active:translate-y-[3px] active:shadow-[0_1px_0_var(--paywall-yellow-shadow)] focus-visible:outline focus-visible:outline-[3px] focus-visible:outline-offset-2 focus-visible:outline-[var(--paywall-blue)]"
+          className="block w-full rounded-[18px] bg-[var(--paywall-yellow)] px-[18px] py-[17px] font-['Fredoka',sans-serif] text-[19px] font-bold text-[var(--paywall-on-yellow)] shadow-[0_4px_0_var(--paywall-yellow-shadow)] transition active:translate-y-[3px] active:shadow-[0_1px_0_var(--paywall-yellow-shadow)] focus-visible:outline focus-visible:outline-[3px] focus-visible:outline-offset-2 focus-visible:outline-[var(--paywall-blue)]"
         >
           Empezar mis 7 días gratis
         </button>
-        <p className="mt-2.5 text-center text-[12.5px] leading-snug text-[var(--paywall-muted)]">
+        <p className="mt-2 text-center text-[12.5px] leading-snug text-[var(--paywall-muted)]">
           7 días gratis, después {actual.cobro}. Renovación automática.
         </p>
 
-        <div className="mt-3 flex justify-center gap-[18px] text-[12.5px] text-[var(--paywall-muted)]">
+        <div className="mt-1 flex justify-center gap-[18px] text-[12.5px] text-[var(--paywall-muted)]">
           <button onClick={onRestore} className="p-1 underline">Restaurar compras</button>
           <button onClick={onTerms} className="p-1 underline">Términos</button>
           <button onClick={onPrivacy} className="p-1 underline">Privacidad</button>
         </div>
-      </section>
+      </div>
     </div>
   );
 }

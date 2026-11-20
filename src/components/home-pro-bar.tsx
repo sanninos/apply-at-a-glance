@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { X } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Paywall } from "@/components/paywall";
+import { PremiumPaywall } from "@/components/premium-paywall";
 import premiumAsset from "@/assets/premium.svg.asset.json";
 
 /**
@@ -48,13 +48,7 @@ export function HomeProBar() {
           aria-modal="true"
           aria-label="Planes UruJobs Premium"
         >
-          <Paywall
-            onClose={() => setPaywallOpen(false)}
-            onStart={() => {}}
-            onRestore={() => {}}
-            onTerms={() => {}}
-            onPrivacy={() => {}}
-          />
+          <PremiumPaywall onClose={() => setPaywallOpen(false)} />
         </div>
       )}
     </>

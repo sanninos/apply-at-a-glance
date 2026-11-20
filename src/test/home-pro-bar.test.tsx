@@ -8,8 +8,8 @@ describe('PRO bar interaction', () => {
     expect(screen.queryByRole('dialog', { name: 'Planes UruJobs Premium' })).toBeNull();
     fireEvent.click(screen.getByRole('button', { name: 'Adquiere PRO y obtén ventajas exclusivas' }));
     const dialog = screen.getByRole('dialog', { name: 'Planes UruJobs Premium' });
-    expect(dialog).toHaveTextContent('Probá UruJobs Premium 7 días gratis');
-    expect(dialog).toHaveTextContent('$1.490');
+    expect(dialog).toHaveTextContent('Pasate a UruJobs Premium');
+    expect(dialog).toHaveTextContent('solo se pueden contratar desde la app de Android');
   });
 
   it('closes the plans screen with its own close button and leaves the bar in place', () => {

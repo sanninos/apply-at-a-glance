@@ -5,7 +5,8 @@ import { AppBottomNav } from '@/components/app-bottom-nav';
 import { useAccess } from '@/components/access-provider';
 import { useAccessDialog } from '@/components/access-dialog';
 import { useState } from 'react';
-import { Paywall } from '@/components/paywall';
+import { PremiumPaywall } from '@/components/premium-paywall';
+import { useSubscription } from '@/components/subscription-provider';
 
 export const Route = createFileRoute('/suscripcion')({
   head: () => ({ meta: [
@@ -24,7 +25,13 @@ const PLAY_SUBSCRIPTIONS_URL = 'https://play.google.com/store/account/subscripti
 function SubscriptionScreen() {
   const { user, ready } = useAccess();
   const { open: openAccess } = useAccessDialog();
+  const subscription = useSubscription();
   const [paywallOpen, setPaywallOpen] = useState(false);
+  const [restoreMessage, setRestoreMessage] = useState<string | null>(null);
+  const restore = async () => {
+    const outcome = await subscription.restore();
+    setRestoreMessage(outcome.status === 'error' ? outcome.message : outcome.status === 'restored' ? 'Recuperamos tu suscripción Pro.' : 'No encontramos compras para restaurar en esta cuenta de Google Play.');
+  };
   return <main className="profile-screen">
     <Link to="/perfil" className="inline-flex items-center gap-2 text-sm font-semibold"><ArrowLeft className="size-4" />Volver al perfil</Link>
     <h1 className="mt-3 text-2xl font-bold">Mi suscripción</h1>
@@ -36,14 +43,15 @@ function SubscriptionScreen() {
         <header className="profile-heading"><h2>PLAN ACTUAL</h2><p>Estado de tu suscripción</p></header>
         <div className="flex items-center gap-3">
           <span className="profile-icon-tile"><Crown /></span>
-          <div><strong>Plan gratuito</strong><p className="text-sm text-muted-foreground">No tenés una suscripción PRO activa.</p></div>
+          <div><strong>{subscription.isPro ? 'Plan PRO' : 'Plan gratuito'}</strong><p className="text-sm text-muted-foreground">{subscription.isPro ? 'Tu suscripción PRO está activa.' : 'No tenés una suscripción PRO activa.'}</p></div>
         </div>
       </section>
       <section className="profile-block">
         <header className="profile-heading"><h2>GESTIONAR</h2><p>Compras realizadas en Google Play</p></header>
         <div className="flex flex-col gap-2">
           <Button onClick={() => setPaywallOpen(true)}><Crown />Ver planes PRO</Button>
-          <Button variant="outline" disabled title="Próximamente"><RefreshCw />Restaurar compras · Próximamente</Button>
+          <Button variant="outline" disabled={!subscription.available || subscription.isPro} onClick={() => void restore()}><RefreshCw />Restaurar compras</Button>
+          {restoreMessage && <p className="text-sm text-muted-foreground" role="status">{restoreMessage}</p>}
           <Button variant="outline" asChild><a href={PLAY_SUBSCRIPTIONS_URL} target="_blank" rel="noreferrer"><ExternalLink />Gestionar o cancelar en Google Play</a></Button>
         </div>
       </section>
@@ -59,7 +67,7 @@ function SubscriptionScreen() {
       </section>
     </>}
     {paywallOpen && <div className="fixed inset-0 z-50 overflow-y-auto bg-background" role="dialog" aria-modal="true" aria-label="Planes UruJobs Premium">
-      <Paywall onClose={() => setPaywallOpen(false)} onStart={() => {}} onRestore={() => {}} onTerms={() => {}} onPrivacy={() => {}} />
+      <PremiumPaywall onClose={() => setPaywallOpen(false)} />
     </div>}
     <AppBottomNav active="perfil" />
   </main>;

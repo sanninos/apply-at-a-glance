@@ -9,6 +9,8 @@ import { useAccess } from '@/components/access-provider';
 import { useAccessDialog } from '@/components/access-dialog';
 import { supabase } from '@/integrations/supabase/client';
 import { AccountDeletion } from '@/components/account-deletion';
+import { SubscriptionCard } from '@/components/subscription-card';
+import { useSubscription } from '@/components/subscription-provider';
 import { activeSearchDaysLeft, activeSearchUntil, isActiveSearch } from '@/lib/active-search';
 
 export const Route = createFileRoute('/perfil')({
@@ -39,6 +41,7 @@ function ProfileBlock({ title, subtitle, children, className = '' }: { title: st
 function ProfileScreen() {
   const { user, ready } = useAccess();
   const { open: openAccess } = useAccessDialog();
+  const subscription = useSubscription();
   const queryClient = useQueryClient();
   const navigate = useNavigate();
   const [busy, setBusy] = useState(false);
@@ -121,6 +124,9 @@ function ProfileScreen() {
       </div>
       {searching && daysLeft <= 2 && <Button variant="outline" className="mt-3" disabled={savingSearch} onClick={() => void setActiveSearch(true)}>Renovar 7 días</Button>}
       {searchError && <p className="profile-error" role="alert">{searchError}</p>}
+    </ProfileBlock>}
+    {user && subscription.available && <ProfileBlock title="SUSCRIPCIÓN" subtitle="Tu plan Urujobs Pro">
+      <SubscriptionCard />
     </ProfileBlock>}
     <ProfileBlock title="ACCESOS" subtitle="Acciones de tu cuenta" className="profile-access-block">
       <div className="profile-access-list">

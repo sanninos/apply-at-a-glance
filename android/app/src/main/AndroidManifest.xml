@@ -14,7 +14,7 @@
             android:name=".MainActivity"
             android:label="@string/title_activity_main"
             android:theme="@style/AppTheme.NoActionBarLaunch"
-            android:launchMode="singleTask"
+            android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:exported="true">
 
@@ -43,6 +43,9 @@
             </intent-filter>
         </service>
     </application>
+
+    <!-- screenOrientation="portrait" implies this feature as required; keep it optional -->
+    <uses-feature android:name="android.hardware.screen.portrait" android:required="false" />
 
     <!-- Permissions -->
 

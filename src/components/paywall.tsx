@@ -33,12 +33,14 @@ interface PaywallProps {
   onStart?: (plan: PaywallPlan) => void;
   onClose?: () => void;
   onRetry?: () => void;
+  /** Real reason the plans could not load, shown under the generic notice. */
+  errorDetail?: string | null;
   onRestore?: () => void;
   onTerms?: () => void;
   onPrivacy?: () => void;
 }
 
-export function Paywall({ plans = [], state = "ready", busy = false, message, onStart, onClose, onRetry, onRestore, onTerms, onPrivacy }: PaywallProps) {
+export function Paywall({ plans = [], state = "ready", busy = false, message, onStart, onClose, onRetry, errorDetail, onRestore, onTerms, onPrivacy }: PaywallProps) {
   const [elegido, setElegido] = useState<PlanId | null>(null);
   const actual = plans.find((p) => p.id === elegido) ?? plans.find((p) => p.id === "yearly") ?? plans[0];
   const dias = actual?.pruebaDias ?? null;
@@ -103,6 +105,9 @@ export function Paywall({ plans = [], state = "ready", busy = false, message, on
         {state !== "ready" || !actual ? (
           <div className="rounded-[18px] bg-[var(--paywall-cream)] px-4 py-5 text-center text-[15px] leading-snug" role={state === "error" ? "alert" : "status"}>
             {ESTADOS[state === "ready" ? "error" : state]}
+            {state === "error" && errorDetail && (
+              <span className="mt-2 block text-[13px] opacity-75">{errorDetail}</span>
+            )}
             {state === "error" && onRetry && (
               <button onClick={onRetry} className="mt-3 block w-full font-bold underline">Reintentar</button>
             )}

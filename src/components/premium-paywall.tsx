@@ -3,7 +3,7 @@ import { Paywall, type PaywallState } from '@/components/paywall';
 import { useAccess } from '@/components/access-provider';
 import { useAccessDialog } from '@/components/access-dialog';
 import { useSubscription } from '@/components/subscription-provider';
-import { loadProPlans, type PaywallPlan, type ProPlan, type PurchaseOutcome } from '@/lib/revenuecat';
+import { loadProPlans, purchaseErrorMessage, type PaywallPlan, type ProPlan, type PurchaseOutcome } from '@/lib/revenuecat';
 
 type Message = { ok: boolean; text: string } | null;
 
@@ -28,6 +28,7 @@ export function PremiumPaywall({ onClose }: { onClose: () => void }) {
   const { available, status, isPro } = subscription;
   const [plans, setPlans] = useState<ProPlan[] | null>(null);
   const [loadFailed, setLoadFailed] = useState(false);
+  const [loadError, setLoadError] = useState<string | null>(null);
   const [attempt, setAttempt] = useState(0);
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState<Message>(null);
@@ -36,9 +37,10 @@ export function PremiumPaywall({ onClose }: { onClose: () => void }) {
     if (!available || status !== 'ready' || isPro) return;
     let cancelled = false;
     setLoadFailed(false);
+    setLoadError(null);
     loadProPlans()
       .then(loaded => { if (!cancelled) setPlans(loaded); })
-      .catch(() => { if (!cancelled) setLoadFailed(true); });
+      .catch(caught => { if (!cancelled) { setLoadFailed(true); setLoadError(purchaseErrorMessage(caught)); } });
     return () => { cancelled = true; };
   }, [available, status, isPro, attempt]);
 
@@ -47,6 +49,8 @@ export function PremiumPaywall({ onClose }: { onClose: () => void }) {
   else if (isPro) state = 'active';
   else if (status === 'error' || loadFailed || plans?.length === 0) state = 'error';
   else state = plans ? 'ready' : 'loading';
+  const errorDetail = status === 'error' ? subscription.error
+    : loadError ?? (plans?.length === 0 ? 'No hay planes publicados: revisá en RevenueCat que la oferta actual (current) tenga los paquetes mensual, anual o de por vida con productos de Google Play activos.' : null);
 
   async function run(action: () => Promise<PurchaseOutcome>) {
     if (busy) return;
@@ -84,6 +88,7 @@ export function PremiumPaywall({ onClose }: { onClose: () => void }) {
     onClose={onClose}
     onStart={start}
     onRetry={retry}
+    errorDetail={errorDetail}
     onRestore={() => void run(subscription.restore)}
   />;
 }

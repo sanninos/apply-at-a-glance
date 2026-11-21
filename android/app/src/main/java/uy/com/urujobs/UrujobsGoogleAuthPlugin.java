@@ -83,7 +83,7 @@ public class UrujobsGoogleAuthPlugin extends Plugin {
                             @Override
                             public void onError(GetCredentialException error) {
                                 cancellation = null;
-                                call.reject("Google sign-in did not complete",
+                                call.reject("Google: " + error.getType() + " " + String.valueOf(error.getMessage()),
                                         error instanceof GetCredentialCancellationException ? "cancelled" : "google_unavailable");
                             }
                         });

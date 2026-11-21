@@ -43,7 +43,7 @@ describe('Android Google handoff', () => {
   it('cancellation does not exchange a token or display an error', async () => {
     mocks.signIn.mockRejectedValue({ code: 'cancelled' });
     await expect(signInWithNativeGoogle()).rejects.toEqual({ code: 'cancelled' });
-    expect(nativeGoogleError({ code: 'cancelled' })).toBeNull();
+    expect(nativeGoogleError({ code: 'cancelled' })).toContain('SHA-1');
     expect(mocks.exchange).not.toHaveBeenCalled();
   });
   it('rejects an empty token without exchanging it', async () => {

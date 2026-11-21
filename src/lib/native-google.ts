@@ -58,7 +58,7 @@ export async function signInWithNativeGoogle() {
 
 export function nativeGoogleError(error: unknown): string | null {
   const code = error && typeof error === 'object' && 'code' in error ? String(error.code) : error instanceof Error ? error.message : '';
-  if (code === 'cancelled') return null;
+  if (code === 'cancelled') return 'Google no devolvió la cuenta elegida. Si elegiste una, falta registrar en Google Cloud la huella SHA-1 de firma de Google Play para esta app.';
   if (code === 'native_unavailable') return 'Actualizá la app para ingresar con las cuentas de Google de tu teléfono.';
   if (code === 'timeout') return 'El ingreso tardó demasiado. Intentá nuevamente.';
   const detail = error instanceof Error && error.message ? ` (${error.message.slice(0, 160)})` : '';

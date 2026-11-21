@@ -58,6 +58,9 @@ describe('RevenueCat helpers', () => {
     const { describeProAccess, hasPro, hasPurchaseHistory } = await import('@/lib/revenuecat');
     expect(describeProAccess(info())).toBeNull();
     expect(describeProAccess(info({ pro: entitlement('lifetime', null) }))).toMatchObject({ plan: 'lifetime', expiresAt: null });
+    // The dashboard currently names the entitlement `urujobs_pro`; it must unlock Pro just like the old `pro` id.
+    expect(hasPro(info({ urujobs_pro: entitlement('monthly', null) }))).toBe(true);
+    expect(describeProAccess(info({ urujobs_pro: entitlement('yearly', null) }))).toMatchObject({ plan: 'yearly' });
     const yearly = describeProAccess(info({ pro: entitlement('yearly:p1y', '2030-01-01T00:00:00Z', false) }));
     expect(yearly).toMatchObject({ plan: 'yearly', willRenew: false });
     expect(yearly?.expiresAt?.getUTCFullYear()).toBe(2030);

@@ -17,8 +17,10 @@ import { RevenueCatUI } from '@revenuecat/purchases-capacitor-ui';
 // the default and VITE_REVENUECAT_API_KEY only overrides it (e.g. the `test_` Test Store key for development).
 export const REVENUECAT_API_KEY: string = import.meta.env['VITE_REVENUECAT_API_KEY'] ?? 'goog_aBFHKjDrVUznprBUXwIiomyHkrv';
 
-/** Entitlement that the lifetime, yearly and monthly products unlock (RevenueCat dashboard → Entitlements). */
-export const PRO_ENTITLEMENT_ID = 'pro';
+/** Entitlement that the lifetime, yearly and monthly products unlock (RevenueCat dashboard → Entitlements).
+ *  The dashboard currently uses `urujobs_pro`; `pro` is kept as an accepted alias so either name works. */
+export const PRO_ENTITLEMENT_ID = 'urujobs_pro';
+export const PRO_ENTITLEMENT_IDS: readonly string[] = ['urujobs_pro', 'pro'];
 
 export const PRODUCT_IDS = { lifetime: 'lifetime', yearly: 'yearly', monthly: 'monthly' } as const;
 export type PlanId = keyof typeof PRODUCT_IDS;
@@ -66,7 +68,15 @@ export async function watchCustomerInfo(onChange: (info: CustomerInfo) => void) 
   return () => { void Purchases.removeCustomerInfoUpdateListener({ listenerToRemove: id }).catch(() => undefined); };
 }
 
-export const proEntitlement = (info: CustomerInfo | null): PurchasesEntitlementInfo | null => info?.entitlements.active[PRO_ENTITLEMENT_ID] ?? null;
+/** Active PRO entitlement, accepting either dashboard name (`urujobs_pro` or the older `pro`). */
+export const proEntitlement = (info: CustomerInfo | null): PurchasesEntitlementInfo | null => {
+  if (!info) return null;
+  for (const id of PRO_ENTITLEMENT_IDS) {
+    const found = info.entitlements.active[id];
+    if (found) return found;
+  }
+  return null;
+};
 export const hasPro = (info: CustomerInfo | null) => proEntitlement(info) !== null;
 
 export interface ProAccess { plan: PlanId | null; expiresAt: Date | null; willRenew: boolean }

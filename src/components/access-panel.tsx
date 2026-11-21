@@ -62,7 +62,7 @@ export function AccessPanel({ onClose, embedded = false }: { onClose?: () => voi
       return;
     }
     const { error } = await supabase.auth.signInWithOAuth({ provider: 'google', options: { redirectTo: `${window.location.origin}/auth` } });
-    if (error) { setError('No pudimos iniciar el ingreso con Google.'); setBusy(false); }
+    if (error) { setError(`No pudimos iniciar el ingreso con Google. (${error.message})`); setBusy(false); }
   }
   async function signOut() {
     setBusy(true); await queryClient.cancelQueries(); queryClient.clear();

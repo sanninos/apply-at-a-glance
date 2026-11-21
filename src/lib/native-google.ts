@@ -61,5 +61,6 @@ export function nativeGoogleError(error: unknown): string | null {
   if (code === 'cancelled') return null;
   if (code === 'native_unavailable') return 'Actualizá la app para ingresar con las cuentas de Google de tu teléfono.';
   if (code === 'timeout') return 'El ingreso tardó demasiado. Intentá nuevamente.';
-  return 'No pudimos completar el ingreso con Google. Intentá nuevamente.';
+  const detail = error instanceof Error && error.message ? ` (${error.message.slice(0, 160)})` : '';
+  return `No pudimos completar el ingreso con Google. Intentá nuevamente.${detail}`;
 }

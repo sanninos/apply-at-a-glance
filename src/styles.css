@@ -554,9 +554,9 @@ body:has(.curriculum-screen) { background: var(--muted); }
 .job-filter-chips button { min-height: 43px; height: auto; padding: 10px 17px; border-radius: 999px; border: 1px solid var(--border); background: var(--employment-surface); color: var(--muted-foreground); font-size: 14px; font-weight: 650; white-space: normal; text-align: left; }
 .job-filter-chips button.selected { background: var(--employment-blue); color: var(--primary-foreground); border-color: var(--employment-blue); }
 .job-filter-chips .location-pin { font-size: 16px; }
-.job-filter-departments { max-height: 40dvh; overflow-y: auto; scrollbar-width: none; align-content: flex-start; }
+.job-filter-departments { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; padding-bottom: 2px; }
 .job-filter-departments::-webkit-scrollbar { display: none; }
-.job-filter-departments button { min-height: 38px; padding: 8px 15px; font-size: 13px; }
+.job-filter-departments button { flex: 0 0 auto; min-height: 38px; padding: 8px 15px; font-size: 13px; white-space: nowrap; }
 .job-filter-contracts { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; padding-bottom: 2px; }
 .job-filter-contracts::-webkit-scrollbar { display: none; }
 .job-filter-contracts button { flex: 0 0 auto; min-height: 38px; padding: 8px 15px; font-size: 13px; white-space: nowrap; }

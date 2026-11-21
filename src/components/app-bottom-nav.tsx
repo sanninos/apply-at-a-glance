@@ -1,9 +1,17 @@
+import { useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { Bell, Radar, BriefcaseBusiness, Layers, UserRound } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useAlertBadgeCount } from "@/lib/alert-badge";
 import { useSocialBadgeCount } from "@/lib/social-badge";
 import { useRadarBadgeCount } from "@/lib/radar-badge";
+import { useAccess } from "@/components/access-provider";
+
+export function avatarUrlOf(user: { user_metadata?: Record<string, unknown> } | null): string | null {
+  const meta = user?.user_metadata ?? {};
+  const url = meta["avatar_url"] ?? meta["picture"];
+  return typeof url === "string" && url.trim() ? url : null;
+}
 
 type AppSection = "alertas" | "empleos" | "social" | "radar" | "perfil";
 
@@ -19,6 +27,10 @@ export function AppBottomNav({ active }: { active: AppSection }) {
   const alertBadge = useAlertBadgeCount();
   const socialBadge = useSocialBadgeCount();
   const radarBadge = useRadarBadgeCount();
+  const { user } = useAccess();
+  const avatarUrl = avatarUrlOf(user);
+  const [avatarFailed, setAvatarFailed] = useState(false);
+  const showAvatar = Boolean(avatarUrl) && !avatarFailed;
   return (
     <nav className="employment-nav" aria-label="Navegación principal">
       {sections.map(({ id, label, icon: Icon, to }) => {
@@ -28,7 +40,17 @@ export function AppBottomNav({ active }: { active: AppSection }) {
         const inner = (
           <>
             <span className="nav-icon">
-              <Icon />
+              {id === "perfil" && showAvatar ? (
+                <img
+                  src={avatarUrl ?? undefined}
+                  alt=""
+                  className="nav-avatar"
+                  referrerPolicy="no-referrer"
+                  onError={() => setAvatarFailed(true)}
+                />
+              ) : (
+                <Icon />
+              )}
             </span>
             <span>{label}</span>
             {badge > 0 && (

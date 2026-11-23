@@ -823,6 +823,21 @@ export type Database = {
         }
         Relationships: []
       }
+      push_broadcast_state: {
+        Row: {
+          id: number
+          last_sent_at: string
+        }
+        Insert: {
+          id?: number
+          last_sent_at?: string
+        }
+        Update: {
+          id?: number
+          last_sent_at?: string
+        }
+        Relationships: []
+      }
       push_counter: {
         Row: {
           id: number

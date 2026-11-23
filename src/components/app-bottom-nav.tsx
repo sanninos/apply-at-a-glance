@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link } from "@tanstack/react-router";
-import { Bell, Radar, BriefcaseBusiness, Layers, UserRound } from "lucide-react";
+import { Radar, BriefcaseBusiness, Layers, UserRound } from "lucide-react";
+import { AppMenuIcon } from "@/components/icons/app-menu-icon";
 import { cn } from "@/lib/utils";
 import { useAlertBadgeCount } from "@/lib/alert-badge";
 import { useSocialBadgeCount } from "@/lib/social-badge";
@@ -13,10 +14,10 @@ export function avatarUrlOf(user: { user_metadata?: Record<string, unknown> } | 
   return typeof url === "string" && url.trim() ? url : null;
 }
 
-type AppSection = "alertas" | "empleos" | "social" | "radar" | "perfil";
+type AppSection = "avanzado" | "empleos" | "social" | "radar" | "perfil";
 
-const sections = [
-  { id: "alertas", label: "Alertas", icon: Bell, to: '/alertas' },
+export const APP_NAV_SECTIONS = [
+  { id: "avanzado", label: "Avanzado", icon: AppMenuIcon, to: '/alertas' },
   { id: "radar", label: "Radar", icon: Radar, to: '/radar' },
   { id: "empleos", label: "Empleos", icon: BriefcaseBusiness, to: '/' },
   { id: "social", label: "Social", icon: Layers, to: '/social' },
@@ -33,9 +34,9 @@ export function AppBottomNav({ active }: { active: AppSection }) {
   const showAvatar = Boolean(avatarUrl) && !avatarFailed;
   return (
     <nav className="employment-nav" aria-label="Navegación principal">
-      {sections.map(({ id, label, icon: Icon, to }) => {
+      {APP_NAV_SECTIONS.map(({ id, label, icon: Icon, to }) => {
         const isActive = id === active;
-        const badge = id === "alertas" ? alertBadge : id === "social" ? socialBadge : id === "radar" ? radarBadge : 0;
+        const badge = id === "avanzado" ? alertBadge : id === "social" ? socialBadge : id === "radar" ? radarBadge : 0;
         const badgeLabel = badge > 99 ? "99+" : String(badge);
         const inner = (
           <>
@@ -65,7 +66,7 @@ export function AppBottomNav({ active }: { active: AppSection }) {
             preload="intent"
             preloadDelay={0}
             aria-current={isActive ? "page" : undefined}
-            aria-label={badge > 0 ? `${label}, ${badge} ${id === 'alertas' ? 'avisos sin leer' : id === 'radar' ? 'ofertas nuevas en el mapa' : 'pósteres sin ver'}` : label}
+            aria-label={badge > 0 ? `${label}, ${badge} ${id === 'avanzado' ? 'avisos sin leer' : id === 'radar' ? 'ofertas nuevas en el mapa' : 'pósteres sin ver'}` : label}
             className={cn("employment-nav-item", isActive && "active")}
           >
             {inner}

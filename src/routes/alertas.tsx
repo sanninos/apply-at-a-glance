@@ -50,7 +50,7 @@ function AlertsScreen() {
         {isAlerts && <Button type="button" className="alerts-empty-cta" onClick={() => setConfigOpen(true)}>Crear una alerta</Button>}
       </div>
     </div>
-    <AppBottomNav active="alertas" />
+    <AppBottomNav active="avanzado" />
     <AlertConfiguration open={configOpen} onOpenChange={setConfigOpen} />
   </main>;
 }

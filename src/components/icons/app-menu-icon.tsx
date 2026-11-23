@@ -1,7 +1,7 @@
 import type { SVGProps } from "react";
 
 /**
- * Icono "Avanzado" del menú inferior.
+ * Icono "Explorar" del menú inferior.
  * Dibuja con currentColor para heredar el color activo/inactivo del nav.
  */
 export function AppMenuIcon(props: SVGProps<SVGSVGElement>) {

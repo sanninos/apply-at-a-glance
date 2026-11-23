@@ -31,27 +31,30 @@ vi.mock("@tanstack/react-router", () => ({
 
 import { AppBottomNav, APP_NAV_SECTIONS } from "@/components/app-bottom-nav";
 
-describe("menú inferior: Avanzado", () => {
+describe("menú inferior: Explorar", () => {
   beforeEach(() => {
     badges.alert = 0;
     badges.social = 0;
     badges.radar = 0;
   });
 
-  it("muestra Avanzado en lugar de Alertas", () => {
+  it("muestra Explorar en lugar de Alertas", () => {
     render(<AppBottomNav active="empleos" />);
-    expect(screen.getByRole("link", { name: "Avanzado" })).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Explorar" })).toBeInTheDocument();
     expect(
       screen.queryByRole("link", { name: "Alertas" }),
     ).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole("link", { name: "Avanzado" }),
+    ).not.toBeInTheDocument();
   });
 
-  it("Avanzado abre la pantalla de Alertas", () => {
-    const avanzado = APP_NAV_SECTIONS.find((section) => section.id === "avanzado");
-    expect(avanzado?.label).toBe("Avanzado");
-    expect(avanzado?.to).toBe("/alertas");
-    render(<AppBottomNav active="avanzado" />);
-    const link = screen.getByRole("link", { name: "Avanzado" });
+  it("Explorar abre la pantalla de Alertas", () => {
+    const explorar = APP_NAV_SECTIONS.find((section) => section.id === "explorar");
+    expect(explorar?.label).toBe("Explorar");
+    expect(explorar?.to).toBe("/alertas");
+    render(<AppBottomNav active="explorar" />);
+    const link = screen.getByRole("link", { name: "Explorar" });
     expect(link).toHaveAttribute("href", "/alertas");
     expect(link).toHaveAttribute("aria-current", "page");
   });
@@ -60,14 +63,14 @@ describe("menú inferior: Avanzado", () => {
     badges.alert = 3;
     render(<AppBottomNav active="empleos" />);
     expect(
-      screen.getByRole("link", { name: "Avanzado, 3 avisos sin leer" }),
+      screen.getByRole("link", { name: "Explorar, 3 avisos sin leer" }),
     ).toHaveAttribute("href", "/alertas");
   });
 
   it("usa el icono propio pintado con currentColor", () => {
     render(<AppBottomNav active="empleos" />);
     const svg = screen
-      .getByRole("link", { name: "Avanzado" })
+      .getByRole("link", { name: "Explorar" })
       .querySelector("svg");
     expect(svg).not.toBeNull();
     expect(svg?.getAttribute("fill")).toBe("currentColor");

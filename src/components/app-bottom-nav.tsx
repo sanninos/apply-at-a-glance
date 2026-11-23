@@ -14,10 +14,10 @@ export function avatarUrlOf(user: { user_metadata?: Record<string, unknown> } | 
   return typeof url === "string" && url.trim() ? url : null;
 }
 
-type AppSection = "avanzado" | "empleos" | "social" | "radar" | "perfil";
+type AppSection = "explorar" | "empleos" | "social" | "radar" | "perfil";
 
 export const APP_NAV_SECTIONS = [
-  { id: "avanzado", label: "Avanzado", icon: AppMenuIcon, to: '/alertas' },
+  { id: "explorar", label: "Explorar", icon: AppMenuIcon, to: '/alertas' },
   { id: "radar", label: "Radar", icon: Radar, to: '/radar' },
   { id: "empleos", label: "Empleos", icon: BriefcaseBusiness, to: '/' },
   { id: "social", label: "Social", icon: Layers, to: '/social' },
@@ -36,7 +36,7 @@ export function AppBottomNav({ active }: { active: AppSection }) {
     <nav className="employment-nav" aria-label="Navegación principal">
       {APP_NAV_SECTIONS.map(({ id, label, icon: Icon, to }) => {
         const isActive = id === active;
-        const badge = id === "avanzado" ? alertBadge : id === "social" ? socialBadge : id === "radar" ? radarBadge : 0;
+        const badge = id === "explorar" ? alertBadge : id === "social" ? socialBadge : id === "radar" ? radarBadge : 0;
         const badgeLabel = badge > 99 ? "99+" : String(badge);
         const inner = (
           <>
@@ -66,7 +66,7 @@ export function AppBottomNav({ active }: { active: AppSection }) {
             preload="intent"
             preloadDelay={0}
             aria-current={isActive ? "page" : undefined}
-            aria-label={badge > 0 ? `${label}, ${badge} ${id === 'avanzado' ? 'avisos sin leer' : id === 'radar' ? 'ofertas nuevas en el mapa' : 'pósteres sin ver'}` : label}
+            aria-label={badge > 0 ? `${label}, ${badge} ${id === 'explorar' ? 'avisos sin leer' : id === 'radar' ? 'ofertas nuevas en el mapa' : 'pósteres sin ver'}` : label}
             className={cn("employment-nav-item", isActive && "active")}
           >
             {inner}

@@ -7,7 +7,7 @@ let started = false;
 /** Loads gtag.js once; call from useEffect only. */
 export function initAnalytics() {
   if (started || typeof window === "undefined") return;
-  const id = import.meta.env.VITE_LOVABLE_CONNECTOR_GOOGLE_ANALYTICS_API_KEY as string | undefined;
+  const id = import.meta.env["VITE_LOVABLE_CONNECTOR_GOOGLE_ANALYTICS_API_KEY"] as string | undefined;
   if (!id) return;
   started = true;
   const s = document.createElement("script");

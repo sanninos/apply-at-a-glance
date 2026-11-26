@@ -27,5 +27,5 @@ export const Route = createFileRoute("/")({
 
 function EmploymentPage() {
   const { data } = useSuspenseQuery(jobsQueryOptions);
-  return <JobListScreen jobs={data} />;
+  return <JobListScreen jobs={data.filter(job => !job.isLlamado)} />;
 }

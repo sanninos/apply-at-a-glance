@@ -895,3 +895,5 @@ nav .employment-nav-item, .employment-nav .employment-nav-item { position: relat
   --paywall-yellow: #F6C21C; --paywall-yellow-shadow: #C99A0A; --paywall-on-yellow: #3A1A0E;
   --paywall-ink: #1E1410; --paywall-muted: #6B5E57; --paywall-cream: #FFF6EC; --paywall-line: #EADFD6; --paywall-surface: #ffffff;
 }
+
+.employment-tabs a.employment-tab { display: inline-flex; align-items: center; justify-content: center; gap: .375rem; white-space: nowrap; text-decoration: none; }

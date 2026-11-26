@@ -18,6 +18,7 @@ import { Route as EmpleosRouteImport } from './routes/empleos'
 import { Route as EmpresaRouteImport } from './routes/empresa'
 import { Route as EmpresaOfertasRouteImport } from './routes/empresa-ofertas'
 import { Route as EstadisticasRouteImport } from './routes/estadisticas'
+import { Route as LlamadosPublicosRouteImport } from './routes/llamados-publicos'
 import { Route as MisPostulacionesRouteImport } from './routes/mis-postulaciones'
 import { Route as OfertasGuardadasRouteImport } from './routes/ofertas-guardadas'
 import { Route as PanelEmpresaRouteImport } from './routes/panel-empresa'
@@ -74,6 +75,11 @@ const EmpresaOfertasRoute = EmpresaOfertasRouteImport.update({
 const EstadisticasRoute = EstadisticasRouteImport.update({
   id: '/estadisticas',
   path: '/estadisticas',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LlamadosPublicosRoute = LlamadosPublicosRouteImport.update({
+  id: '/llamados-publicos',
+  path: '/llamados-publicos',
   getParentRoute: () => rootRouteImport,
 } as any)
 const MisPostulacionesRoute = MisPostulacionesRouteImport.update({
@@ -147,6 +153,7 @@ export interface FileRoutesByFullPath {
   '/empresa': typeof EmpresaRoute
   '/empresa-ofertas': typeof EmpresaOfertasRoute
   '/estadisticas': typeof EstadisticasRoute
+  '/llamados-publicos': typeof LlamadosPublicosRoute
   '/mis-postulaciones': typeof MisPostulacionesRoute
   '/ofertas-guardadas': typeof OfertasGuardadasRoute
   '/panel-empresa': typeof PanelEmpresaRoute
@@ -170,6 +177,7 @@ export interface FileRoutesByTo {
   '/empresa': typeof EmpresaRoute
   '/empresa-ofertas': typeof EmpresaOfertasRoute
   '/estadisticas': typeof EstadisticasRoute
+  '/llamados-publicos': typeof LlamadosPublicosRoute
   '/mis-postulaciones': typeof MisPostulacionesRoute
   '/ofertas-guardadas': typeof OfertasGuardadasRoute
   '/panel-empresa': typeof PanelEmpresaRoute
@@ -193,6 +201,7 @@ export interface FileRoutesById {
   '/empresa': typeof EmpresaRoute
   '/empresa-ofertas': typeof EmpresaOfertasRoute
   '/estadisticas': typeof EstadisticasRoute
+  '/llamados-publicos': typeof LlamadosPublicosRoute
   '/mis-postulaciones': typeof MisPostulacionesRoute
   '/ofertas-guardadas': typeof OfertasGuardadasRoute
   '/panel-empresa': typeof PanelEmpresaRoute
@@ -218,6 +227,7 @@ export interface FileRouteTypes {
     | '/empresa'
     | '/empresa-ofertas'
     | '/estadisticas'
+    | '/llamados-publicos'
     | '/mis-postulaciones'
     | '/ofertas-guardadas'
     | '/panel-empresa'
@@ -241,6 +251,7 @@ export interface FileRouteTypes {
     | '/empresa'
     | '/empresa-ofertas'
     | '/estadisticas'
+    | '/llamados-publicos'
     | '/mis-postulaciones'
     | '/ofertas-guardadas'
     | '/panel-empresa'
@@ -263,6 +274,7 @@ export interface FileRouteTypes {
     | '/empresa'
     | '/empresa-ofertas'
     | '/estadisticas'
+    | '/llamados-publicos'
     | '/mis-postulaciones'
     | '/ofertas-guardadas'
     | '/panel-empresa'
@@ -287,6 +299,7 @@ export interface RootRouteChildren {
   EmpresaRoute: typeof EmpresaRoute
   EmpresaOfertasRoute: typeof EmpresaOfertasRoute
   EstadisticasRoute: typeof EstadisticasRoute
+  LlamadosPublicosRoute: typeof LlamadosPublicosRoute
   MisPostulacionesRoute: typeof MisPostulacionesRoute
   OfertasGuardadasRoute: typeof OfertasGuardadasRoute
   PanelEmpresaRoute: typeof PanelEmpresaRoute
@@ -362,6 +375,13 @@ declare module '@tanstack/react-router' {
       path: '/estadisticas'
       fullPath: '/estadisticas'
       preLoaderRoute: typeof EstadisticasRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/llamados-publicos': {
+      id: '/llamados-publicos'
+      path: '/llamados-publicos'
+      fullPath: '/llamados-publicos'
+      preLoaderRoute: typeof LlamadosPublicosRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/mis-postulaciones': {
@@ -474,6 +494,7 @@ const rootRouteChildren: RootRouteChildren = {
   EmpresaRoute: EmpresaRoute,
   EmpresaOfertasRoute: EmpresaOfertasRoute,
   EstadisticasRoute: EstadisticasRoute,
+  LlamadosPublicosRoute: LlamadosPublicosRoute,
   MisPostulacionesRoute: MisPostulacionesRoute,
   OfertasGuardadasRoute: OfertasGuardadasRoute,
   PanelEmpresaRoute: PanelEmpresaRoute,

@@ -61,3 +61,4 @@
 - [x] Menú inferior: reemplazar «Alertas» por «Avanzado» con el icono subido (app-menu), abriendo la misma pantalla /alertas y conservando su contador; 4 pruebas nuevas, 156 en total, build OK y verificado en el navegador (móvil, escritorio y tema oscuro).
 - [x] Menú inferior: renombrar «Avanzado» a «Explorar» (mismo icono, mismo destino /alertas y mismo contador); 4 pruebas actualizadas, 156 en total, build OK.
 - [x] Google Analytics: medir visitas por pantalla
+- [x] Llamados públicos en pantalla propia

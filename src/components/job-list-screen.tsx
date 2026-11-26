@@ -1,6 +1,6 @@
 import { Fragment, useEffect, useRef, useState } from "react";
 import { Link, useRouter } from "@tanstack/react-router";
-import { BriefcaseBusiness, Search, SlidersHorizontal, Flame, Clock, ChevronRight, Building2, ArrowLeft, X } from "lucide-react";
+import { BriefcaseBusiness, Search, SlidersHorizontal, Flame, Clock, Landmark, ChevronRight, Building2, ArrowLeft, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { JobFilterPanel } from "@/components/job-filter-panel";
@@ -29,7 +29,7 @@ function EmployerLogo({ job, usePoster }: { job: JobListItem; usePoster: boolean
 const CARD_BATCH = 40;
 const POSITIONS_AFTER = 5;
 
-export function JobListScreen({ jobs, variant = "home", categoryTitle }: { jobs: JobListItem[]; variant?: "home" | "search" | "category"; categoryTitle?: string }) {
+export function JobListScreen({ jobs, variant = "home", categoryTitle }: { jobs: JobListItem[]; variant?: "home" | "search" | "category" | "llamados"; categoryTitle?: string }) {
   const router = useRouter();
   const newOffers = useNewJobOffers(jobs);
   const isNew = (job: JobListItem) => newOffers ? isNewUnseenOffer(job, newOffers.seen, newOffers.now) : false;
@@ -83,14 +83,15 @@ export function JobListScreen({ jobs, variant = "home", categoryTitle }: { jobs:
     {isHome && newOffers && <NewOffersNotice key={accountScope} count={unseenJobs.length} signature={unseenJobs.map(job => job.id).sort((a, b) => a - b).join(",")} onView={() => { setNewOnlyScope(accountScope); setMode("all"); setDepartment(""); setContract(""); }} />}
     <header className="employment-header">
       <div className="employment-search-row">
-        {!isHome && <Button variant="ghost" size="icon" className="search-back" aria-label="Volver" onClick={() => (window.history.length > 1 ? router.history.back() : router.navigate({ to: isSearch ? "/" : "/puestos" }))}><ArrowLeft /></Button>}
+        {!isHome && <Button variant="ghost" size="icon" className="search-back" aria-label="Volver" onClick={() => (window.history.length > 1 ? router.history.back() : router.navigate({ to: isSearch || variant === "llamados" ? "/" : "/puestos" }))}><ArrowLeft /></Button>}
         {!isHome
-          ? <div className="employment-search"><Search aria-hidden="true" /><Input autoFocus={isSearch} type="search" aria-label="Buscar un puesto de trabajo" placeholder={categoryTitle ? "Buscar en este puesto" : "Busca un puesto de trabajo"} value={search} onChange={event => setSearch(event.target.value)} onKeyDown={event => { if (event.key === "Enter") remember(search); }} />{search && <Button variant="ghost" size="icon" className="search-clear" aria-label="Borrar búsqueda" onClick={() => setSearch("")}><X /></Button>}</div>
+          ? <div className="employment-search"><Search aria-hidden="true" /><Input autoFocus={isSearch} type="search" aria-label="Buscar un puesto de trabajo" placeholder={variant === "llamados" ? "Buscar llamados públicos" : categoryTitle ? "Buscar en este puesto" : "Busca un puesto de trabajo"} value={search} onChange={event => setSearch(event.target.value)} onKeyDown={event => { if (event.key === "Enter") remember(search); }} />{search && <Button variant="ghost" size="icon" className="search-clear" aria-label="Borrar búsqueda" onClick={() => setSearch("")}><X /></Button>}</div>
           : <Link to="/buscar" preload="intent" preloadDelay={0} className="employment-search employment-search-link" aria-label="Buscar un puesto de trabajo"><Search aria-hidden="true" /><span>Busca un puesto de trabajo</span></Link>}
         <Button variant="outline" size="icon" className={cn("employment-filter", (department || contract) && "filter-active")} aria-label="Filtrar empleos" title="Filtrar empleos" onClick={() => setFiltersOpen(true)}><SlidersHorizontal /></Button>
       </div>
       {isHome && <div className="employment-tabs" role="tablist" aria-label="Tipo de empleos">
         {tabs.map(({ id, label, icon: Icon, count }) => <Button key={id} role="tab" aria-selected={!newOnly && mode === id} variant="ghost" className={cn("employment-tab", !newOnly && mode === id && "selected")} onClick={() => { setMode(id); setNewOnlyScope(null); }}><Icon /><span>{label}</span>{count !== undefined && <span className="tab-count">{count}</span>}</Button>)}
+        <Link to="/llamados-publicos" preload="intent" preloadDelay={0} className="employment-tab"><Landmark /><span>Llamados</span></Link>
       </div>}
     </header>
     {newOnly && <div className="new-offers-selection"><span>Nuevas sin ver · {unseenJobs.length}</span><Button variant="link" onClick={() => setNewOnlyScope(null)}>Ver todas</Button></div>}

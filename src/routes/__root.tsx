@@ -16,6 +16,7 @@ import { AccessProvider } from '@/components/access-provider';
 import { AccessDialogProvider } from '@/components/access-dialog';
 import { PushTokenRegistrar } from '@/components/push-token-registrar';
 import { SubscriptionProvider } from '@/components/subscription-provider';
+import { AnalyticsTracker } from '@/components/analytics-tracker';
 
 function NotFoundComponent() {
   return (
@@ -124,7 +125,7 @@ function RootComponent() {
       {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
       <AccessProvider>
         <SubscriptionProvider>
-          <PushTokenRegistrar /><div className="rotate-lock" role="alert"><span aria-hidden="true">📱</span><p>Girá el teléfono a vertical para usar URUJOBS</p></div><AccessDialogProvider><Outlet /></AccessDialogProvider>
+          <AnalyticsTracker /><PushTokenRegistrar /><div className="rotate-lock" role="alert"><span aria-hidden="true">📱</span><p>Girá el teléfono a vertical para usar URUJOBS</p></div><AccessDialogProvider><Outlet /></AccessDialogProvider>
         </SubscriptionProvider>
       </AccessProvider>
     </QueryClientProvider>

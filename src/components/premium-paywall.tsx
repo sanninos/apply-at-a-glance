@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { trackEvent } from "@/lib/analytics";
 import { Paywall, type PaywallState } from '@/components/paywall';
 import { useAccess } from '@/components/access-provider';
 import { useAccessDialog } from '@/components/access-dialog';
@@ -28,6 +29,7 @@ export function PremiumPaywall({ onClose }: { onClose: () => void }) {
   const { available, status, isPro } = subscription;
   const [plans, setPlans] = useState<ProPlan[] | null>(null);
   const [loadFailed, setLoadFailed] = useState(false);
+  useEffect(() => { trackEvent('planes_pro_abiertos'); }, []);
   const [loadError, setLoadError] = useState<string | null>(null);
   const [attempt, setAttempt] = useState(0);
   const [busy, setBusy] = useState(false);

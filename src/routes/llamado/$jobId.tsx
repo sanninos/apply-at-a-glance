@@ -1,4 +1,5 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { trackEvent } from "@/lib/analytics";
 import { useAccess } from "@/components/access-provider";
 import { useAccessDialog } from "@/components/access-dialog";
 import { useSuspenseQuery, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -153,6 +154,7 @@ function JobDetail() {
       setApplyError("No pudimos registrar tu postulación. Intentá nuevamente.");
       return;
     }
+    trackEvent("postulacion", { job_id: Number(jobId), con_cv: Boolean(snapshot), con_mensaje: Boolean(text) });
     void queryClient.invalidateQueries({ queryKey: ["application", jobId] });
     void queryClient.invalidateQueries({ queryKey: ["applications", user.id] });
   }

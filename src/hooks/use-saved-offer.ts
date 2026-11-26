@@ -1,4 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { trackEvent } from "@/lib/analytics";
 import { useServerFn } from '@tanstack/react-start';
 import { useAccess } from '@/components/access-provider';
 import { useAccessDialog } from '@/components/access-dialog';
@@ -14,7 +15,8 @@ export function useSavedOffer(jobId: number) {
   const query = useQuery({ queryKey: key, enabled: ready && Boolean(user), queryFn: () => read({ data: { jobId } }) });
   const mutation = useMutation({
     mutationFn: (saved: boolean) => write({ data: { jobId, saved } }),
-    onSuccess: result => {
+    onSuccess: (result, saved) => {
+      trackEvent(saved ? 'oferta_guardada' : 'oferta_quitada', { job_id: jobId });
       queryClient.setQueryData(key, result);
       void queryClient.invalidateQueries({ queryKey: ['saved-offers', user?.id] });
     },
